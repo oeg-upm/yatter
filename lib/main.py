@@ -1,5 +1,6 @@
 import yaml
 import sys
+import os
 import mapping as mappingmod
 import source as sourcemod
 import subject as subjectmod
@@ -46,8 +47,10 @@ if __name__ =="__main__":
     print("------------------------START RML-------------------------------")
     mapping_list=[]
     list_initial_sources= sourcemod.getInitialSources(data)
-    for mapp in data.get("mappings"):
-        try:
+    final=""
+    final = mappingmod.addPrefix(data)
+    try:
+        for mapp in data.get("mappings"):
             subject_list=[]
             subject_list = subjectmod.addSubject(data, mapp)
             source_list=[]
@@ -57,15 +60,25 @@ if __name__ =="__main__":
             for source in source_list:
                 for subject in subject_list:
                     map=mappingmod.addMapping(data,mapp,it)
-                    final = map + source +subject + pred
+                    if type(source) is list:
+                        final += map + source[0] +subject + pred + source[1]
+                    else:
+                        final += map + source +subject + pred
                     final = final[:-3]
-                    final+= ".\n"
-                    print(final)
-                    nuevo_fich.write(final)
+                    final+= ".\n\n\n"
                     it=it+1
-        except Exception as e:
+        print(final)
+        nuevo_fich.write(final)
+    except Exception as e:
             print(str(e))
-            break
+            print("------------------------END RML-------------------------------")
+            print("FILE NOT SUCCESSFULY CREATED")
+            if(".rml" in end):
+                os.remove(end)
+            else:
+                os.remove(end+".rml")
+            sys.exit()
+
 
     print("------------------------END RML-------------------------------")
     print("FILE SUCCESSFULY CREATED!")

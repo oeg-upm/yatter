@@ -1,0 +1,1991 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix rev: <http://purl.org/stuff/rev#>.
+@prefix gtfs: <http://vocab.gtfs.org/terms#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix schema: <http://schema.org/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix rml: <http://semweb.mmlab.be/ns/rml#>.
+@prefix ql: <http://semweb.mmlab.be/ns/ql#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+
+<#stoptimes_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/STOP_TIMES.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/stoptimes/{trip_id}-{stop_id}-{arrival_time}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:StopTime
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:arrivalTime;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "arrival_time"
+			rr:datatype xsd:duration
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:departureTime;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "departure_time"
+			rr:datatype xsd:duration
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:stopSequence;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_sequence"
+			rr:datatype xsd:integer
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:headsign;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_headsign"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:pickupType;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference http://transport.linkeddata.es/resource/PickupType/"pickup_type"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:dropOffType;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference http://transport.linkeddata.es/resource/DropOffType/"drop_off_type"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:distanceTraveled;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "shape_dist_traveled"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:trip
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#trips>;
+			rr:joinCondition [
+				rr:child "trip_id";
+				rr:parent "trip_id";
+			]
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:stop
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#stops>;
+			rr:joinCondition [
+				rr:child "stop_id";
+				rr:parent "stop_id";
+			]
+		]
+	].
+<#trips_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/TRIPS.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/trips/{trip_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Trip
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:headsign;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "trip_headsign"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:shortName;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "trip_short_name"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:direction;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "direction_id"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:block;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "block_id"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:wheelchairAccessible;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference http://transport.linkeddata.es/resource/WheelchairBoardingStatus/"wheelchair_accessible"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:service
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#services1>;
+			rr:joinCondition [
+				rr:child "service_id";
+				rr:parent "service_id";
+			]
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:route
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#routes>;
+			rr:joinCondition [
+				rr:child "route_id";
+				rr:parent "route_id";
+			]
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:shape
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#shapes>;
+			rr:joinCondition [
+				rr:child "shape_id";
+				rr:parent "shape_id";
+			]
+		]
+	].
+<#routes_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/ROUTES.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/routes/{route_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Route
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:shortName;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "route_short_name"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:longName;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "route_long_name"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate dct:description;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "route_desc"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:routeType;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference http://transport.linkeddata.es/resource/RouteType/"route_type"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:routeUrl;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "route_url"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:color;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "route_color"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:textColor;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "route_text_color"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:agency
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#agency>;
+			rr:joinCondition [
+				rr:child "agency_id";
+				rr:parent "agency_id";
+			]
+		]
+	].
+<#agency_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/AGENCY.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/agency/{agency_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Agency
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate foaf:page;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "agency_url"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate foaf:name;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "agency_name"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:timeZone;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "agency_timezone"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate dct:language;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "agency_lang"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate foaf:phone;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "agency_phone"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:fareUrl;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "agency_fare_url"~iri
+		]
+	].
+<#stops_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/STOPS.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/stops/{stop_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Stop
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:code;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_code"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate dct:identifier;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_id"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate foaf:name;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_name"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate dct:description;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_desc"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate geo:lat;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_lat"
+			rr:datatype xsd:double
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate geo:long;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_lon"
+			rr:datatype xsd:double
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:zone;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "zone_id"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate foaf:page;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_url"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:locationType;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference http://transport.linkeddata.es/resource/LocationType/"location_type"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:timeZone;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_timezone"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:wheelchairAccessible;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference http://transport.linkeddata.es/resource/WheelchairBoardingStatus/"wheelchair_boarding"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:parentStation
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#stops>;
+			rr:joinCondition [
+				rr:child "parent_station";
+				rr:parent "stop_id";
+			]
+		]
+	].
+<#services1_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/CALENDAR.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/services/{service_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Service
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:serviceRule
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#calendar_rules>;
+			rr:joinCondition [
+				rr:child "service_id";
+				rr:parent "service_id";
+			]
+		]
+	].
+<#services2_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/CALENDAR_DATES.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/services/{service_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Service
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:serviceRule
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#calendar_date_rules>;
+			rr:joinCondition [
+				rr:child "service_id";
+				rr:parent "service_id";
+			]
+		]
+	].
+<#calendar_date_rules_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/CALENDAR_DATES.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/calendar_date_rule/{service_id}-{date}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:CalendarDateRule
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate dct:date;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "date"
+			rr:datatype xsd:date
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:dateAddition;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "exception_type"
+			rr:datatype xsd:boolean
+		]
+	].
+<#calendar_rules_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/CALENDAR.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/calendar_rules/{service_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:CalendarRule
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:monday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "monday"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:tuesday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "tuesday"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:wednesday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "wednesday"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:thursday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "thursday"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:friday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "friday"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:saturday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "saturday"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:sunday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "sunday"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate schema:startDate;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "start_date"
+			rr:datatype xsd:date
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate schema:endDate;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "end_date"
+			rr:datatype xsd:date
+		]
+	].
+<#feed_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/FEED_INFO.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/feed/{feed_publisher_name}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Feed
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate dct:publisher;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "feed_publisher_name"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate foaf:page;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "feed_publisher_url"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate dct:language;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "feed_lang"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate schema:startDate;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "feed_start_date"
+			rr:datatype xsd:date
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate schema:endDate;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "feed_end_date"
+			rr:datatype xsd:date
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate schema:version;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "feed_version"
+		]
+	].
+<#shapes_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/SHAPES.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/shape/{shape_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Shape
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:shapePoint
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#shapePoints>;
+			rr:joinCondition [
+				rr:child "shape_id";
+				rr:parent "shape_id";
+			]
+		]
+	].
+<#shapePoints_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/SHAPES.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/shape_point/{shape_id}-{shape_pt_sequence}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:ShapePoint
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate geo:lat;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "shape_pt_lat"
+			rr:datatype xsd:double
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate geo:long;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "shape_pt_lon"
+			rr:datatype xsd:double
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:pointSequence;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "shape_pt_sequence"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:distanceTraveled;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "shape_dist_traveled"
+		]
+	].
+<#frequencies_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/FREQUENCIES.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/frequency/{trip_id}-{start_time}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Frequency
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:startTime;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "start_time"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:endTime;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "end_time"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:headwaySeconds;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "headway_secs"
+			rr:datatype xsd:integer
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:exactTimes;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "exact_times"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:trip
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#trips>;
+			rr:joinCondition [
+				rr:child "trip_id";
+				rr:parent "trip_id";
+			]
+		]
+	].
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix rev: <http://purl.org/stuff/rev#>.
+@prefix gtfs: <http://vocab.gtfs.org/terms#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix schema: <http://schema.org/>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix rml: <http://semweb.mmlab.be/ns/rml#>.
+@prefix ql: <http://semweb.mmlab.be/ns/ql#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+
+<#stoptimes_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/STOP_TIMES.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/stoptimes/{trip_id}-{stop_id}-{arrival_time}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:StopTime
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:arrivalTime;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "arrival_time"
+			rr:datatype xsd:duration
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:departureTime;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "departure_time"
+			rr:datatype xsd:duration
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:stopSequence;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_sequence"
+			rr:datatype xsd:integer
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:headsign;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_headsign"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:pickupType;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference http://transport.linkeddata.es/resource/PickupType/"pickup_type"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:dropOffType;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference http://transport.linkeddata.es/resource/DropOffType/"drop_off_type"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:distanceTraveled;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "shape_dist_traveled"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:trip
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#trips>;
+			rr:joinCondition [
+				rr:child "trip_id";
+				rr:parent "trip_id";
+			]
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:stop
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#stops>;
+			rr:joinCondition [
+				rr:child "stop_id";
+				rr:parent "stop_id";
+			]
+		]
+	].
+
+<#trips_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/TRIPS.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/trips/{trip_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Trip
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:headsign;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "trip_headsign"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:shortName;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "trip_short_name"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:direction;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "direction_id"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:block;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "block_id"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:wheelchairAccessible;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference http://transport.linkeddata.es/resource/WheelchairBoardingStatus/"wheelchair_accessible"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:service
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#services1>;
+			rr:joinCondition [
+				rr:child "service_id";
+				rr:parent "service_id";
+			]
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:route
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#routes>;
+			rr:joinCondition [
+				rr:child "route_id";
+				rr:parent "route_id";
+			]
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:shape
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#shapes>;
+			rr:joinCondition [
+				rr:child "shape_id";
+				rr:parent "shape_id";
+			]
+		]
+	].
+
+<#routes_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/ROUTES.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/routes/{route_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Route
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:shortName;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "route_short_name"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:longName;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "route_long_name"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate dct:description;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "route_desc"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:routeType;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference http://transport.linkeddata.es/resource/RouteType/"route_type"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:routeUrl;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "route_url"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:color;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "route_color"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:textColor;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "route_text_color"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:agency
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#agency>;
+			rr:joinCondition [
+				rr:child "agency_id";
+				rr:parent "agency_id";
+			]
+		]
+	].
+
+<#agency_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/AGENCY.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/agency/{agency_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Agency
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate foaf:page;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "agency_url"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate foaf:name;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "agency_name"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:timeZone;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "agency_timezone"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate dct:language;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "agency_lang"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate foaf:phone;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "agency_phone"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:fareUrl;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "agency_fare_url"~iri
+		]
+	].
+
+<#stops_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/STOPS.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/stops/{stop_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Stop
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:code;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_code"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate dct:identifier;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_id"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate foaf:name;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_name"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate dct:description;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_desc"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate geo:lat;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_lat"
+			rr:datatype xsd:double
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate geo:long;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_lon"
+			rr:datatype xsd:double
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:zone;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "zone_id"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate foaf:page;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_url"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:locationType;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference http://transport.linkeddata.es/resource/LocationType/"location_type"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:timeZone;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "stop_timezone"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:wheelchairAccessible;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference http://transport.linkeddata.es/resource/WheelchairBoardingStatus/"wheelchair_boarding"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:parentStation
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#stops>;
+			rr:joinCondition [
+				rr:child "parent_station";
+				rr:parent "stop_id";
+			]
+		]
+	].
+
+<#services1_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/CALENDAR.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/services/{service_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Service
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:serviceRule
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#calendar_rules>;
+			rr:joinCondition [
+				rr:child "service_id";
+				rr:parent "service_id";
+			]
+		]
+	].
+
+<#services2_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/CALENDAR_DATES.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/services/{service_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Service
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:serviceRule
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#calendar_date_rules>;
+			rr:joinCondition [
+				rr:child "service_id";
+				rr:parent "service_id";
+			]
+		]
+	].
+
+<#calendar_date_rules_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/CALENDAR_DATES.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/calendar_date_rule/{service_id}-{date}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:CalendarDateRule
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate dct:date;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "date"
+			rr:datatype xsd:date
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:dateAddition;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "exception_type"
+			rr:datatype xsd:boolean
+		]
+	].
+
+<#calendar_rules_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/CALENDAR.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/calendar_rules/{service_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:CalendarRule
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:monday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "monday"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:tuesday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "tuesday"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:wednesday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "wednesday"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:thursday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "thursday"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:friday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "friday"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:saturday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "saturday"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:sunday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "sunday"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate schema:startDate;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "start_date"
+			rr:datatype xsd:date
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate schema:endDate;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "end_date"
+			rr:datatype xsd:date
+		]
+	].
+
+<#feed_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/FEED_INFO.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/feed/{feed_publisher_name}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Feed
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate dct:publisher;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "feed_publisher_name"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate foaf:page;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "feed_publisher_url"~iri
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate dct:language;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "feed_lang"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate schema:startDate;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "feed_start_date"
+			rr:datatype xsd:date
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate schema:endDate;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "feed_end_date"
+			rr:datatype xsd:date
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate schema:version;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "feed_version"
+		]
+	].
+
+<#shapes_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/SHAPES.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/shape/{shape_id}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Shape
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:shapePoint
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#shapePoints>;
+			rr:joinCondition [
+				rr:child "shape_id";
+				rr:parent "shape_id";
+			]
+		]
+	].
+
+<#shapePoints_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/SHAPES.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/shape_point/{shape_id}-{shape_pt_sequence}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:ShapePoint
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate geo:lat;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "shape_pt_lat"
+			rr:datatype xsd:double
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate geo:long;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "shape_pt_lon"
+			rr:datatype xsd:double
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:pointSequence;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "shape_pt_sequence"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:distanceTraveled;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "shape_dist_traveled"
+		]
+	].
+
+<#frequencies_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "/data/FREQUENCIES.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://transport.linkeddata.es/madrid/metro/frequency/{trip_id}-{start_time}"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference gtfs:Frequency
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:startTime;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "start_time"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:endTime;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "end_time"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:headwaySeconds;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "headway_secs"
+			rr:datatype xsd:integer
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:exactTimes;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "exact_times"
+			rr:datatype xsd:boolean
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gtfs:trip
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#trips>;
+			rr:joinCondition [
+				rr:child "trip_id";
+				rr:parent "trip_id";
+			]
+		]
+	].
+
