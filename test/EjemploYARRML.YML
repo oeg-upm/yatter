@@ -24,7 +24,7 @@ mappings:
       - [properties:latitude, $(latitude), xsd:float]
       - p: properties:has_address
         o:
-          mapping: TriplesMap5
+          mapping: TriplesMap1
           condition:
            function: equal
            parameters:

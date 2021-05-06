@@ -123,8 +123,11 @@ def addPredicateObjectFull(data,mapping,predob,access):
                     template+= "\t\t\trr:TermType " + predob.get("o").get("type") + "\n\t\t]\n\t];\n\n"
                 elif "language" in predob.get("o"):
                     template+= '\t\t\trr:language "' + predob.get("o").get("language") + '"\n\t\t]\n\t];\n\n'
-            elif "mapping" in predob.get("o"):
-                template+= joinMapping(data,mapping,predob,"o")
+            elif "mapping" in predob.get("o") or (type(predob.get("o")) is list):
+                if (type(predob.get("o")) is list and "mapping" in predob.get("o")[0]):
+                    template+= joinMapping(data,mapping,predob,"o","l")
+                else:
+                    template+= joinMapping(data,mapping,predob,"o","")
             else:
                 template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
                 object=predob.get("o")
@@ -138,7 +141,6 @@ def addPredicateObjectFull(data,mapping,predob,access):
                 for predic in predob.get(access):
                     template+= "\t\trr:predicate " + str(predic) + ";\n"
                 for objec in predob.get("objects"):
-                    print("THe object is "+ str(objec))
                     template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
                     if(type(objec) is list):
                         object = objec[0]
@@ -213,36 +215,62 @@ def check_type(predob,pos):
     else:
         return "error"
 
-def joinMapping(data,mapping,predob,access):
+def joinMapping(data,mapping,predob,access,parameter):
     list_mappings=[]
     for mappings in data.get("mappings"):
         list_mappings.append(mappings)
+    if(parameter!="l"):
+        if predob.get(access).get("mapping") in list_mappings :
+            template="\t\trr:objectMap [ \n\t\t\ta rr:RefObjectMap;\n\t\t\trr:parentTriplesMap <#"+ predob.get(access).get("mapping") +">;\n"
 
-    if predob.get(access).get("mapping") in list_mappings and predob.get(access).get("mapping") != mapping:
-        template="\t\trr:objectMap [ \n\t\t\ta rr:RefObjectMap;\n\t\t\trr:parentTriplesMap <#"+ predob.get(access).get("mapping") +">;\n"
+            if "condition" in predob.get(access):
+                if "parameters" in predob.get(access).get("condition"):
+                    list_parameters = predob.get(access).get("condition").get("parameters")
+                    if len(list_parameters)==2:
+                        child=list_parameters[0][1]
+                        parent=list_parameters[1][1]
+                        child=child.replace("$(",'"')
+                        child=child.replace(")",'"')
+                        parent=parent.replace("$(",'"')
+                        parent=parent.replace(")",'"')
 
-        if "condition" in predob.get(access):
-            if "parameters" in predob.get(access).get("condition"):
-                list_parameters = predob.get(access).get("condition").get("parameters")
-                if len(list_parameters)==2:
-                    child=list_parameters[0][1]
-                    parent=list_parameters[1][1]
-                    print(child)
-                    print(parent)
-                    child=child.replace("$(",'"')
-                    child=child.replace(")",'"')
-                    parent=parent.replace("$(",'"')
-                    parent=parent.replace(")",'"')
+                        template+='\t\t\trr:joinCondition [\n\t\t\t\trr:child ' + child + ';\n\t\t\t\trr:parent ' + parent + ';\n\t\t\t]\n\t\t]\n\t];\n\n'
 
-                    template+='\t\t\trr:joinCondition [\n\t\t\t\trr:child ' + child + ';\n\t\t\t\trr:parent ' + parent + ';\n\t\t\t]\n\t\t]\n\t];\n\n'
+                    else:
+                        raise Exception("Error: more than two parameters in join condition in mapping " + mapping)
+            else:
+                template+="\n\t\t]\n\t];\n\n"
+                return template
 
-                else:
-                    raise Exception("Error: more than two parameters in join condition in mapping " + mapping)
+
         else:
-            template+="\n\t\t]\n\t];\n\n"
-            return template
-
+            raise Exception("Error in reference mapping another mapping in mapping2 " + mapping)
 
     else:
-        raise Exception("Error in reference mapping another mapping " + mapping)
+        if predob.get(access)[0].get("mapping") in list_mappings:
+            template="\t\trr:objectMap [ \n\t\t\ta rr:RefObjectMap;\n\t\t\trr:parentTriplesMap <#"+ predob.get(access)[0].get("mapping") +">;\n"
+
+            if "condition" in predob.get(access)[0]:
+                if "parameters" in predob.get(access)[0].get("condition"):
+                    list_parameters = predob.get(access)[0].get("condition").get("parameters")
+                    if len(list_parameters)==2:
+                        child=list_parameters[0][1]
+                        parent=list_parameters[1][1]
+                        child=child.replace("$(",'"')
+                        child=child.replace(")",'"')
+                        parent=parent.replace("$(",'"')
+                        parent=parent.replace(")",'"')
+
+                        template+='\t\t\trr:joinCondition [\n\t\t\t\trr:child ' + child + ';\n\t\t\t\trr:parent ' + parent + ';\n\t\t\t]\n\t\t]\n\t];\n\n'
+
+                    else:
+                        raise Exception("Error: more than two parameters in join condition in mapping1 " + mapping)
+            else:
+                template+="\n\t\t]\n\t];\n\n"
+                return template
+
+
+        else:
+
+            raise Exception("Error in reference mapping another mapping in mapping1 " + mapping)
     return template
