@@ -60,9 +60,24 @@ def addPredicateObjectSimplified(data,mapping,predob):
 
         template+="\t\trr:predicate "+str(predob[0])+";\n"+"\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
         object=str(predob[1])
-        object=object.replace("$(",'"')
-        object=object.replace(")",'"')
-        template+="\t\t\trml:reference " + object + "\n\t\t]\n\t];\n\n"
+        if "~" in object:
+            object=object.replace("$(",'')
+            object=object.replace(")",'"')
+            types=check_type_simple(object)
+            object1=object.split("~")
+            template+='\t\t\trml:reference "' + object1[0] + ";\n"
+            if(types!="error"):
+                if(types=="iri"):
+                    template+="\t\t\trr:TermType rr:IRI"+"\n\t\t];\n"
+                elif(types=="language"):
+                    lenguage=objec[1].replace("~lang","")
+                    template+='\t\t\trr:language "'+  lenguage +'"\n\t\t];\n'
+                elif(types=="datatype"):
+                    template+="\t\t\trr:datatype "+  objec[1] +"\n\t\t];\n"
+        else:
+            object=object.replace("$(",'"')
+            object=object.replace(")",'"')
+            template+="\t\t\trml:reference " + object + "\n\t\t]\n\t];\n\n"
 
     elif(len(predob)==3):
         #1 pred, 2 obj, 3 datatype, leng
@@ -214,6 +229,18 @@ def check_type(predob,pos):
         return "datatype"
     else:
         return "error"
+
+def check_type_simple(object):
+
+    if "~iri" in object:
+        return "iri"
+    elif "~lang" in object:
+        return "language"
+    elif ("xsd:" in object) or ("ex:" in object):
+        return "datatype"
+    else:
+        return "error"
+
 
 def joinMapping(data,mapping,predob,access,parameter):
     list_mappings=[]
