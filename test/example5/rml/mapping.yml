@@ -66,11 +66,11 @@ mappings:
        o:
          mapping: SitterMapping
   WikipediaExportMapping:
-    source: src/test/resources/example5/moon-walkers.csv
+    source:
+      - [src/test/resources/example5/moon-walkers.csv~csv]
     subject: "http://ex.com/$(Name)"
     predicateobjects:
      - [ex:birthday,$(Birth Date),xsd:date]
      - [ex:deathday,$(Death Date),xsd:date]
      - [ex:evaday,$(EVA Date),xsd:date]
      - [ex:service,$(Service)]
-

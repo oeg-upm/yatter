@@ -44,9 +44,9 @@ mappings:
                 - [str1, $(stop_id)]
                 - [str2, $(stop_id)]
   trips:
-    sources:
-      - [/data/TRIPS.csv~csv]
     s: http://transport.linkeddata.es/madrid/metro/trips/$(trip_id)
+    sources:
+      - [src/test/resources/example/Venue.json~jsonpath,$]
     po:
       - [a, gtfs:Trip]
       - [gtfs:headsign, $(trip_headsign)]

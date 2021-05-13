@@ -9,7 +9,7 @@ mappings:
       - access: src/test/resources/example4/Venue4.json
         referenceFormulation: jsonpath
         iterator: $
-    subjects: "http://loc.example.com/city/$(city)"
+    subjects: [http://loc.example.com/city/$(city),http://loc.example.com/town/$(town)]
     po:
      - [a, schema:City]
      - [wgs84_pos:lat,$(venue.latitude)]

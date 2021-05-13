@@ -49,9 +49,10 @@ def addPredicateObjectSimplified(data,mapping,predob):
         for object in predob[1]:
             template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
             object=str(object)
+            termMap=getTermMap(object)
             object=object.replace("$(",'"')
             object=object.replace(")",'"')
-            template+="\t\t\trml:reference " + object + "\n\t\t];\n"
+            template+="\t\t\t"+ termMap + object + "\n\t\t];\n"
         template = template[:-2]
         template+="\n\t];\n"
 
@@ -61,31 +62,34 @@ def addPredicateObjectSimplified(data,mapping,predob):
         template+="\t\trr:predicate "+str(predob[0])+";\n"+"\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
         object=str(predob[1])
         if "~" in object:
+            termMap=getTermMap(object)
             object=object.replace("$(",'')
             object=object.replace(")",'"')
             types=check_type_simple(object)
             object1=object.split("~")
-            template+='\t\t\trml:reference "' + object1[0] + ";\n"
+            template+='\t\t\t'+termMap + object1[0] + ";\n"
             if(types!="error"):
                 if(types=="iri"):
-                    template+="\t\t\trr:TermType rr:IRI"+"\n\t\t];\n"
+                    template+="\t\t\trr:TermType rr:IRI"+"\n\t\t]\n\t];\n\n"
                 elif(types=="language"):
                     lenguage=objec[1].replace("~lang","")
-                    template+='\t\t\trr:language "'+  lenguage +'"\n\t\t];\n'
+                    template+='\t\t\trr:language "'+  lenguage +'"\n\t\t]\n\t];\n\n'
                 elif(types=="datatype"):
-                    template+="\t\t\trr:datatype "+  objec[1] +"\n\t\t];\n"
+                    template+="\t\t\trr:datatype "+  objec[1] +"\n\t\t]\n\t];\n\n"
         else:
+            termMap=getTermMap(object)
             object=object.replace("$(",'"')
             object=object.replace(")",'"')
-            template+="\t\t\trml:reference " + object + "\n\t\t]\n\t];\n\n"
+            template+="\t\t\t"+ termMap + object + "\n\t\t]\n\t];\n\n"
 
     elif(len(predob)==3):
         #1 pred, 2 obj, 3 datatype, leng
         template+="\t\trr:predicate "+str(predob[0])+";\n"+"\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
         object=str(predob[1])
+        termMap=getTermMap(object)
         object=object.replace("$(",'"')
         object=object.replace(")",'"')
-        template+="\t\t\trml:reference " + object + "\n"
+        template+="\t\t\t"+termMap + object + "\n"
         types = check_type(predob,3)
         if(types!="error"):
             template+="\t\t\trr:" + types +" "+ predob[2] +"\n\t\t]\n\t];\n\n"
@@ -106,9 +110,10 @@ def addPredicateObjectFull(data,mapping,predob,access):
             if "value" in predob.get("objects"):
                 template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
                 object=predob.get("objects").get("value")
+                termMap=getTermMap(object)
                 object=object.replace("$(",'"')
                 object=object.replace(")",'"')
-                template+="\t\t\trml:reference " + object + ";\n"
+                template+="\t\t\t"+ termMap + object + ";\n"
                 "\t\t]\n\t];\n\n"
                 if "datatype" in predob.get("objects"):
                     template+= "\t\t\trr:datatype " + predob.get("objects").get("datatype") + "\n\t\t]\n\t];\n\n"
@@ -121,16 +126,18 @@ def addPredicateObjectFull(data,mapping,predob,access):
             else:
                 template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
                 object=predob.get("objects")
+                termMap=getTermMap(object)
                 object=object.replace("$(",'"')
                 object=object.replace(")",'"')
-                template+="\t\t\trml:reference " + object + ";\n\t\t]\n\t];\n\n"
+                template+="\t\t\t"+ termMap + object + ";\n\t\t]\n\t];\n\n"
         elif "o" in predob:
             if "value" in predob.get("o"):
                 template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
                 object=predob.get("o").get("value")
+                termMap=getTermMap(object)
                 object=object.replace("$(",'"')
                 object=object.replace(")",'"')
-                template+="\t\t\trml:reference " + object + ";\n"
+                template+="\t\t\t"+ termMap + object + ";\n"
                 "\t\t]\n\t];\n\n"
                 if "datatype" in predob.get("o"):
                     template+= "\t\t\trr:datatype " + predob.get("o").get("datatype") + "\n\t\t]\n\t];\n\n"
@@ -146,9 +153,10 @@ def addPredicateObjectFull(data,mapping,predob,access):
             else:
                 template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
                 object=predob.get("o")
+                termMap=getTermMap(object)
                 object=object.replace("$(",'"')
                 object=object.replace(")",'"')
-                template+="\t\t\trml:reference " + object + ";\n\t\t]\n\t];\n\n"
+                template+="\t\t\t"+termMap + object + ";\n\t\t]\n\t];\n\n"
     else:
         if("objects" in predob):
             if len(predob.get(access)) == len(predob.get("objects")):
@@ -159,12 +167,14 @@ def addPredicateObjectFull(data,mapping,predob,access):
                     template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
                     if(type(objec) is list):
                         object = objec[0]
+                        termMap=getTermMap(object)
                         object=object.replace("$(",'"')
                         object=object.replace(")",'"')
                     else:
+                        termMap=getTermMap(object)
                         object=objec.replace("$(",'"')
                         object=object.replace(")",'"')
-                    template+="\t\t\trml:reference " + object + ";\n"
+                    template+="\t\t\t"+termMap + object + ";\n"
                     if type(objec)== list and len(objec)==2:
                         types = check_type(objec,2)
                         if(types!="error"):
@@ -193,12 +203,14 @@ def addPredicateObjectFull(data,mapping,predob,access):
                     template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
                     if(type(objec) is list):
                         object = objec[0]
+                        termMap=getTermMap(object)
                         object=object.replace("$(",'"')
                         object=object.replace(")",'"')
                     else:
+                        termMap=getTermMap(object)
                         object=objec.replace("$(",'"')
                         object=object.replace(")",'"')
-                    template+="\t\t\trml:reference " + object + ";\n\t\t];\n"
+                    template+="\t\t\t"+termMap + object + ";\n\t\t];\n"
                     if type(objec)== list and len(objec)==2:
                         types = check_type(objec,2)
                         if(types!="error"):
@@ -301,3 +313,14 @@ def joinMapping(data,mapping,predob,access,parameter):
 
             raise Exception("Error in reference mapping another mapping in mapping1 " + mapping)
     return template
+
+
+
+def getTermMap(text):
+    if("$(" in text and ")" in text):
+        if text[0]=="$":
+            return "rml:reference "
+        else:
+            return "rr:template "
+    else:
+        return "rr:constant "

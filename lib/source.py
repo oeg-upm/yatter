@@ -17,7 +17,7 @@ def addSource(data, mapping,list_initial_sources):
     #primero se comprueba que este en la lista inicial de sources, sino luego se comprueba si es forma completa o simplificada
     if "sources" in data.get("mappings").get(mapping):
         if(type(data.get("mappings").get(mapping).get("sources")) is str ):
-            list_sources.append(data.get("mappings").get(mapping).get("sources"))
+            #list_sources.append(data.get("mappings").get(mapping).get("sources"))
             final_list.append(addInitialSource(data,data.get("mappings").get(mapping).get("sources")))
         else:
             for sources in data.get("mappings").get(mapping).get("sources"):
@@ -27,7 +27,7 @@ def addSource(data, mapping,list_initial_sources):
                     final_list.append(addInitialSource(data,sources))
     elif "source" in data.get("mappings").get(mapping):
         if(type(data.get("mappings").get(mapping).get("source")) is str ):
-            list_sources.append(data.get("mappings").get(mapping).get("source"))
+            #list_sources.append(data.get("mappings").get(mapping).get("source"))
             final_list.append(addInitialSource(data,data.get("mappings").get(mapping).get("source")))
         else:
             for sources in data.get("mappings").get(mapping).get("source"):
@@ -60,6 +60,9 @@ def addSource(data, mapping,list_initial_sources):
 
 def addInitialSource(data,sources):
     source_template = ""
+    if "query" in sources:
+        list_source=databaseSource(data,mapping,sources)
+        return list_source
 
     if "access" in data.get("sources").get(sources):
         access = data.get("sources").get(sources).get("access")
@@ -213,10 +216,13 @@ def databaseSource(data,mapping,source):
     if "access" in source:
         if "credentials" in source:
             if "type" in source and source.get("type")=="mysql":
-                templatelog+='\t\trml:source <#DataSource>;\n\t\trr:sqlVersion rr:SQL2008;\n\t\trml:query "'+source.get("query") +'";\n\t\t'
+                templatelog+='\t\trml:source <#DataSource_'+mapping+'>;\n\t\trr:sqlVersion rr:SQL2008;\n\t\trml:query "'+source.get("query") +'";\n\t\t'
                 if "referenceFormulation" in source:
                     formu=getReferenceFOrmulation(source.get("referenceFormulation"))
                     templatelog+="\t\trml:referenceFormulation ql:"+ formu +"\n\t];\n"
+                else:
+                    templatelog+="\n\t];\n"
+
         else:
             raise Exception("ERROR: no credentials to get access to source in mapping "+ mapping)
     else:
@@ -225,7 +231,7 @@ def databaseSource(data,mapping,source):
 
     list.append(templatelog)
 
-    templateDat = '<#DataSource> a d2rq:Database;\n\tdrr1:jdbcDSN "'+ source.get("access")+'";\n\td2rq:jdbcDriver "com.mysql.jdbc.Driver";\n\td2rq:username "'+source.get("credentials").get("username")+'";\n\td2rq:password "'+source.get("credentials").get("password")+'".\n\n'
+    templateDat = '<#DataSource_'+mapping+'> a d2rq:Database;\n\tdrr1:jdbcDSN "'+ source.get("access")+'";\n\td2rq:jdbcDriver "com.mysql.jdbc.Driver";\n\td2rq:username "'+source.get("credentials").get("username")+'";\n\td2rq:password "'+source.get("credentials").get("password")+'".\n\n'
 
     list.append(templateDat)
 
