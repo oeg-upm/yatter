@@ -15,5 +15,5 @@ mappings:
       - [bases_bicimad-with-links2.csv~csv]
     s: http://www.semanticweb.org/bicimad/classes/Bike_Station/$(bs_id)
     po:
-      - predicates: [foaf:name,foaf:zorra]
+      - predicates: a
         o: [$(firstname), en~lang]
