@@ -10,7 +10,7 @@ mappings:
        iterator: "/SimModel/simmodel:SimAppLibraryDefault_AppLibraryDefault_GlobalLibrary"
    subjects: "http://www.lbl.gov/namespaces/Sim/Model/$(@RefId)"
    predicateobjects:
-    - [a, simmodel:SimAppLibraryDefault_AppLibraryDefault_GlobalLibrary]
+    #- [a, simmodel:SimAppLibraryDefault_AppLibraryDefault_GlobalLibrary]
     - [simmodel:refId, "$(@RefId)"]
     - [simres:simModelType, "$(simres:SimModelType)"]
     - [simres:SimModelSubtype, "$(simres:SimModelSubtype)"]

@@ -115,7 +115,7 @@ def addInitialSource(data,sources):
             raise Exception("ERROR: source " + sources + "has no referenceFormulation")
     if "iterator" in data.get("sources").get(sources):
         source_iterator = data.get("sources").get(sources).get("iterator")
-        source_template += '"' + access + '";\n' + "\t\trml:referenceFormulation ql:"+ source_referenceFormulation +";\n" + '\t\trml:iterator "' +source_iterator + '".\n\t];\n'
+        source_template += '"' + access + '";\n' + "\t\trml:referenceFormulation ql:"+ source_referenceFormulation +";\n" + '\t\trml:iterator "' +source_iterator + '"\n\t];\n'
         return source_template
     else:
         if(extension[1]=="csv" or extension[1]=="SQL2008"):
@@ -170,19 +170,19 @@ def addSourceFull(data,mapping,sour):
         if(extension[1]=="csv"):
             if "iterator" in sour:
                 source_iterator = str(sour.get("iterator"))
-                source_template += '"'+source+'"' + ";\n" + '\t\trml:iterator "' +source_iterator + '".\n\t];\n'
+                source_template += '"'+source+'"' + ";\n" + '\t\trml:iterator "' +source_iterator + '"\n\t];\n'
                 return source_template
             else:
-                source_template += '"'+source+'"' + ";\n" + '".\n\t];\n'
+                source_template += '"'+source+'"' + ";\n" + '"\n\t];\n'
                 return source_template
         else:
             raise Exception("ERROR: source "+sour.get("access") + "in mapping " + mapping + " has no referenceFormulation")
     if "iterator" in sour:
         source_iterator = str(sour.get("iterator"))
-        source_template += '"'+source+'"' + ";\n" + "\t\trml:referenceFormulation ql:"+ source_referenceFormulation +";\n" + '\t\trml:iterator "' +source_iterator + '".\n\t];\n'
+        source_template += '"'+source+'"' + ";\n" + "\t\trml:referenceFormulation ql:"+ source_referenceFormulation +";\n" + '\t\trml:iterator "' +source_iterator + '"\n\t];\n'
     else:
         if (extension[1]=="csv" or extension[1]=="SQL2008"):
-            source_template += '"'+source+'"' + ";\n" + "\t\trml:referenceFormulation ql:"+ source_referenceFormulation +";\n" + '".\n\t];\n'
+            source_template += '"'+source+'"' + ";\n" + "\t\trml:referenceFormulation ql:"+ source_referenceFormulation +";\n" + '"\n\t];\n'
         else:
             raise Exception("ERROR: source "+sour.get("access") + " in mapping " + mapping + " has no iterator")
     source_final += source_template

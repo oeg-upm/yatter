@@ -11,7 +11,7 @@ mappings:
         iterator: $
     subjects: [http://loc.example.com/city/$(city),http://loc.example.com/town/$(town)]
     po:
-     - [a, schema:City]
+    # - [a, schema:City]
      - [wgs84_pos:lat,$(venue.latitude)]
      - [wgs84_pos:long, $(venue.longtitude)]
      - [geosp:onContinent, $(continent)]

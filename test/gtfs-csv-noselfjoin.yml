@@ -19,12 +19,11 @@ mappings:
       - [/data/STOP_TIMES.csv~csv]
     s: http://transport.linkeddata.es/madrid/metro/stoptimes/$(trip_id)-$(stop_id)-$(arrival_time)
     po:
-      - [a, gtfs:StopTime]
-      - [gtfs:arrivalTime, $(arrival_time),xsd:duration]
-      - [gtfs:departureTime, $(departure_time),xsd:duration]
       - [gtfs:stopSequence, $(stop_sequence),xsd:integer]
-      - [gtfs:headsign, $(stop_headsign)]
+      - [gtfs:arrivalTime, $(arrival_time),xsd:duration]
       - [gtfs:pickupType, http://transport.linkeddata.es/resource/PickupType/$(pickup_type)~iri]
+      - [gtfs:departureTime, $(departure_time),xsd:duration]
+      - [gtfs:headsign, $(stop_headsign)]
       - [gtfs:dropOffType, http://transport.linkeddata.es/resource/DropOffType/$(drop_off_type)~iri]
       - [gtfs:distanceTraveled, $(shape_dist_traveled)]
       - p: gtfs:trip
@@ -43,12 +42,15 @@ mappings:
               parameters:
                 - [str1, $(stop_id)]
                 - [str2, $(stop_id)]
+
   trips:
     s: http://transport.linkeddata.es/madrid/metro/trips/$(trip_id)
     sources:
       - [src/test/resources/example/Venue.json~jsonpath,$]
+      - [src/test/resources/example/Venue.json~jsonpath,$]
+
     po:
-      - [a, gtfs:Trip]
+      #- [a, gtfs:Trip]
       - [gtfs:headsign, $(trip_headsign)]
       - [gtfs:shortName, $(trip_short_name)]
       - [gtfs:direction, $(direction_id)]
@@ -89,7 +91,7 @@ mappings:
       - [/data/ROUTES.csv~csv]
     s: http://transport.linkeddata.es/madrid/metro/routes/$(route_id)
     po:
-      - [a, gtfs:Route]
+      #- [a, gtfs:Route]
       - [gtfs:shortName, $(route_short_name)]
       - [gtfs:longName, $(route_long_name)]
       - [dct:description, $(route_desc)]
@@ -110,7 +112,7 @@ mappings:
       - [/data/AGENCY.csv~csv]
     s: http://transport.linkeddata.es/madrid/agency/$(agency_id)
     po:
-      - [a, gtfs:Agency]
+    #  - [a, gtfs:Agency]
       - [foaf:page, $(agency_url)~iri]
       - [foaf:name,$(agency_name)]
       - [gtfs:timeZone,$(agency_timezone)]
@@ -122,7 +124,7 @@ mappings:
       - [/data/STOPS.csv~csv]
     s: http://transport.linkeddata.es/madrid/metro/stops/$(stop_id)
     po:
-      - [a,gtfs:Stop]
+    #  - [a,gtfs:Stop]
       - [gtfs:code,$(stop_code)]
       - [dct:identifier,$(stop_id)]
       - [foaf:name,$(stop_name)]
@@ -147,7 +149,7 @@ mappings:
       - [/data/CALENDAR.csv~csv]
     s: http://transport.linkeddata.es/madrid/metro/services/$(service_id)
     po:
-      - [a, gtfs:Service]
+      #- [a, gtfs:Service]
       - p: gtfs:serviceRule
         o:
           - mapping: calendar_rules
@@ -161,7 +163,7 @@ mappings:
       - [/data/CALENDAR_DATES.csv~csv]
     s: http://transport.linkeddata.es/madrid/metro/services/$(service_id)
     po:
-      - [a, gtfs:Service]
+      #- [a, gtfs:Service]
       - p: gtfs:serviceRule
         o:
           - mapping: calendar_date_rules
@@ -175,7 +177,7 @@ mappings:
       - [/data/CALENDAR_DATES.csv~csv]
     s: http://transport.linkeddata.es/madrid/metro/calendar_date_rule/$(service_id)-$(date)
     po:
-      - [a, gtfs:CalendarDateRule]
+      #- [a, gtfs:CalendarDateRule]
       - [dct:date, $(date), xsd:date]
       - [gtfs:dateAddition, $(exception_type), xsd:boolean]
   calendar_rules:
@@ -183,7 +185,7 @@ mappings:
       - [/data/CALENDAR.csv~csv]
     s: http://transport.linkeddata.es/madrid/metro/calendar_rules/$(service_id)
     po:
-      - [a, gtfs:CalendarRule]
+    #  - [a, gtfs:CalendarRule]
       - [gtfs:monday, $(monday), xsd:boolean]
       - [gtfs:tuesday, $(tuesday), xsd:boolean]
       - [gtfs:wednesday, $(wednesday), xsd:boolean]
@@ -198,8 +200,7 @@ mappings:
       - [/data/FEED_INFO.csv~csv]
     s: http://transport.linkeddata.es/madrid/metro/feed/$(feed_publisher_name)
     po:
-      - [a, gtfs:Feed]
-      - [dct:publisher,$(feed_publisher_name)]
+      #- [a, gtfs:Feed]
       - [foaf:page,$(feed_publisher_url)~iri]
       - [dct:language,$(feed_lang)]
       - [schema:startDate,$(feed_start_date), xsd:date]
@@ -210,14 +211,14 @@ mappings:
       - [/data/SHAPES.csv~csv]
     s: http://transport.linkeddata.es/madrid/metro/shape/$(shape_id)
     po:
-      - [a, gtfs:Shape]
+    #  - [a, gtfs:Shape]
       - [gtfs:shapePoint, http://transport.linkeddata.es/madrid/metro/shape_point/$(shape_id)-$(shape_pt_sequence)]
   shapePoints:
     sources:
       - [/data/SHAPES.csv~csv]
     s: http://transport.linkeddata.es/madrid/metro/shape_point/$(shape_id)-$(shape_pt_sequence)
     po:
-      - [a, gtfs:ShapePoint]
+    #  - [a, gtfs:ShapePoint]
       - [geo:lat,$(shape_pt_lat),xsd:double]
       - [geo:long,$(shape_pt_lon),xsd:double]
       - [gtfs:pointSequence,$(shape_pt_sequence)]
@@ -227,7 +228,7 @@ mappings:
       - [/data/FREQUENCIES.csv~csv]
     s: http://transport.linkeddata.es/madrid/metro/frequency/$(trip_id)-$(start_time)
     po:
-      - [a, gtfs:Frequency]
+    #  - [a, gtfs:Frequency]
       - [gtfs:startTime,$(start_time)]
       - [gtfs:endTime,$(end_time)]
       - [gtfs:headwaySeconds,$(headway_secs),xsd:integer]

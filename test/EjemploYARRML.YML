@@ -8,6 +8,7 @@ prefixes:
   owl: http://www.w3.org/2002/07/owl#
   classes: http://www.semanticweb.org/bicimad/classes/
   properties: http://www.semanticweb.org/bicimad/properties#
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
 
 mappings:
  TriplesMap1:

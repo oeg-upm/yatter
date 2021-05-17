@@ -37,9 +37,10 @@ def addSubject(data, mapping):
                 final_list.append(subject_template)
                 return final_list
             else:
+                print("si")
                 #varios sujetos
                 for x in list_subject[1]:
-                    termMap=getTermMap(subject)
+                    termMap=getTermMap(x)
                     subject_template = "\trr:subjectMap [\n" + "\t\ta rr:SubjectMap;\n"+ "\t\t"
                     x = x.replace("$(","{").replace(")","}")
                     subject_template = subject_template +termMap+ ' "'  + x +'"'+ "\n\t];"+"\n\n"
