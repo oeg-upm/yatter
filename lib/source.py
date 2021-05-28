@@ -193,7 +193,6 @@ def checkExtension (extension,referenceFormulation):
         "json":"jsonpath",
         "csv":"csv",
         "xml":"xpath"
-        #para querys
     }
     reference = switcher.get(extension,"ERROR")
     if reference == referenceFormulation:
