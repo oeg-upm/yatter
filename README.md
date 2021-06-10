@@ -1,5 +1,8 @@
 # YARRRML2RML
-Repository for the pretty transformation of YARRRML mappings into RML.
+Repository for the pretty transformation of YARRRML mappings into RML. This parser is based on RML and YARRRML mapping rules which can be seen here:
+- [RML Spec](https://rml.io/specs/rml/ "RML Spec")
+- [YARRRML Spec](https://rml.io/yarrrml/spec/ "YARRRML Spec")
+
 
 ## Release
 The version of this parser is 0.1
