@@ -13,8 +13,8 @@ YARRRML2RML is licensed under the Apache License, Version 2.0.
 ## Execution
 In order to execute the code, two options are available:
 - Python main.py
-		Introduce the mapping file
-		Introduce the name of the output file
+	Introduce the mapping file
+	Introduce the name of the output file
 
 ------------- 
 - Python main.py -m MappingFile.yml -o OutputFile.rml
