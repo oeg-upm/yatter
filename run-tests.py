@@ -17,8 +17,8 @@ if __name__ == "__main__":
             expected_output_graph = ConjunctiveGraph()
             output_graph = ConjunctiveGraph()
             try:
-                expected_output_graph.parse(dirpath + "/mapping.rml.ttl")
-                output_graph.parse(dirpath + "/mapping-output.rml.ttl")
+                expected_output_graph.parse(dirpath + "/mapping.rml.ttl", format="turtle")
+                output_graph.parse(dirpath + "/mapping-output.rml.ttl", format="turtle")
                 iso_expected = compare.to_isomorphic(expected_output_graph)
                 iso_output = compare.to_isomorphic(output_graph)
                 # and graphs are equal
@@ -28,7 +28,7 @@ if __name__ == "__main__":
                 else:
                     print("Output RDF does not match with the expected RDF")
                     result = "failed"
-                print(dirpath + "," + result, "not equal")
+                list.append(dirpath + "," + results)
             except Exception as e:
                 print(str(e))
                 results = "failed"
