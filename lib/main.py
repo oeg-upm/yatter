@@ -1,80 +1,71 @@
 import yaml
 import sys
-import os
-import mapping as mappingmod
-import source as sourcemod
-import subject as subjectmod
-import predicateobject as predicateobjectmod
+import mapping as mapping_mod
+import source as source_mod
+import subject as subject_mod
+import predicateobject as predicate_object_mod
 
 
-
-if __name__ =="__main__":
-    if len(sys.argv)==1:
-        print("Introduce the .yml file you want to convert to RML")
-        file = input()
-        #file="../test/gtfs-csv.yml"
-        print("\n")
-        #../test/example1/rml/mapping.yml
+def run_parsing_system_inputs():
+    if len(sys.argv) == 1:
+        file = input("Introduce the .yml file you want to convert to RML")
         with open(file) as f:
-            print("Name for your file:")
-            end=input()
-            #end="prueba"
-            if(end[:-4]!=".rml"):
-                nuevo_fich=open(end+".rml","a")
-            else:
-                nuevo_fich=open(end,"a")
-            data = yaml.safe_load(f)
-            yaml_stream = True
+            yaml_data = yaml.safe_load(f)
 
-    elif len(sys.argv)==5 and sys.argv[1]=="-m" and sys.argv[3]=="-o":
-        file=sys.argv[2]
-        with open(file) as f:
-            end=sys.argv[4]
-            if(end[:-4]!=".rml"):
-                nuevo_fich=open(end+".rml","a")
-            else:
-                nuevo_fich=open(end,"a")
-            data = yaml.safe_load(f)
-            yaml_stream = True
+    elif len(sys.argv) == 5 and sys.argv[1] == "-m" and sys.argv[3] == "-o":
+        with open(sys.argv[2]) as f:
+            yaml_data = yaml.safe_load(f)
     else:
-        sys.tracebacklimit=0
-        raise Exception("\n####################################\nERROR: Wrong argument input. You can:\n-Use no arguments\n-Use arguments: -m YARRRMLfile -o RMLFile\n####################################\n")
+        sys.tracebacklimit = 0
+        raise Exception(
+            "\n####################################\nERROR: Wrong argument input. You can:"
+            "\n-Use no arguments\n-Use arguments: -m YARRRMLfile -o RMLFile"
+            "\n####################################\n")
+    return yaml_data
 
 
-    print("------------------------START RML-------------------------------")
-    mapping_list=[]
-    list_initial_sources= sourcemod.getInitialSources(data)
-    final=""
-    final = mappingmod.addPrefix(data)
+def write_results(rml_content):
+    if len(sys.argv) == 1:
+        rml_output_path = open(input("Name the path for the output file:"), "a")
+    else:
+        rml_output_path = sys.argv[3]
+
+    rml_output_path.write(rml_content)
+
+
+def translate(yarrrml_data):
+    print("------------------------START TRANSLATING RML-------------------------------")
+    list_initial_sources = source_mod.getInitialSources(yarrrml_data)
+    final = mapping_mod.addPrefix(yarrrml_data)
     try:
-        for mapp in data.get("mappings"):
-            subject_list=[]
-            subject_list = subjectmod.addSubject(data, mapp)
-            source_list=[]
-            source_list=sourcemod.addSource(data,mapp,list_initial_sources)
-            pred =predicateobjectmod.addPredicateObject(data,mapp)
+        for mapp in yarrrml_data.get("mappings"):
+            subject_list = subject_mod.addSubject(yarrrml_data, mapp)
+            source_list = source_mod.addSource(yarrrml_data, mapp, list_initial_sources)
+            pred = predicate_object_mod.addPredicateObject(yarrrml_data, mapp)
             it = 0
             for source in source_list:
                 for subject in subject_list:
-                    map=mappingmod.addMapping(data,mapp,it)
+                    map = mapping_mod.addMapping(yarrrml_data, mapp, it)
                     if type(source) is list:
-                        final += map + source[0] +subject + pred + source[1]
+                        final += map + source[0] + subject + pred + source[1]
                     else:
-                        final += map + source +subject + pred
+                        final += map + source + subject + pred
                     final = final[:-3]
-                    final+= ".\n\n\n"
-                    it=it+1
-        nuevo_fich.write(final)
-    except Exception as e:
-            print(str(e))
-            print("------------------------END RML-------------------------------")
-            print("FILE NOT SUCCESSFULY CREATED")
-            if(".rml" in end):
-                os.remove(end)
-            else:
-                os.remove(end+".rml")
-            sys.exit()
+                    final += ".\n\n\n"
+                    it = it + 1
 
+    except Exception as e:
+        print(str(e))
+        print("------------------------END RML-------------------------------")
+        print("FILE NOT SUCCESSFULY CREATED")
+        sys.exit()
+
+    return final
+
+
+if __name__ == "__main__":
+    yarrrml_data, output_file = run_parsing_system_inputs()
+    write_results(translate(yarrrml_data, output_file))
 
     print("------------------------END RML-------------------------------")
     print("FILE SUCCESSFULY CREATED!")
