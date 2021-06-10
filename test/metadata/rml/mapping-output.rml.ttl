@@ -1,0 +1,131 @@
+@prefix mail: <http://example.com/mail#>.
+@prefix ex: <http://www.example.com/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+@prefix rml: <http://semweb.mmlab.be/ns/rml#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+
+<#FromToMaps_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "src/test/resources/example1/example1.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/notes/note"
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template  "http://www.example.com/note/@id"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rr:constant mail:note;
+			rr:TermType rr:IRI
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate mail:when;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "@year-@month-@day";
+			rr:datatype xsd:date
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate mail:from;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "from"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate mail:to;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "to"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate mail:heading;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "heading"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate mail:body;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "body"
+		]
+	].
+
+
+<#DateTime_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "src/test/resources/example1/example1.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/notes/note"
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template  "http://www.example.com/DateTime/@year@month@day"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rr:constant ex:DateTime;
+			rr:TermType rr:IRI
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate ex:day;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rr:template "--{@day}";
+			rr:datatype xsd:gDay
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate ex:month;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rr:template "--{@month}";
+			rr:datatype xsd:gMonth
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate ex:year;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "@year";
+			rr:datatype xsd:gYear
+		]
+	].
+
+

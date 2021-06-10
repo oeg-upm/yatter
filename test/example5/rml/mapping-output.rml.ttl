@@ -1,0 +1,223 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/>.
+@prefix ex: <http://example.org/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+@prefix rml: <http://semweb.mmlab.be/ns/rml#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+
+<#ArtistMapping_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "src/test/resources/example5/museum.json";
+		rml:referenceFormulation ql:JSONPath;
+		rml:iterator "$.[*]"
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template  "http://ex.com/Artist"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate rdfs:label;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "Artist"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate crm:P143_carried_out_by;
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#MoonWalkerMapping_0>;
+			rr:joinCondition [
+				rr:child "Artist";
+				rr:parent "Name";
+			]
+		.
+
+
+<#MoonWalkerMapping_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "src/test/resources/example5/museum.json";
+		rml:referenceFormulation ql:JSONPath;
+		rml:iterator "$.[*].Sitter[*]"
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template  "http://ex.com/Name"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate rdfs:label;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "Name"
+		]
+	].
+
+
+<#SitterMapping_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "src/test/resources/example5/museum.json";
+		rml:referenceFormulation ql:JSONPath;
+		rml:iterator "$.[*].Sitter"
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template  "http://ex.com/Name"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate rdfs:label;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "Name"
+		]
+	].
+
+
+<#ProductionMapping_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "src/test/resources/example5/museum.json";
+		rml:referenceFormulation ql:JSONPath;
+		rml:iterator "$.[*]"
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template  "http://ex.com/Production/Ref"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate crm:P82_at_some_time_within;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "DateOfWork"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate crm:P14_carried_out_by;
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#ArtistMapping_0>;
+
+		]
+	];	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate crm:P108_has_produced;
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#ArtworkMapping_0>;
+
+		]
+.
+
+
+<#ArtworkMapping_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "src/test/resources/example5/museum.json";
+		rml:referenceFormulation ql:JSONPath;
+		rml:iterator "$.[*]"
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:constant http://ex.com/{Ref}
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate crm:P102_has_title;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "Title"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate crm:P48_has_preferred_identifier;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "Ref"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate crm:P62_depicts;
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#SitterMapping_0>;
+
+		]
+.
+
+
+<#WikipediaExportMapping_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "src/test/resources/example5/moon-walkers.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template  "http://ex.com/Name"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate ex:birthday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "Birth Date";
+			rr:datatype xsd:date
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate ex:deathday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "Death Date";
+			rr:datatype xsd:date
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate ex:evaday;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "EVA Date";
+			rr:datatype xsd:date
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate ex:service;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "Service"
+		]
+	].
+
+

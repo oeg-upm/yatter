@@ -1,6 +1,6 @@
 import yaml
-import source as sourcemod
-import subject as subjectmod
+from lib import source as sourcemod
+from lib import subject as subjectmod
 
 def addPredicateObject(data,mapping):
     po_template = ""

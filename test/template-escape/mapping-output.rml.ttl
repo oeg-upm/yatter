@@ -1,0 +1,9 @@
+@prefix ex: <http://example.com/>.
+@prefix as: <https://www.w3.org/ns/activitystreams#>.
+@prefix xapi: <http://adlnet.gov/expapi/verbs/>.
+@prefix fnstr: <http://example.com/idlab/functions/string/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+@prefix rml: <http://semweb.mmlab.be/ns/rml#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+
