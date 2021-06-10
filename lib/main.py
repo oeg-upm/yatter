@@ -6,9 +6,6 @@ import source as sourcemod
 import subject as subjectmod
 import predicateobject as predicateobjectmod
 
-#################################LISTA DE COSAS A COMPROBAR#############################################
-#que hacer si tenemos $($.) en un predicateobject
-#-------
 
 
 if __name__ =="__main__":
@@ -67,7 +64,6 @@ if __name__ =="__main__":
                     final = final[:-3]
                     final+= ".\n\n\n"
                     it=it+1
-        print(final)
         nuevo_fich.write(final)
     except Exception as e:
             print(str(e))
