@@ -19,9 +19,10 @@ def run_parsing_system_inputs():
         sys.tracebacklimit = 0
         raise Exception(
             "\n####################################\nERROR: Wrong argument input. You can:"
-            "\n-Use no arguments\n-Use arguments: -m YARRRMLfile -o RMLFile"
+            "\n-Use no arguments\n-Use arguments (in this order): -m yarrrml.yml -o mapping.rml.ttl"
             "\n####################################\n")
     return yaml_data
+
 
 def open_inputs(yarrml_path):
     with open(yarrml_path) as f:
@@ -33,28 +34,28 @@ def write_results(rml_content):
     if len(sys.argv) == 1:
         rml_output_path = open(input("Name the path for the output file:"), "a")
     else:
-        rml_output_path = open(sys.argv[3],"a")
+        rml_output_path = open(sys.argv[4], "a")
 
     rml_output_path.write(rml_content)
 
 
 def translate(yarrrml_data):
     print("------------------------START TRANSLATING RML-------------------------------")
-    list_initial_sources = source_mod.getInitialSources(yarrrml_data)
-    final = mapping_mod.addPrefix(yarrrml_data)
+    list_initial_sources = source_mod.get_initial_sources(yarrrml_data)
+    final = mapping_mod.add_prefix(yarrrml_data)
     try:
-        for mapp in yarrrml_data.get("mappings"):
-            subject_list = subject_mod.addSubject(yarrrml_data, mapp)
-            source_list = source_mod.addSource(yarrrml_data, mapp, list_initial_sources)
-            pred = predicate_object_mod.addPredicateObject(yarrrml_data, mapp)
+        for map in yarrrml_data.get("mappings"):
+            subject_list = subject_mod.add_subject(yarrrml_data, map)
+            source_list = source_mod.add_source(yarrrml_data, map, list_initial_sources)
+            pred = predicate_object_mod.addPredicateObject(yarrrml_data, map)
             it = 0
             for source in source_list:
                 for subject in subject_list:
-                    map = mapping_mod.addMapping(yarrrml_data, mapp, it)
+                    map_aux = mapping_mod.add_mapping(map, it)
                     if type(source) is list:
-                        final += map + source[0] + subject + pred + source[1]
+                        final += map_aux + source[0] + subject + pred + source[1]
                     else:
-                        final += map + source + subject + pred
+                        final += map_aux + source + subject + pred
                     final = final[:-3]
                     final += ".\n\n\n"
                     it = it + 1
@@ -63,7 +64,7 @@ def translate(yarrrml_data):
         print(str(e))
         print("------------------------END RML-------------------------------")
         print("FILE NOT SUCCESSFULY CREATED")
-        #sys.exit()
+        # sys.exit()
 
     return final
 

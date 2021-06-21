@@ -1,21 +1,38 @@
-import yaml
-def addMapping(data, mapping,it):
-    map_template="<#"+mapping+"_"+str(it)+"> a rr:TriplesMap;\n\n"
+import constants
+
+
+def add_mapping(mapping, it):
+    map_template = "<#" + mapping + "_" + str(it) + "> a " + constants.RML_TRIPLES_MAP + ";\n\n"
     return map_template
 
-def addPrefix(data):
-    template=""
-    if "prefixes" in data:
-        prefixes=data.get("prefixes")
+
+def add_prefix(data):
+    template = ""
+    common_prefixes = []
+    if constants.YARRRML_PREFIXES in data:
+        prefixes = data.get(constants.YARRRML_PREFIXES)
         for prefix in prefixes:
-            template+="@prefix "+ prefix +": <"+data.get("prefixes").get(prefix)+">.\n"
-        if "rr" not in data.get("prefixes"):
-            template+="@prefix rr: <http://www.w3.org/ns/r2rml#>.\n"
-        if "rml" not in data.get("prefixes"):
-            template+="@prefix rml: <http://semweb.mmlab.be/ns/rml#>.\n"
-        if "rdf" not in data.get("prefixes"):
-            template+="@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.\n"
-        template+="\n\n"
-        return template
-    else:
-        return template
+            prefix_uri = data.get(constants.YARRRML_PREFIXES).get(prefix)
+            check_common_prefixes(prefix_uri, common_prefixes)
+            template += constants.RML_PREFIX + " " + prefix + ": <" + prefix_uri + ">.\n"
+
+        if "r2rml" not in common_prefixes:
+            template += constants.RML_PREFIX + " rr: <" + constants.R2RML_URI + ">.\n"
+        if "rml" not in common_prefixes:
+            template += constants.RML_PREFIX + " rml: <" + constants.RML_URI + ">.\n"
+        if "rdf" not in common_prefixes:
+            template += constants.RML_PREFIX + " rdf: <" + constants.RDF_URI + ">.\n"
+
+        template += "\n\n"
+
+    return template
+
+
+def check_common_prefixes(prefix_uri, common_prefixes):
+
+    if prefix_uri == constants.R2RML_URI:
+        common_prefixes.append("r2rml")
+    elif prefix_uri == constants.RML_URI:
+        common_prefixes.append("rml")
+    elif prefix_uri == constants.RDF_URI:
+        common_prefixes.append("rdf")
