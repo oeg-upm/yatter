@@ -1,3 +1,5 @@
+import re
+
 import constants
 
 
@@ -27,7 +29,7 @@ def add_source(data, mapping, list_initial_sources):
 
         if constants.YARRRML_ACCESS in source:
             if constants.YARRRML_QUERY in source:
-                final_list.append(database_source(mapping, source))
+                final_list.extend(source_template + database_source(mapping, source))
             else:
                 final_list.append(source_template + add_source_full(mapping, source))
         elif type(source) is list:
@@ -39,23 +41,23 @@ def add_source(data, mapping, list_initial_sources):
 
 def add_source_simplified(mapping, source):
     source_rdf = ""
-    file_path = source[0]
-    source_reference_formulation = source.split('~')[1]
+    file_path = re.sub("~.*", "", source[0])
+    reference_formulation = source[0].split('~')[1]
     source_extension = file_path.split('.')[1]
-
-    if switch_in_reference_formulation(source_reference_formulation) != source_extension:
+    ref_formulation_rml = reference_formulation.replace("json", "JSON").replace("csv", "CSV").replace("xpath", "XPath")
+    if switch_in_reference_formulation(reference_formulation) != source_extension:
         raise Exception(
             "ERROR: mismatch extension and referenceFormulation in source " + source + " in mapping " + mapping)
     else:
         if len(source) == 1:  # si no tiene iterador
             if source_extension == "csv" or source_extension == "SQL2008":
                 source_rdf += '"' + file_path + '"' + ";\n" + "\t\t" + constants.RML_REFERENCE_FORMULATION + " ql:" \
-                              + source_reference_formulation + "\n" + "\t];\n"
+                              + ref_formulation_rml + "\n" + "\t];\n"
             else:
                 raise Exception("ERROR: source " + source + " in mapping " + mapping + " has no iterator")
         else:  # source[1] es el iterador en json y xml
             source_rdf += "\"" + file_path + "\";\n\t\t" + constants.RML_REFERENCE_FORMULATION + " ql:" \
-                          + source_reference_formulation + ";\n\t\t" + constants.RML_ITERATOR + "\"" \
+                          + ref_formulation_rml + ";\n\t\t" + constants.RML_ITERATOR + "\"" \
                           + source[1] + "\";\n\t];\n"
     return source_rdf
 
@@ -68,20 +70,21 @@ def add_source_full(mapping, source):
 
     if constants.YARRRML_REFERENCE_FORMULATION in source:
         reference_formulation = str(source.get(constants.YARRRML_REFERENCE_FORMULATION))
-        format_from_reference = switch_in_reference_formulation(reference_formulation)
+        format_from_reference = switch_in_reference_formulation(reference_formulation.lower())
+        ref_formulation_rml = reference_formulation.replace("json", "JSON").replace("csv", "CSV").replace("xpath","XPath")
         if extension == format_from_reference or format_from_reference == "ERROR":
             raise Exception("ERROR: not referenceFormulation found or mismatch between the format and "
                             "referenceFormulation in source " + access + "in mapping " + mapping)
-
         if constants.YARRRML_ITERATOR in source:
             source_iterator = str(source.get(constants.YARRRML_ITERATOR))
+
             source_rdf += "\"" + access + "\";\n\t\t" + constants.RML_REFERENCE_FORMULATION + " ql:" \
-                          + reference_formulation + ";\n\t\t" + constants.RML_ITERATOR + "\"" \
+                          + ref_formulation_rml + ";\n\t\t" + constants.RML_ITERATOR + "\"" \
                           + source_iterator + "\"\n\t];\n"
         else:
             if extension == "csv" or extension == "SQL2008":
                 source_rdf += "\"" + access + "\";\n\t\t" + constants.RML_REFERENCE_FORMULATION + " ql:" \
-                              + reference_formulation + ";\n\n\t];\n"
+                              + ref_formulation_rml + ";\n\n\t];\n"
             else:
                 raise Exception("ERROR: source " + access + "in mapping " + mapping + " has no referenceFormulation")
 
@@ -122,11 +125,12 @@ def database_source(mapping, source):
 
 def switch_in_reference_formulation(value):
     switcher = {
-        "jsonpath": "JSONPath",
-        "csv": "CSV",
-        "xpath": "XPath"
+        "json": "jsonpath",
+        "csv": "csv",
+        "xml": "xpath"
     }
-    return switcher.get(value, "ERROR")
+
+    return switcher.get(value.lower(), "ERROR")
 
 
 def generate_database_connection(mapping, source):

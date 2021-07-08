@@ -29,7 +29,23 @@ R2RML_SUBJECT_PROPERTY = 'rr:subjectMap'
 R2RML_SUBJECT_CLASS = 'rr:SubjectMap'
 R2RML_SQL_VERSION = 'rr:sqlVersion'
 R2RML_SQL_QUERY = 'rr:sqlQuery'
-
+R2RML_PREDICATE_OBJECT_MAP = 'rr:predicateObjectMap'
+R2RML_PREDICATE_OBJECT_MAP_CLASS = 'rr:PredicateObjectMap'
+R2RML_SHORTCUT_PREDICATE = 'rr:predicate'
+R2RML_PREDICATE = 'rr:predicateMap'
+R2RML_PREDICATE_CLASS = 'rr:PredicateMap'
+R2RML_SHORTCUT_OBJECT = 'rr:object'
+R2RML_OBJECT = 'rr:objectMap'
+R2RML_OBJECT_CLASS = 'rr:ObjectMap'
+R2RML_DATATYPE = 'rr:datatype'
+R2RML_TERMTYPE = 'rr:termType'
+R2RML_LANGUAGE = 'rr:language'
+R2RML_IRI = 'rr:IRI'
+R2RML_REFOBJECT_CLASS = 'rr:RefObjectMap'
+R2RML_PARENT_TRIPLESMAP = 'rr:parentTriplesMap'
+R2RML_JOIN_CONITION = 'rr:joinCondition'
+R2RML_CHILD = 'rr:child'
+R2RML_PARENT = 'rr:parent'
 
 ##############################################################################
 #############################   D2RQ CONSTANTS  ###########################
@@ -71,6 +87,14 @@ YARRRML_PREDICATES = 'predicates'
 YARRRML_SHORTCUT_PREDICATES = 'p'
 YARRRML_OBJECT = 'objects'
 YARRRML_SHORTCUT_OBJECT = 'o'
+YARRRML_VALUE = 'value'
+YARRRML_MAPPING = 'mapping'
+YARRRML_DATATYPE = 'datatype'
+YARRRML_LANGUAGE = 'language'
+
+YARRRML_CONDITION = 'condition'
+YARRRML_PARAMETERS = 'parameters'
+
 
 
 

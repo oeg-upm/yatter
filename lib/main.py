@@ -47,7 +47,7 @@ def translate(yarrrml_data):
         for map in yarrrml_data.get("mappings"):
             subject_list = subject_mod.add_subject(yarrrml_data, map)
             source_list = source_mod.add_source(yarrrml_data, map, list_initial_sources)
-            pred = predicate_object_mod.addPredicateObject(yarrrml_data, map)
+            pred = predicate_object_mod.add_predicate_object_maps(yarrrml_data, map)
             it = 0
             for source in source_list:
                 for subject in subject_list:
