@@ -95,6 +95,9 @@ YARRRML_LANGUAGE = 'language'
 YARRRML_CONDITION = 'condition'
 YARRRML_PARAMETERS = 'parameters'
 
+YARRRML_IRI = '~iri'
+YARRRML_LANG = '~lang'
+
 
 
 

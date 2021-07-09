@@ -13,8 +13,8 @@ def get_termmap_type(text):
 
 
 ## Generates a TermMap (subject, predicate, object) based on the property, class and the text
-def generate_rml_termmap(rml_property, rml_class, text):
-    template = "\t" + rml_property + " [\n\t\ta " + rml_class + ";\n\t\t"
+def generate_rml_termmap(rml_property, rml_class, text, identation):
+    template = identation[0:-1] + rml_property + " [\n"+identation+"a " + rml_class + ";\n" + identation
     term_map = get_termmap_type(text)
     if term_map == "rr:template":
         text = text.replace("$(", "{")
@@ -23,9 +23,9 @@ def generate_rml_termmap(rml_property, rml_class, text):
         text = text.replace("$(", "")
         text = text.replace(")", "")
     if term_map != "rr:constant":
-        template += term_map + " \"" + text + "\";\n\t];\n"
+        template += term_map + " \"" + text + "\";\n"+identation[0:-1]+"];\n"
     else:
-        template += term_map + " " + text + ";\n\t];\n\n"
+        template += term_map + " " + text + ";\n"+identation[0:-1]+"];\n"
 
     return template
 

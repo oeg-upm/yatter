@@ -28,7 +28,7 @@ def add_subject(data, mapping):
         rml_subjects = subject
 
     for subject in subjects:
-        subject_termmap = termmap.generate_rml_termmap(constants.R2RML_SUBJECT_PROPERTY, constants.R2RML_SUBJECT_CLASS, subject)
+        subject_termmap = termmap.generate_rml_termmap(constants.R2RML_SUBJECT_PROPERTY, constants.R2RML_SUBJECT_CLASS, subject, "\t\t")
         rml_subjects.append(subject_termmap)
 
     return rml_subjects

@@ -35,15 +35,16 @@ def get_predicate_object_access(mapping):
 
 
 def add_predicate_object_maps(data, mapping):
-    po_template = "\t" + constants.R2RML_PREDICATE_OBJECT_MAP + " [\n"
+    po_template = ""
+    pom_text = "\t" + constants.R2RML_PREDICATE_OBJECT_MAP + " [\n"
     mapping_data = data.get(constants.YARRRML_MAPPINGS).get(mapping)
     for predicate_object_map in mapping_data.get(get_predicate_object_access(mapping_data)):
         if type(predicate_object_map) is list:
-            po_template += add_predicate_object(data, mapping, predicate_object_map)
+            po_template += pom_text + add_predicate_object(data, mapping, predicate_object_map) + "\n"
         else:
-            po_template += add_predicate_object(data, mapping, predicate_object_map,
-                                                get_predicate_access(predicate_object_map),
-                                                get_object_access(predicate_object_map))
+            po_template += pom_text + add_predicate_object(data, mapping, predicate_object_map,
+                                                           get_predicate_access(predicate_object_map),
+                                                           get_object_access(predicate_object_map)) + "\n"
     return po_template
 
 
@@ -87,27 +88,29 @@ def add_predicate_object(data, mapping, predicate_object, predicate_access=None,
     object_list = get_object_list(predicate_object, object_access)
 
     for pm in predicate_list:
-        template += "\t" + termmap.generate_rml_termmap(constants.R2RML_PREDICATE, constants.R2RML_PREDICATE_CLASS, pm)
+        template += termmap.generate_rml_termmap(constants.R2RML_PREDICATE, constants.R2RML_PREDICATE_CLASS, pm,
+                                                 "\t\t\t")
     for om in object_list:
         iri = False
         if type(om) == list:
             object_value = om[0]
-            if "~iri" in om[0]:
-                object_value = om[0].split("~iri")[0]
+            if constants.YARRRML_IRI in om[0]:
+                object_value = om[0].split(constants.YARRRML_IRI)[0]
                 iri = True
-            template += "\t" + termmap.generate_rml_termmap(constants.R2RML_OBJECT, constants.R2RML_OBJECT_CLASS,
-                                                            object_value)
-            template = template[0:len(template) - 3]
+            template += termmap.generate_rml_termmap(constants.R2RML_OBJECT, constants.R2RML_OBJECT_CLASS,
+                                                     object_value, "\t\t\t")
             if len(om) == 2:
                 types = termmap.check_type(om[1])
                 if types != "error":
                     if types == constants.YARRRML_LANGUAGE:
-                        template += "\t\t\t" + constants.R2RML_LANGUAGE + " " + om[1].replace("~lang",
-                                                                                              "") + "\"\n\t\t]\n\t];"
+                        template = template[0:len(template) - 5] + "\t\t\t" + constants.R2RML_LANGUAGE + " " \
+                                   + om[1].replace(constants.YARRRML_LANG, "") + "\"\n\t\t];\n"
                     elif types == constants.YARRRML_DATATYPE:
-                        template += "\t\t\t" + constants.R2RML_DATATYPE + " " + om[1] + "\n\t\t]\n\t];"
+                        template = template[0:len(template) - 5] + "\t\t\t" + constants.R2RML_DATATYPE + " " \
+                                   + om[1] + "\n\t\t];\n"
             if iri:
-                template += "\t\t\t" + constants.R2RML_TERMTYPE + " " + constants.R2RML_IRI + "\n\t\t]\n\t];"
+                template = template[0:len(template) - 5] + "\t\t\t" + constants.R2RML_TERMTYPE + " " \
+                           + constants.R2RML_IRI + "\n\t\t];\n"
         elif constants.YARRRML_MAPPING in om:
             template += join_mapping(data, mapping, om)
         else:
@@ -115,22 +118,22 @@ def add_predicate_object(data, mapping, predicate_object, predicate_access=None,
                 object_value = om.get(constants.YARRRML_VALUE)
             else:
                 object_value = om
-                if "~iri" in om:
-                    object_value = om.split("~iri")[0]
+                if constants.YARRRML_IRI in om:
+                    object_value = om.split(constants.YARRRML_IRI)[0]
                     iri = True
-            template += "\t" + termmap.generate_rml_termmap(constants.R2RML_OBJECT, constants.R2RML_OBJECT_CLASS,
-                                                            object_value)
-            template = template[0:len(template) - 3]
-            if constants.YARRRML_DATATYPE in om:
-                template += "\t\t\t" + constants.R2RML_DATATYPE + " " + om.get(
-                    constants.YARRRML_DATATYPE) + "\n\t\t]\n\t];"
-            if (constants.YARRRML_TYPE in om and om.get(constants.YARRRML_TYPE) == "iri") or iri:
-                template += "\t\t\t" + constants.R2RML_TERMTYPE + " " + constants.R2RML_IRI + "\n\t\t]\n\t];"
-            if constants.YARRRML_LANGUAGE in om:
-                template += "\t\t\t" + constants.R2RML_LANGUAGE + " \"" + om.get(
-                    constants.YARRRML_LANGUAGE) + "\"\n\t\t]\n\t];"
+            template += termmap.generate_rml_termmap(constants.R2RML_OBJECT, constants.R2RML_OBJECT_CLASS,
+                                                     object_value, "\t\t\t")
+            if type(om) == list and constants.YARRRML_DATATYPE in om:
+                template = template[0:len(template) - 5] + "\t\t\t" + constants.R2RML_DATATYPE + " " \
+                           + om.get(constants.YARRRML_DATATYPE) + "\n\t\t];\n"
+            if (type(om) == list and constants.YARRRML_TYPE in om and om.get(constants.YARRRML_TYPE) == "iri") or iri:
+                template = template[0:len(template) - 5] + "\t\t\t" + constants.R2RML_TERMTYPE + " " \
+                           + constants.R2RML_IRI + "\n\t\t];\n"
+            if type(om) == list and constants.YARRRML_LANGUAGE in om:
+                template = template[0:len(template) - 5] + "\t\t\t" + constants.R2RML_LANGUAGE + " \"" \
+                           + om.get(constants.YARRRML_LANGUAGE) + "\"\n\t\t];\n"
 
-    return template
+    return template + "\t];"
 
 
 def join_mapping(data, mapping, om):
@@ -142,15 +145,15 @@ def join_mapping(data, mapping, om):
     mapping_join = om.get(constants.YARRRML_MAPPING)
 
     if mapping_join in list_mappings:
-        subject_list = subject.add_subject(data, om.get(mapping_join))
+        subject_list = subject.add_subject(data, mapping_join)
         list_initial_sources = source.get_initial_sources(data)
         source_list = source.add_source(data, mapping_join, list_initial_sources)
 
         number_joins_rml = len(subject_list) * len(source_list)
         for i in range(number_joins_rml):
             template += "\t\t" + constants.R2RML_OBJECT + \
-                        " [ \n\t\t\ta "+constants.R2RML_REFOBJECT_CLASS + \
-                        ";\n\t\t\t"+constants.R2RML_PARENT_TRIPLESMAP+" <#" + mapping_join + "_" + str(i) + ">;\n"
+                        " [ \n\t\t\ta " + constants.R2RML_REFOBJECT_CLASS + \
+                        ";\n\t\t\t" + constants.R2RML_PARENT_TRIPLESMAP + " <#" + mapping_join + "_" + str(i) + ">;\n"
             if constants.YARRRML_CONDITION in om:
                 if constants.YARRRML_PARAMETERS in om.get(constants.YARRRML_CONDITION):
                     list_parameters = om.get(constants.YARRRML_CONDITION).get(constants.YARRRML_PARAMETERS)
@@ -162,15 +165,14 @@ def join_mapping(data, mapping, om):
                         parent = parent.replace("$(", '"')
                         parent = parent.replace(")", '"')
 
-                        template += "\t\t\t"+constants.R2RML_JOIN_CONITION + \
-                                    " [\n\t\t\t\t"+constants.R2RML_CHILD+" " + child + \
-                                    ";\n\t\t\t\t"+constants.R2RML_PARENT+" " + parent + ";\n\t\t\t]\n\t\t];\n"
+                        template += "\t\t\t" + constants.R2RML_JOIN_CONITION + \
+                                    " [\n\t\t\t\t" + constants.R2RML_CHILD + " " + child + \
+                                    ";\n\t\t\t\t" + constants.R2RML_PARENT + " " + parent + ";\n\t\t\t]; \n\t\t];\n"
 
                     else:
                         raise Exception("Error: more than two parameters in join condition in mapping1 " + mapping)
             else:
-                template += "\n\t\t]\n\t];"
-                return template
+                template += "\n\t\t]\n"
 
     else:
         raise Exception("Error in reference mapping another mapping in mapping " + mapping)
