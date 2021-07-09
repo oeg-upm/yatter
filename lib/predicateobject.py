@@ -1,7 +1,7 @@
 import constants
-from lib import source
-from lib import subject
-from lib import termmap
+import source
+import subject
+import termmap
 
 
 def get_object_access(predicate_object_map):

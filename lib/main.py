@@ -1,9 +1,9 @@
 import yaml
 import sys
-from lib import mapping as mapping_mod
-from lib import source as source_mod
-from lib import subject as subject_mod
-from lib import predicateobject as predicate_object_mod
+import mapping as mapping_mod
+import source as source_mod
+import subject as subject_mod
+import predicateobject as predicate_object_mod
 
 
 def run_parsing_system_inputs():
