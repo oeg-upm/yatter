@@ -2,11 +2,11 @@ import yaml
 import sys
 
 from rdflib import Graph
-import constants
-import mapping as mapping_mod
-import source as source_mod
-import subject as subject_mod
-import predicateobject as predicate_object_mod
+import pretty_yarrrml2rml.constants as constants
+import pretty_yarrrml2rml.mapping as mapping_mod
+import pretty_yarrrml2rml.source as source_mod
+import pretty_yarrrml2rml.subject as subject_mod
+import pretty_yarrrml2rml.predicateobject as predicate_object_mod
 
 
 def run_parsing_system_inputs():

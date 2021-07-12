@@ -1,5 +1,5 @@
 import re
-import constants
+import pretty_yarrrml2rml.constants as constants
 
 
 def get_initial_sources(data):

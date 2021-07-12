@@ -1,4 +1,4 @@
-import constants
+import pretty_yarrrml2rml.constants as constants
 
 
 ## return the type of TermMap based on the input text
