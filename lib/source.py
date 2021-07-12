@@ -44,7 +44,6 @@ def add_source_simplified(mapping, source):
     reference_formulation = source[0].split('~')[1]
     source_extension = file_path.split('.')[1]
     ref_formulation_rml = reference_formulation.replace("json", "JSON").replace("csv", "CSV").replace("xpath", "XPath")
-    switcher = switch_in_reference_formulation(reference_formulation)
     if switch_in_reference_formulation(reference_formulation) != source_extension:
         raise Exception(
             "ERROR: mismatch extension and referenceFormulation in source " + source + " in mapping " + mapping)
