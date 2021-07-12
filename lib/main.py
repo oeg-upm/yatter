@@ -1,5 +1,8 @@
 import yaml
 import sys
+
+from rdflib import Graph
+
 import mapping as mapping_mod
 import source as source_mod
 import subject as subject_mod
@@ -38,9 +41,17 @@ def write_results(rml_content):
 
     rml_output_path.write(rml_content)
 
+    print("Validating the generated RDF file with RDFLib")
+    try:
+        graph = Graph()
+        graph.parse(rml_output_path, format="turtle")
+    except Exception as e:
+        print("------------------------ERROR-------------------------------")
+        print("File not created: " + str(e))
+        sys.exit()
 
 def translate(yarrrml_data):
-    print("------------------------START TRANSLATING RML-------------------------------")
+    print("------------------------START TRANSLATING YARRRML TO RML-------------------------------")
     list_initial_sources = source_mod.get_initial_sources(yarrrml_data)
     final = mapping_mod.add_prefix(yarrrml_data)
     try:
@@ -60,11 +71,11 @@ def translate(yarrrml_data):
                     final += ".\n\n\n"
                     it = it + 1
 
+        print("RML content successfully created!")
     except Exception as e:
-        print(str(e))
-        print("------------------------END RML-------------------------------")
-        print("FILE NOT SUCCESSFULY CREATED")
-        # sys.exit()
+        print("------------------------ERROR-------------------------------")
+        print("RML content not generated: "+str(e))
+        sys.exit()
 
     return final
 
@@ -74,5 +85,4 @@ if __name__ == "__main__":
     rml_content = translate(yarrrml_data)
     write_results(rml_content)
 
-    print("------------------------END RML-------------------------------")
-    print("FILE SUCCESSFULY CREATED!")
+    print("------------------------END TRANSLATION-------------------------------")
