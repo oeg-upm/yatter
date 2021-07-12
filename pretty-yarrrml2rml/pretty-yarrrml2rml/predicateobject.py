@@ -1,7 +1,8 @@
-import constants
-import source
-import subject
-import termmap
+import pretty-yarrrml2rml.constants as constants
+import pretty-yarrrml2rml.source as source
+import pretty-yarrrml2rml.subject as subject
+import pretty-yarrrml2rml.termmap as termmap
+
 
 
 def get_object_access(predicate_object_map):

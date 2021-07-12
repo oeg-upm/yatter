@@ -1,4 +1,4 @@
-import constants
+import pretty-yarrrml2rml.constants as constants
 
 
 def add_mapping(mapping, it):

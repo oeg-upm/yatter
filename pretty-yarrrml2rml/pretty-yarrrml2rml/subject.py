@@ -1,7 +1,7 @@
 import sys
 
-import constants
-import termmap
+import pretty-yarrrml2rml.constants as constants
+import pretty-yarrrml2rml.termmap as termmap
 
 
 ## Adds a subject or set of subjects to the given TriplesMap
