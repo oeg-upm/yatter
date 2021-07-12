@@ -11,10 +11,10 @@ parsed, rest = parser.parse_known_args()
 sys.argv = [sys.argv[0]] + rest
 
 
-with open("README.md", "r") as fh:
+with open("../README.md", "r") as fh:
     long_description = fh.read()
 
-with open("VERSION", "r") as fh:
+with open("../VERSION", "r") as fh:
     v = fh.read().replace("\n", "")
     if parsed.kind == "rel":
         vers_taged = v
