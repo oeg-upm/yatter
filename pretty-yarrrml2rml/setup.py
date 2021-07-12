@@ -22,7 +22,7 @@ with open("../VERSION", "r") as fh:
         vers_taged = v+".dev"+v_time
 
 
-with open("requirements.txt") as r:
+with open("../requirements.txt") as r:
     requirements = list(filter(None, r.read().split("\n")[0:]))
 
 setuptools.setup(
