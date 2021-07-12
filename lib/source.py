@@ -65,13 +65,13 @@ def add_source_full(mapping, source):
     source_rdf = ""
 
     access = str(source.get(constants.YARRRML_ACCESS))
-    extension = source.split(".")[1]
+    extension = access.split(".")[1]
 
     if constants.YARRRML_REFERENCE_FORMULATION in source:
         reference_formulation = str(source.get(constants.YARRRML_REFERENCE_FORMULATION))
         format_from_reference = switch_in_reference_formulation(reference_formulation.lower())
         ref_formulation_rml = reference_formulation.replace("json", "JSON").replace("csv", "CSV").replace("xpath","XPath")
-        if extension == format_from_reference or format_from_reference == "ERROR":
+        if extension != format_from_reference or format_from_reference == "ERROR":
             raise Exception("ERROR: not referenceFormulation found or mismatch between the format and "
                             "referenceFormulation in source " + access + "in mapping " + mapping)
         if constants.YARRRML_ITERATOR in source:

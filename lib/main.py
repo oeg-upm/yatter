@@ -2,7 +2,7 @@ import yaml
 import sys
 
 from rdflib import Graph
-
+import constants
 import mapping as mapping_mod
 import source as source_mod
 import subject as subject_mod
@@ -55,22 +55,22 @@ def write_results(rml_content):
 def translate(yarrrml_data):
     print("------------------------START TRANSLATING YARRRML TO RML-------------------------------")
     list_initial_sources = source_mod.get_initial_sources(yarrrml_data)
-    final = [mapping_mod.add_prefix(yarrrml_data)]
+    rml_mapping = [mapping_mod.add_prefix(yarrrml_data)]
     try:
-        for map in yarrrml_data.get("mappings"):
-            subject_list = subject_mod.add_subject(yarrrml_data, map)
-            source_list = source_mod.add_source(yarrrml_data, map, list_initial_sources)
-            pred = predicate_object_mod.add_predicate_object_maps(yarrrml_data, map)
+        for mapping in yarrrml_data.get(constants.YARRRML_MAPPINGS):
+            subject_list = subject_mod.add_subject(yarrrml_data, mapping)
+            source_list = source_mod.add_source(yarrrml_data, mapping, list_initial_sources)
+            pred = predicate_object_mod.add_predicate_object_maps(yarrrml_data, mapping)
             it = 0
             for source in source_list:
                 for subject in subject_list:
-                    map_aux = mapping_mod.add_mapping(map, it)
+                    map_aux = mapping_mod.add_mapping(mapping, it)
                     if type(source) is list:
-                        final.append(map_aux + source[0] + subject + pred + source[1])
+                        rml_mapping.append(map_aux + source[0] + subject + pred + source[1])
                     else:
-                        final.append(map_aux + source + subject + pred)
-                    final[len(final)-1] = final[len(final)-1][:-2]
-                    final.append(".\n\n\n")
+                        rml_mapping.append(map_aux + source + subject + pred)
+                    rml_mapping[len(rml_mapping)-1] = rml_mapping[len(rml_mapping)-1][:-2]
+                    rml_mapping.append(".\n\n\n")
                     it = it + 1
 
         print("RML content successfully created!")
@@ -79,7 +79,7 @@ def translate(yarrrml_data):
         print("RML content not generated: "+str(e))
         sys.exit()
 
-    return "".join(final)
+    return "".join(rml_mapping)
 
 
 if __name__ == "__main__":
