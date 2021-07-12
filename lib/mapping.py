@@ -23,9 +23,9 @@ def add_prefix(data):
         if "rdf" not in common_prefixes:
             template += constants.RML_PREFIX + " rdf: <" + constants.RDF_URI + ">.\n"
         if "ql" not in common_prefixes:
-            template += constants.RML_PREFIX + " rdf: <" + constants.QL_URI + ">.\n"
+            template += constants.RML_PREFIX + " ql: <" + constants.QL_URI + ">.\n"
         if "d2rq" not in common_prefixes:
-            template += constants.RML_PREFIX + " rdf: <" + constants.D2RQ_URI + ">.\n"
+            template += constants.RML_PREFIX + " d2rq: <" + constants.D2RQ_URI + ">.\n"
         if "base" not in common_prefixes:
             template += constants.RML_BASE + " <" + constants.EXAMPLE_URI + ">.\n"
         template += "\n\n"
