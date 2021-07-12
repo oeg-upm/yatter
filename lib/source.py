@@ -78,7 +78,7 @@ def add_source_full(mapping, source):
             source_iterator = str(source.get(constants.YARRRML_ITERATOR))
 
             source_rdf += "\"" + access + "\";\n\t\t" + constants.RML_REFERENCE_FORMULATION + " ql:" \
-                          + ref_formulation_rml + ";\n\t\t" + constants.RML_ITERATOR + "\"" \
+                          + ref_formulation_rml + ";\n\t\t" + constants.RML_ITERATOR + " \"" \
                           + source_iterator + "\"\n\t];\n"
         else:
             if extension == "csv" or extension == "SQL2008":
