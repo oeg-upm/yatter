@@ -1,0 +1,203 @@
+@prefix transit: <http://vocab.org/transit/terms/>.
+@prefix wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix gn: <http://www.geonames.org/ontology#>.
+@prefix geosp: <http://www.telegraphis.net/ontology/geography/geography#>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+@prefix rml: <http://semweb.mmlab.be/ns/rml#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+
+<#AirportMapping_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "src/test/resources/example3/Airport.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template  "http://airport.example.com/id"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rr:constant transit:Stop
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate transit:service;
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#BusMapping_0>;
+			rr:joinCondition [
+				rr:child "bus";
+				rr:parent "@id";
+			]
+		];
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate wgs84_pos:location;
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#VenueMapping_0>;
+			rr:joinCondition [
+				rr:child "city";
+				rr:parent "$.location.city";
+			]
+		.
+
+
+<#BusMapping_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "src/test/resources/example3/Transport.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/transport/bus"
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template  "http://trans.example.com/busses/@id"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rr:constant transit:Service
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate transit:stop;
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#BusStopMapping_0>;
+
+		]
+.
+
+
+<#BusStopMapping_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "src/test/resources/example3/Transport.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/transport/bus/route/stop"
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template  "http://trans.example.com/stops/@id"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rr:constant transit:Stop
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate rdfs:label;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "."
+		]
+	].
+
+
+<#VenueMapping_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "src/test/resources/example3/Venue.json";
+		rml:referenceFormulation ql:JSONPath;
+		rml:iterator "$"
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template  "http://loc.example.com/city/$.location.city"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rr:constant schema:City
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate wgs84_pos:location;
+		rr:objectMap [ 
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <#LocationMapping_0>;
+			rr:joinCondition [
+				rr:child "$.location.city";
+				rr:parent "$.location.city";
+			]
+		];
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate geosp:onContinent;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "$.location.continent"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate gn:countryCode;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "$.location.country"
+		]
+	].
+
+
+<#LocationMapping_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "src/test/resources/example3/Venue.json";
+		rml:referenceFormulation ql:JSONPath;
+		rml:iterator "$"
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template  "http://loc.example.com/latlong/$.venue.latitude,$.venue.longitude"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate wgs84_pos:lat;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "$.venue.latitude"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate wgs84_pos:long;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "$.venue.longitude"
+		]
+	].
+
+

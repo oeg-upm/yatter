@@ -1,0 +1,94 @@
+@prefix simmodel: <http://www.lbl.gov/namespaces/Sim/Model/>.
+@prefix simres: <http://www.lbl.gov/namespaces/Sim/ResourcesGeneral/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+@prefix rml: <http://semweb.mmlab.be/ns/rml#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+
+<#SimModelMapping_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "src/test/resources/example8/simergy.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/SimModel/simmodel:SimAppLibraryDefault_AppLibraryDefault_GlobalLibrary"
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template  "http://www.lbl.gov/namespaces/Sim/Model/@RefId"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate simmodel:refId;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "@RefId"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate simres:simModelType;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "simres:SimModelType"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate simres:SimModelSubtype;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "simres:SimModelSubtype"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate simres:SimModelName;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "simres:SimModelName"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate simres:SourceModelSchema;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "simres:SourceModelSchema"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate simres:DefaultPreferenceIndex;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "simres:DefaultPreferenceIndex";
+			rr:datatype xsd:int
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate simres:LibraryLocation;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "simres:LibraryLocation"
+		]
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate simres:LibraryName;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rml:reference "simres:LibraryName"
+		]
+	].
+
+

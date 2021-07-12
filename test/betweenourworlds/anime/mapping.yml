@@ -60,7 +60,7 @@ mappings:
     s: https://betweenourworlds.org/trailer/$(attributes.slug)
     po:
       - [a, [schema:VideoObject, schema:Thing, schema:CreativeWork, schema:MediaObject]]
-      - [schema:url, https://www.youtube.com/watch?v=$(attributes.youtubeVideoId)]
+      - [schema:url, "https://www.youtube.com/watch?v=$(attributes.youtubeVideoId)"]
   stream:
     source: stream_source
     s: https://betweenourworlds.org/stream/$(slug)-$(service)

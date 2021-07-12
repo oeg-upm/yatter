@@ -1,0 +1,22 @@
+<#person_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:logicalSource;
+		rml:source "person.csv";
+		rml:referenceFormulation ql:csv
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rml:reference  "id\:\:number"
+	];
+
+	rr:predicateObjectMap [
+		a rr:PredicateObjectMap;
+		rr:predicate a;
+		rr:objectMap [ 
+			a rr:ObjectMap;
+			rr:constant schema:Person
+		]
+	].
+
+

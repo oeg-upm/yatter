@@ -1,475 +1,180 @@
-import yaml
-import source as sourcemod
-import subject as subjectmod
+import constants
+import source
+import subject
+import termmap
 
-def addPredicateObject(data,mapping):
+
+def get_object_access(predicate_object_map):
+    if constants.YARRRML_OBJECT in predicate_object_map:
+        object_access = constants.YARRRML_OBJECT
+    elif constants.YARRRML_SHORTCUT_OBJECT in predicate_object_map:
+        object_access = constants.YARRRML_SHORTCUT_OBJECT
+    else:
+        raise Exception("There isn't an object key correctly specify in " + predicate_object_map)
+    return object_access
+
+
+def get_predicate_access(predicate_object_map):
+    if constants.YARRRML_PREDICATES in predicate_object_map:
+        predicate_access = constants.YARRRML_PREDICATES
+    elif constants.YARRRML_SHORTCUT_PREDICATES in predicate_object_map:
+        predicate_access = constants.YARRRML_SHORTCUT_PREDICATES
+    else:
+        raise Exception("There isn't a predicate key correctly specify in " + predicate_object_map)
+    return predicate_access
+
+
+def get_predicate_object_access(mapping):
+    if constants.YARRRML_PREDICATEOBJECT in mapping:
+        predicate_object_access = constants.YARRRML_PREDICATEOBJECT
+    elif constants.YARRRML_SHORTCUT_PREDICATEOBJECT in mapping:
+        predicate_object_access = constants.YARRRML_SHORTCUT_PREDICATEOBJECT
+    else:
+        raise Exception("There isn't a predicate_object_map key correctly specify in " + mapping)
+    return predicate_object_access
+
+
+def add_predicate_object_maps(data, mapping):
     po_template = ""
-    if ("predicateobjects" in data.get("mappings").get(mapping)):
-        for predob in data.get("mappings").get(mapping).get("predicateobjects"):
-            if "predicates" in predob:
-                #full con acceso a predicates
-                if "objects" in predob:
-                    po_template+=addPredicateObjectFull(data,mapping,predob,"predicates","objects")
-                elif "o" in predob:
-                    po_template+= addPredicateObjectFull(data,mapping,predob,"predicates","o")
-
-            elif "p" in predob:
-                #full con acceso a p
-                if "objects" in predob:
-                    po_template+=addPredicateObjectFull(data,mapping,predob,"p","objects")
-                elif "o" in predob:
-                    po_template+= addPredicateObjectFull(data,mapping,predob,"p","o")
-            else:
-                    if type(predob) is list:
-                        po_template+=addPredicateObjectSimplified(data,mapping,predob)
-                    else:
-                        #ERROR
-                        raise Exception("Error: Incorrect predicateObject Map in mapping " + mapping)
-    elif ("po" in data.get("mappings").get(mapping)):
-        for predob in data.get("mappings").get(mapping).get("po"):
-            if "predicates" in predob:
-                #full
-                if "objects" in predob:
-                    po_template+=addPredicateObjectFull(data,mapping,predob,"predicates","objects")
-                elif "o" in predob:
-                    po_template+= addPredicateObjectFull(data,mapping,predob,"predicates","o")
-
-            elif "p" in predob:
-                #full con acceso a p
-                if "objects" in predob:
-                    po_template+=addPredicateObjectFull(data,mapping,predob,"p","objects")
-                elif "o" in predob:
-                    po_template+= addPredicateObjectFull(data,mapping,predob,"p","o")
-            else:
-                    if type(predob) is list:
-                        po_template+=addPredicateObjectSimplified(data,mapping,predob)
-                    else:
-                        #ERROR
-                        raise Exception("Error: Incorrect predicateObject Map in mapping " + mapping)
+    pom_text = "\t" + constants.R2RML_PREDICATE_OBJECT_MAP + " [\n"
+    mapping_data = data.get(constants.YARRRML_MAPPINGS).get(mapping)
+    for predicate_object_map in mapping_data.get(get_predicate_object_access(mapping_data)):
+        if type(predicate_object_map) is list:
+            po_template += pom_text + add_predicate_object(data, mapping, predicate_object_map) + "\n"
+        else:
+            po_template += pom_text + add_predicate_object(data, mapping, predicate_object_map,
+                                                           get_predicate_access(predicate_object_map),
+                                                           get_object_access(predicate_object_map)) + "\n"
     return po_template
 
-def addPredicateObjectFull(data,mapping,predob,access,accessObject):
-    template=""
-    #COMPROBAR SI ES LISTA PRIMERO
-    if(type(predob.get(access))!= list):
-        template="\trr:predicateObjectMap [\n" + "\t\ta rr:PredicateObjectMap;\n\t\trr:predicate " + predob.get(access) +";\n"
-    if accessObject in predob:
-        if "value" in predob.get(accessObject):
-            template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
-            object=predob.get(accessObject).get("value")
-            termMap=getTermMap(object)
-            if(termMap=='rr:template "'):
-                object=object.replace("$",'')
-                object=object.replace("(","{")
-                object=object.replace(")",'}')
-            else:
-                object=object.replace("$(",'')
-                object=object.replace(")",'')
-            if(termMap!='rr:constant '):
-                template+="\t\t\t"+ termMap + object + '"'+ ';\n'
-            else:
-                template+="\t\t\t"+ termMap + object + ';\n'
-            #"\t\t]\n\t];\n\n"
-            if "datatype" in predob.get(accessObject):
-                template+= "\t\t\trr:datatype " + predob.get(accessObject).get("datatype") + "\n\t\t]\n\t];"
-            elif "type" in predob.get(accessObject):
-                template+= "\t\t\trr:TermType " + predob.get(accessObject).get("type") + "\n\t\t]\n\t];"
-            elif "language" in predob.get(accessObject):
-                template+= '\t\t\trr:language "' + predob.get(accessObject).get("language") + '"\n\t\t]\n\t];'
-        elif "mapping" in predob.get(accessObject):
-            template+= joinMapping(data,mapping,predob.get(accessObject))
-        else:
-            if(type(predob.get(accessObject))!=list):
-                template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
-                object=predob.get(accessObject)
-                termMap=getTermMap(object)
-                if(termMap=='rr:template "'):
-                    object=object.replace("$",'')
-                    object=object.replace("(","{")
-                    object=object.replace(")",'}')
-                else:
-                    object=object.replace("$(",'')
-                    object=object.replace(")",'')
-                if(termMap!='rr:constant '):
-                    template+="\t\t\t"+ termMap + object + '"'+ ';\n\t\t]\n\t];\n\n'
-                else:
-                    template+="\t\t\t"+ termMap + object + ';\n\t\t]\n\t];\n\n'
 
-            else:
-                for objec in predob.get(accessObject):
-                    if "mapping" in objec:
-                        template+= joinMapping(data,mapping,objec)
-                        continue
-                    else:
-                        template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
-                    if(type(objec) is list):
-                        object = objec[0]
-                        termMap=getTermMap(object)
-                        if(termMap=='rr:template "'):
-                            object=object.replace("$",'')
-                            object=object.replace("(","{")
-                            object=object.replace(")",'}')
-                        else:
-                            object=object.replace("$(",'')
-                            object=object.replace(")",'')
-                    else:
-                        termMap=getTermMap(object)
-                        if(termMap=='rr:template "'):
-                            object=object.replace("$",'')
-                            object=object.replace("(","{")
-                            object=object.replace(")",'}')
-                        else:
-                            object=object.replace("$(",'')
-                            object=object.replace(")",'')
-                    if(termMap!='rr:constant '):
-                        template+="\t\t\t"+ termMap + object + '"'+ ';\n'
-                    else:
-                        template+="\t\t\t"+ termMap + object + ';\n'
-                    if type(objec)== list and len(objec)==2:
-                        types = check_type(objec,2)
-                        if(types!="error"):
-                            if(types=="iri"):
-                                template+="\t\t\trr:TermType rr:IRI"+"\n\t\t];\n"
-                            elif(types=="language"):
-                                lenguage=objec[1].replace("~lang","")
-                                template+='\t\t\trr:language "'+  lenguage +'"\n\t\t];\n'
-                            elif(types=="datatype"):
-                                template+="\t\t\trr:datatype "+  objec[1] +"\n\t\t];\n"
-                        else:
-                            raise Exception("Error: incorrect format of predicateObjectMap in mapping " + mapping)
-                    else:
-                        template+="\t\t];\n"
-                template=template[:-2]
-                template+= "\n\t];\n\n"
-
-#CASO LISTA
+def get_object_list(predicate_object, object_access):
+    object_list = []
+    if object_access is not None:
+        object_maps = predicate_object.get(object_access)
     else:
-        if(accessObject in predob):
-            if (type(predob.get(accessObject))==list):
-                template="\trr:predicateObjectMap [\n" + "\t\ta rr:PredicateObjectMap;\n"
-                for predic in predob.get(access):
-                    template+= "\t\trr:predicate " + str(predic) + ";\n"
-                if(len(predob.get(accessObject))==2 and type(predob.get(accessObject)[1])!=list and type(predob.get(accessObject)[1])!=list): #solo un objeto con tipo
-                    object=predob.get(accessObject)[0]
-                    termMap=getTermMap(object)
-                    if(termMap=='rr:template "'):
-                        object=object.replace("$",'')
-                        object=object.replace("(","{")
-                        object=object.replace(")",'}')
-                    else:
-                        object=object.replace("$(",'')
-                        object=object.replace(")",'')
+        object_maps = predicate_object[1]
 
-                    if(termMap!='rr:constant '):
-                        template+="\t\t\t"+ termMap + object + '"'+ ';\n'
-                    else:
-                        template+="\t\t\t"+ termMap + object + ';\n'
-                    types = check_type_simple(predob.get(accessObject)[1])
-                    if(types!="error"):
-                        if(types=="iri"):
-                            template+="\t\t\trr:TermType rr:IRI"+"\n\t\t];\n"
-                        elif(types=="language"):
-                            lenguage=predob.get(accessObject)[1].replace("~lang","")
-                            template+='\t\t\trr:language "'+  lenguage +'"\n\t\t];\n'
-                        elif(types=="datatype"):
-                            template+="\t\t\trr:datatype "+  predob.get(accessObject)[1] +"\n\t\t];\n"
-                    else:
-                        raise Exception("Error: incorrect format of predicateObjectMap in mapping " + mapping)
-                    template=template[:-2]
-                    template+= "\n\t];\n\n"
-                else:
-                    for objec in predob.get(accessObject):
-                        template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
-                        if(type(objec) is list):
-                            object = objec[0]
-                            termMap=getTermMap(object)
-                            if(termMap=='rr:template "'):
-                                object=object.replace("$",'')
-                                object=object.replace("(","{")
-                                object=object.replace(")",'}')
-                            else:
-                                object=object.replace("$(",'')
-                                object=object.replace(")",'')
-                        else:
-                            object=objec
-                            termMap=getTermMap(object)
-                            if(termMap=='rr:template "'):
-                                object=object.replace("$",'')
-                                object=object.replace("(","{")
-                                object=object.replace(")",'}')
-                            else:
-                                object=object.replace("$(",'')
-                                object=object.replace(")",'')
-                        if(termMap!='rr:constant '):
-                            template+="\t\t\t"+ termMap + object + '"'+ ';\n'
-                        else:
-                            template+="\t\t\t"+ termMap + object + ';\n'
-                        if type(objec)== list and len(objec)==2:
-                            types = check_type(objec,2)
-                            if(types!="error"):
-                                if(types=="iri"):
-                                    template+="\t\t\trr:TermType rr:IRI"+"\n\t\t];\n"
-                                elif(types=="language"):
-                                    lenguage=objec[1].replace("~lang","")
-                                    template+='\t\t\trr:language "'+  lenguage +'"\n\t\t];\n'
-                                elif(types=="datatype"):
-                                    template+="\t\t\trr:datatype "+  objec[1] +"\n\t\t];\n"
-                            else:
-                                raise Exception("Error: incorrect format of predicateObjectMap in mapping " + mapping)
-                        else:
-                            template+="\t\t];\n"
-                    template=template[:-2]
-                    template+= "\n\t];\n\n"
-            else:
-                if "value" in predob.get(accessObject):
-                    template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
-                    object=predob.get(accessObject).get("value")
-                    termMap=getTermMap(object)
-                    if(termMap=='rr:template "'):
-                        object=object.replace("$",'')
-                        object=object.replace("(","{")
-                        object=object.replace(")",'}')
-                    else:
-                        object=object.replace("$(",'')
-                        object=object.replace(")",'')
-                    if(termMap!='rr:constant '):
-                        template+="\t\t\t"+ termMap + object + '"'+ ';\n'
-                    else:
-                        template+="\t\t\t"+ termMap + object + ';\n'
-                    #"\t\t]\n\t];\n\n"
-                    if "datatype" in predob.get(accessObject):
-                        template+= "\t\t\trr:datatype " + predob.get(accessObject).get("datatype") + "\n\t\t]\n\t];\n\n"
-                    elif "type" in predob.get(accessObject):
-                        template+= "\t\t\trr:TermType " + predob.get(accessObject).get("type") + "\n\t\t]\n\t];\n\n"
-                    elif "language" in predob.get(accessObject):
-                        template+= '\t\t\trr:language "' + predob.get(accessObject).get("language") + '"\n\t\t]\n\t];\n\n'
-                elif "mapping" in predob.get(accessObject):
-                    template+= joinMapping(data,mapping,predob.get(accessObject))
-                else:#creo que sobra
-                    template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
-                    object=predob.get(accessObject)
-                    termMap=getTermMap(object)
-                    if(termMap=='rr:template "'):
-                        object=object.replace("$",'')
-                        object=object.replace("(","{")
-                        object=object.replace(")",'}')
-                    else:
-                        object=object.replace("$(",'')
-                        object=object.replace(")",'')
-                    if(termMap!='rr:constant '):
-                        template+="\t\t\t"+ termMap + object + '"'+ ';\n\t\t]\n\t];\n\n'
-                    else:
-                        template+="\t\t\t"+ termMap + object + ';\n\t\t]\n\t];\n\n'
-
-    return template
-
-def addPredicateObjectSimplified(data,mapping,predob):
-    template= "\trr:predicateObjectMap [\n\t\ta rr:PredicateObjectMap;\n"
-    if((type(predob[0]) == list or type(predob[1])==list) and len(predob)==2):
-        if(type(predob[0])==list): #varios predicados
-            for predicate in predob[0]:
-                template+="\t\trr:predicate "+str(predicate)+";\n"
-        else: #un predicado
-            template+="\t\trr:predicate "+str(predob[0])+";\n"
-        if(type(predob[1])==list): #varios objetos
-            for object in predob[1]:
-                template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
-                object=str(object)
-                termMap=getTermMap(object)
-                if(termMap=='rr:template "'):
-                    object=object.replace("$",'')
-                    object=object.replace("(","{")
-                    object=object.replace(")",'}')
-                else:
-                    object=object.replace("$(",'')
-                    object=object.replace(")",'')
-                types=check_type_simple(object)
-                if(types=="error"):
-                    if(termMap!='rr:constant '):
-                        template+="\t\t\t"+ termMap + object + '"'+ ';\n'
-                    else:
-                        template+="\t\t\t"+ termMap + object + ';\n'
-                else:
-                    if(types=="iri"):
-                        object=object.replace("~iri","")
-                        template+="\t\t\t"+ termMap + object + '";\n'
-                        template+="\t\t\trr:TermType rr:IRI"+"\n\t\t]\n\t];\n\n"
-                    elif(types=="language"):
-                        lenguage=object.replace("~lang","")
-                        template+='\t\t\trr:language "'+  lenguage +'"\n\t\t]\n\t];\n\n'
-                    elif(types=="datatype"):
-                        template+="\t\t\trr:datatype "+  object +"\n\t\t]\n\t];\n\n"
-        else: #un solo objeto
-            template+="\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
-            object=str(predob[1])
-            termMap=getTermMap(object)
-            if(termMap=='rr:template "'):
-                object=object.replace("$",'')
-                object=object.replace("(","{")
-                object=object.replace(")",'}')
-            else:
-                object=object.replace("$(",'')
-                object=object.replace(")",'')
-            types=check_type_simple(object)
-            if(termMap!='rr:constant '):
-                template+="\t\t\t"+ termMap + object + '"'+ ';\n'
-            else:
-                template+="\t\t\t"+ termMap + object + ';\n'
-            if(types!="error"):
-                if(types=="iri"):
-                    template+="\t\t\trr:TermType rr:IRI"+"\n\t\t]\n\t];\n\n"
-                elif(types=="language"):
-                    lenguage=object.replace("~lang","")
-                    template+='\t\t\trr:language "'+  lenguage +'"\n\t\t]\n\t];\n\n'
-                elif(types=="datatype"):
-                    template+="\t\t\trr:datatype "+  object +"\n\t\t]\n\t];\n\n"
-
-
-        template = template[:-2]
-        template+="\n\t];\n"
-
-    elif(len(predob)==2):
-        ##solo predicado y objeto singulares
-
-        template+="\t\trr:predicate "+str(predob[0])+";\n"+"\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
-        object=str(predob[1])
-        if "~" in object:
-            termMap=getTermMap(object)
-            if(termMap=='rr:template "'):
-                object=object.replace("$",'')
-                object=object.replace("(","{")
-                object=object.replace(")",'}')
-            else:
-                object=object.replace("$(",'')
-                object=object.replace(")",'')
-            types=check_type_simple(object)
-            object1=object.split("~")
-            if(termMap!='rr:constant '):
-                template+="\t\t\t"+ termMap + object1[0] + '"'+ ';\n'
-            else:
-                template+="\t\t\t"+ termMap + object1[0] + ';\n'
-            if(types!="error"):
-                if(types=="iri"):
-                    template+="\t\t\trr:TermType rr:IRI"+"\n\t\t]\n\t];\n\n"
-                elif(types=="language"):
-                    lenguage=objec[1].replace("~lang","")
-                    template+='\t\t\trr:language "'+  lenguage +'"\n\t\t]\n\t];\n\n'
-                elif(types=="datatype"):
-                    template+="\t\t\trr:datatype "+  objec[1] +"\n\t\t]\n\t];\n\n"
+    if type(object_maps) == list:
+        if len(predicate_object) == 3:
+            for i in range(len(object_maps)):
+                object_list.append([object_maps[i], predicate_object[2]])
         else:
-            termMap=getTermMap(object)
-            if(termMap=='rr:template "'):
-                object=object.replace("$",'')
-                object=object.replace("(","{")
-                object=object.replace(")",'}')
-            else:
-                object=object.replace("$(",'')
-                object=object.replace(")",'')
-            if(termMap!='rr:constant '):
-                template+="\t\t\t"+ termMap + object + '"'+ '\n\t\t]\n\t];\n\n'
-            else:
-                template+="\t\t\t"+ termMap + object + '\n\t\t]\n\t];\n\n'
-
-    elif(len(predob)==3):
-        #1 pred, 2 obj, 3 datatype, leng
-        template+="\t\trr:predicate "+str(predob[0])+";\n"+"\t\trr:objectMap [ \n\t\t\ta rr:ObjectMap;\n"
-        object=str(predob[1])
-        termMap=getTermMap(object)
-        if(termMap=='rr:template "'):
-            object=object.replace("$",'')
-            object=object.replace("(","{")
-            object=object.replace(")",'}')
-        else:
-            object=object.replace("$(",'')
-            object=object.replace(")",'')
-        if(termMap!='rr:constant '):
-            template+="\t\t\t"+ termMap + object + '"'+ ';\n'
-        else:
-            template+="\t\t\t"+ termMap + object + ';\n'
-        types = check_type(predob,3)
-        if(types!="error"):
-            template+="\t\t\trr:" + types +" "+ predob[2] +"\n\t\t]\n\t];\n\n"
-        else:
-            raise Exception("Error: incorrect format of predicateObjectMap in mapping " + mapping)
+            object_list.extend(object_maps)
     else:
-        #ERROR
-        raise Exception("Error: incorrect format of predicateObjectMap in mapping " + mapping)
+        if len(predicate_object) == 3:
+            object_list.append([object_maps, predicate_object[2]])
+        else:
+            object_list.append(object_maps)
+    return object_list
 
-    return template
 
-
-
-
-def check_type(predob,pos):
-
-    type=str(predob[pos-1])
-    if "~iri" in type:
-        return "iri"
-    elif "~lang" in type:
-        return "language"
-    elif ("xsd:" in type) or ("ex:" in type):
-        return "datatype"
+def get_predicate_list(predicate_object, predicate_access):
+    predicate_list = []
+    if predicate_access is not None:
+        predicate_maps = predicate_object.get(predicate_access)
     else:
-        return "error"
-
-def check_type_simple(object):
-
-    if "~iri" in object:
-        return "iri"
-    elif "~lang" in object:
-        return "language"
-    elif ("xsd:" in object) or ("ex:" in object):
-        return "datatype"
+        predicate_maps = predicate_object[0]
+    if type(predicate_maps) == list:
+        predicate_list.extend(predicate_maps)
     else:
-        return "error"
+        predicate_list.append(predicate_maps)
+    return predicate_list
 
 
-def joinMapping(data,mapping,objec):
-    list_mappings=[]
-    template=""
-    for mappings in data.get("mappings"):
+def add_predicate_object(data, mapping, predicate_object, predicate_access=None, object_access=None):
+    template = ""
+    predicate_list = get_predicate_list(predicate_object, predicate_access)
+    object_list = get_object_list(predicate_object, object_access)
+
+    for pm in predicate_list:
+        template += termmap.generate_rml_termmap(constants.R2RML_PREDICATE, constants.R2RML_PREDICATE_CLASS, pm,
+                                                 "\t\t\t")
+    for om in object_list:
+        iri = False
+        if type(om) == list:
+            object_value = om[0]
+            if constants.YARRRML_IRI in om[0]:
+                object_value = om[0].split(constants.YARRRML_IRI)[0]
+                iri = True
+            template += termmap.generate_rml_termmap(constants.R2RML_OBJECT, constants.R2RML_OBJECT_CLASS,
+                                                     object_value, "\t\t\t")
+            if len(om) == 2:
+                types = termmap.check_type(om[1])
+                if types != "error":
+                    if types == constants.YARRRML_LANGUAGE:
+                        template = template[0:len(template) - 5] + "\t\t\t" + constants.R2RML_LANGUAGE + " " \
+                                   + om[1].replace(constants.YARRRML_LANG, "") + "\"\n\t\t];\n"
+                    elif types == constants.YARRRML_DATATYPE:
+                        template = template[0:len(template) - 5] + "\t\t\t" + constants.R2RML_DATATYPE + " " \
+                                   + om[1] + "\n\t\t];\n"
+            if iri:
+                template = template[0:len(template) - 5] + "\t\t\t" + constants.R2RML_TERMTYPE + " " \
+                           + constants.R2RML_IRI + "\n\t\t];\n"
+        elif constants.YARRRML_MAPPING in om:
+            template += join_mapping(data, mapping, om)
+        else:
+            if constants.YARRRML_VALUE in om:
+                object_value = om.get(constants.YARRRML_VALUE)
+            else:
+                object_value = om
+                if constants.YARRRML_IRI in om:
+                    object_value = om.split(constants.YARRRML_IRI)[0]
+                    iri = True
+            template += termmap.generate_rml_termmap(constants.R2RML_OBJECT, constants.R2RML_OBJECT_CLASS,
+                                                     object_value, "\t\t\t")
+            if type(om) == list and constants.YARRRML_DATATYPE in om:
+                template = template[0:len(template) - 5] + "\t\t\t" + constants.R2RML_DATATYPE + " " \
+                           + om.get(constants.YARRRML_DATATYPE) + "\n\t\t];\n"
+            if (type(om) == list and constants.YARRRML_TYPE in om and om.get(constants.YARRRML_TYPE) == "iri") or iri:
+                template = template[0:len(template) - 5] + "\t\t\t" + constants.R2RML_TERMTYPE + " " \
+                           + constants.R2RML_IRI + "\n\t\t];\n"
+            if type(om) == list and constants.YARRRML_LANGUAGE in om:
+                template = template[0:len(template) - 5] + "\t\t\t" + constants.R2RML_LANGUAGE + " \"" \
+                           + om.get(constants.YARRRML_LANGUAGE) + "\"\n\t\t];\n"
+
+    return template + "\t];"
+
+
+def join_mapping(data, mapping, om):
+    list_mappings = []
+    template = ""
+    for mappings in data.get(constants.YARRRML_MAPPINGS):
         list_mappings.append(mappings)
 
-    if objec.get("mapping") in list_mappings:
-        subject_list = subjectmod.addSubject(data, objec.get("mapping"))
-        list_initial_sources= sourcemod.getInitialSources(data)
-        source_list=sourcemod.addSource(data,objec.get("mapping"),list_initial_sources)
+    mapping_join = om.get(constants.YARRRML_MAPPING)
 
-        sumSourSub = len(subject_list) * len(source_list)
-        for i in range(sumSourSub):
-            template+="\t\trr:objectMap [ \n\t\t\ta rr:RefObjectMap;\n\t\t\trr:parentTriplesMap <#"+ objec.get("mapping")+"_"+str(i)+">;\n"
-            if "condition" in objec:
-                if "parameters" in objec.get("condition"):
-                    list_parameters = objec.get("condition").get("parameters")
-                    if len(list_parameters)==2:
-                        child=list_parameters[0][1]
-                        parent=list_parameters[1][1]
-                        child=child.replace("$(",'"')
-                        child=child.replace(")",'"')
-                        parent=parent.replace("$(",'"')
-                        parent=parent.replace(")",'"')
+    if mapping_join in list_mappings:
+        subject_list = subject.add_subject(data, mapping_join)
+        list_initial_sources = source.get_initial_sources(data)
+        source_list = source.add_source(data, mapping_join, list_initial_sources)
 
-                        template+='\t\t\trr:joinCondition [\n\t\t\t\trr:child ' + child + ';\n\t\t\t\trr:parent ' + parent + ';\n\t\t\t]\n\t\t];\n'
+        number_joins_rml = len(subject_list) * len(source_list)
+        for i in range(number_joins_rml):
+            template += "\t\t" + constants.R2RML_OBJECT + \
+                        " [ \n\t\t\ta " + constants.R2RML_REFOBJECT_CLASS + \
+                        ";\n\t\t\t" + constants.R2RML_PARENT_TRIPLESMAP + " <#" + mapping_join + "_" + str(i) + ">;\n"
+            if constants.YARRRML_CONDITION in om:
+                if constants.YARRRML_PARAMETERS in om.get(constants.YARRRML_CONDITION):
+                    list_parameters = om.get(constants.YARRRML_CONDITION).get(constants.YARRRML_PARAMETERS)
+                    if len(list_parameters) == 2:
+                        child = list_parameters[0][1]
+                        parent = list_parameters[1][1]
+                        child = child.replace("$(", '"')
+                        child = child.replace(")", '"')
+                        parent = parent.replace("$(", '"')
+                        parent = parent.replace(")", '"')
+
+                        template += "\t\t\t" + constants.R2RML_JOIN_CONITION + \
+                                    " [\n\t\t\t\t" + constants.R2RML_CHILD + " " + child + \
+                                    ";\n\t\t\t\t" + constants.R2RML_PARENT + " " + parent + ";\n\t\t\t]; \n\t\t];\n"
 
                     else:
-                            raise Exception("Error: more than two parameters in join condition in mapping1 " + mapping)
+                        raise Exception("Error: more than two parameters in join condition in mapping1 " + mapping)
             else:
-                template+="\n\t\t]\n\t];"
-                return template
-
+                template += "\n\t\t]\n"
 
     else:
         raise Exception("Error in reference mapping another mapping in mapping " + mapping)
 
     return template
-
-
-
-def getTermMap(text):
-    if("$(" in text and ")" in text):
-        if text[0]=="$":
-            return 'rml:reference "'
-        else:
-            return 'rr:template "'
-    else:
-        return 'rr:constant '
