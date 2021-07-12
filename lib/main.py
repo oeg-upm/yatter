@@ -35,11 +35,13 @@ def open_inputs(yarrml_path):
 
 def write_results(rml_content):
     if len(sys.argv) == 1:
-        rml_output_path = open(input("Name the path for the output file:"), "a")
+        rml_output_path = input("Name the path for the output file:")
     else:
-        rml_output_path = open(sys.argv[4], "a")
+        rml_output_path = sys.argv[4]
 
-    rml_output_path.write(rml_content)
+    rml_output_file = open(rml_output_path, "a")
+    rml_output_file.write(rml_content)
+    rml_output_file.close()
 
     print("Validating the generated RDF file with RDFLib")
     try:
