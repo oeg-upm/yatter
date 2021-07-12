@@ -27,6 +27,6 @@ jobs:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        cd pretty-yarrrml2rml
+        cd pretty_yarrrml2rml
         python setup.py -k dev sdist bdist_wheel
         twine upload dist/*
