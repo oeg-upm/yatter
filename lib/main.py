@@ -55,7 +55,7 @@ def write_results(rml_content):
 def translate(yarrrml_data):
     print("------------------------START TRANSLATING YARRRML TO RML-------------------------------")
     list_initial_sources = source_mod.get_initial_sources(yarrrml_data)
-    final = mapping_mod.add_prefix(yarrrml_data)
+    final = [mapping_mod.add_prefix(yarrrml_data)]
     try:
         for map in yarrrml_data.get("mappings"):
             subject_list = subject_mod.add_subject(yarrrml_data, map)
@@ -66,11 +66,11 @@ def translate(yarrrml_data):
                 for subject in subject_list:
                     map_aux = mapping_mod.add_mapping(map, it)
                     if type(source) is list:
-                        final += map_aux + source[0] + subject + pred + source[1]
+                        final.append(map_aux + source[0] + subject + pred + source[1])
                     else:
-                        final += map_aux + source + subject + pred
-                    final = final[:-2]
-                    final += ".\n\n\n"
+                        final.append(map_aux + source + subject + pred)
+                    final[len(final)-1] = final[len(final)-1][:-2]
+                    final.append(".\n\n\n")
                     it = it + 1
 
         print("RML content successfully created!")
@@ -79,7 +79,7 @@ def translate(yarrrml_data):
         print("RML content not generated: "+str(e))
         sys.exit()
 
-    return final
+    return "".join(final)
 
 
 if __name__ == "__main__":
