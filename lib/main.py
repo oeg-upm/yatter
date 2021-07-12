@@ -39,7 +39,7 @@ def write_results(rml_content):
     else:
         rml_output_path = sys.argv[4]
 
-    rml_output_file = open(rml_output_path, "a")
+    rml_output_file = open(rml_output_path, "w")
     rml_output_file.write(rml_content)
     rml_output_file.close()
 

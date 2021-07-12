@@ -8,14 +8,18 @@
 RML_URI = 'http://semweb.mmlab.be/ns/rml#'
 R2RML_URI = 'http://www.w3.org/ns/r2rml#'
 RDF_URI = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+D2RQ_URI = 'http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#'
+QL_URI = 'http://semweb.mmlab.be/ns/ql#'
+EXAMPLE_URI = 'http://example.com/ns#'
 RDF_TYPE = 'rdf:type'
 
 RML_PREFIX = '@prefix'
+RML_BASE = '@base'
 RML_TRIPLES_MAP = 'rr:TriplesMap'
 
 
-RML_LOGICAL_SOURCE = 'rml:LogicalSource'
-RML_LOGICAL_SOURCE_PROPERTY = 'rml:logicalSource'
+RML_LOGICAL_SOURCE_CLASS = 'rml:LogicalSource'
+RML_LOGICAL_SOURCE = 'rml:logicalSource'
 RML_SOURCE = 'rml:source'
 RML_REFERENCE_FORMULATION = 'rml:referenceFormulation'
 RML_ITERATOR = 'rml:iterator'

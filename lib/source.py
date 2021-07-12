@@ -11,7 +11,7 @@ def get_initial_sources(data):
 
 
 def add_source(data, mapping, list_initial_sources):
-    source_template = "\t" + constants.RML_LOGICAL_SOURCE + " [\n\t\ta " + constants.RML_LOGICAL_SOURCE_PROPERTY + \
+    source_template = "\t" + constants.RML_LOGICAL_SOURCE + " [\n\t\ta " + constants.RML_LOGICAL_SOURCE_CLASS + \
                       ";\n\t\t" + constants.RML_SOURCE + " "
     final_list = []
 
