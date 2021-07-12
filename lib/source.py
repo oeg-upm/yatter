@@ -44,6 +44,7 @@ def add_source_simplified(mapping, source):
     reference_formulation = source[0].split('~')[1]
     source_extension = file_path.split('.')[1]
     ref_formulation_rml = reference_formulation.replace("json", "JSON").replace("csv", "CSV").replace("xpath", "XPath")
+    switcher = switch_in_reference_formulation(reference_formulation)
     if switch_in_reference_formulation(reference_formulation) != source_extension:
         raise Exception(
             "ERROR: mismatch extension and referenceFormulation in source " + source + " in mapping " + mapping)
@@ -123,13 +124,20 @@ def database_source(mapping, source):
 
 
 def switch_in_reference_formulation(value):
-    switcher = {
-        "json": "jsonpath",
-        "csv": "csv",
-        "xml": "xpath"
-    }
-
-    return switcher.get(value.lower(), "ERROR")
+    value = value.lower()
+    if value == "csv":
+        switcher = value
+    elif "json" in value:
+        if "path" in value:
+            switcher = "json"
+        else:
+            switcher = "jsonpath"
+    elif "x" in value:
+        if "path" in value:
+            switcher = "xml"
+        else:
+            switcher = "xpath"
+    return switcher
 
 
 def generate_database_connection(mapping, source):
