@@ -56,7 +56,7 @@ def translate(yarrrml_data):
                         final += map_aux + source[0] + subject + pred + source[1]
                     else:
                         final += map_aux + source + subject + pred
-                    final = final[:-3]
+                    final = final[:-2]
                     final += ".\n\n\n"
                     it = it + 1
 
