@@ -16,8 +16,8 @@ python3 main.py -m path_to_input_yarrrml.yml -o path_to_output_rml.rml
 
 ## Authors
 Ontology Engineering Group - Data Integration:
-- [David Chaves-Fraga] (mailto:david.chaves@upm.es)
-- Luis López Piñero (Bachelor student - v0.1)
+- [David Chaves-Fraga](mailto:david.chaves@upm.es)
+- Luis López Piñero (Final bachelor thesis - v0.1)
 
 
 
