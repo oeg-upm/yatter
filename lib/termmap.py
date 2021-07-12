@@ -16,12 +16,14 @@ def get_termmap_type(text):
 def generate_rml_termmap(rml_property, rml_class, text, identation):
     template = identation[0:-1] + rml_property + " [\n"+identation+"a " + rml_class + ";\n" + identation
     term_map = get_termmap_type(text)
-    if term_map == "rr:template":
+    if term_map == constants.R2RML_TEMPLATE:
         text = text.replace("$(", "{")
         text = text.replace(")", "}")
-    else:
+    elif term_map == constants.RML_REFERENCE:
         text = text.replace("$(", "")
         text = text.replace(")", "")
+    elif term_map == constants.R2RML_CONSTANT and text == "a":
+        text = constants.RDF_TYPE
     if term_map != "rr:constant":
         template += term_map + " \"" + text + "\";\n"+identation[0:-1]+"];\n"
     else:

@@ -8,6 +8,7 @@
 RML_URI = 'http://semweb.mmlab.be/ns/rml#'
 R2RML_URI = 'http://www.w3.org/ns/r2rml#'
 RDF_URI = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+RDF_TYPE = 'rdf:type'
 
 RML_PREFIX = '@prefix'
 RML_TRIPLES_MAP = 'rr:TriplesMap'
