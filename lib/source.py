@@ -56,7 +56,7 @@ def add_source_simplified(mapping, source):
                 raise Exception("ERROR: source " + source + " in mapping " + mapping + " has no iterator")
         else:  # source[1] es el iterador en json y xml
             source_rdf += "\"" + file_path + "\";\n\t\t" + constants.RML_REFERENCE_FORMULATION + " ql:" \
-                          + ref_formulation_rml + ";\n\t\t" + constants.RML_ITERATOR + "\"" \
+                          + ref_formulation_rml + ";\n\t\t" + constants.RML_ITERATOR + " \"" \
                           + source[1] + "\";\n\t];\n"
     return source_rdf
 
