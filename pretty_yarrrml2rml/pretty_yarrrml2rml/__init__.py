@@ -60,7 +60,7 @@ def translate(yarrrml_data):
         print("RML content not generated: "+str(e))
         sys.exit()
 
-	print("------------------------END TRANSLATION-------------------------------")
+    print("------------------------END TRANSLATION-------------------------------")
 
     return "".join(rml_mapping)
 
