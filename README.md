@@ -1,5 +1,6 @@
 # Pretty-yarrrml2rml
-The tool translates mapping rules in RML from YARRRML serialization to RDF turtle in a pretty and interpreatable way for humans. The translation is based on [RML]((https://rml.io/specs/rml/ "RML Spec") and [YARRRML]((https://rml.io/yarrrml/spec/ "YARRRML Spec") specifications.
+The tool translates mapping rules from YARRRML in a pretty turtle-based serialization of RML. The translation is based 
+on [RML]((https://rml.io/specs/rml/ "RML Spec") and [YARRRML]((https://rml.io/yarrrml/spec/ "YARRRML Spec") specifications.
 
 ## Limitations:
 We are working on inlcuding the following features which are not yet implemented:
@@ -11,7 +12,7 @@ We are working on inlcuding the following features which are not yet implemented
 In order to execute the code run you can download de PyPi module:
 ```bash
 python3 -m pip install pretty-yarrrml2rml
-python3 -m pretty_yarrrml2rml -m path_to_input_yarrrml.yml -o path_to_output_rml.rml
+python3 -m pretty_yarrrml2rml -i path_to_input_yarrrml.yml -o path_to_output_rml.rml
 ```
 
 If you want to include the module in your implementation:

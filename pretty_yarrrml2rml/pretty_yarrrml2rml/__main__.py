@@ -22,14 +22,14 @@ def run_parsing_system_inputs():
         with open(file) as f:
             yaml_data = yaml.safe_load(f)
 
-    elif len(sys.argv) == 5 and sys.argv[1] == "-m" and sys.argv[3] == "-o":
+    elif len(sys.argv) == 5 and sys.argv[1] == "-i" and sys.argv[3] == "-o":
         with open(sys.argv[2]) as f:
             yaml_data = yaml.safe_load(f)
     else:
         sys.tracebacklimit = 0
         raise Exception(
             "\n####################################\nERROR: Wrong argument input. You can:"
-            "\n-Use no arguments\n-Use arguments (in this order): -m yarrrml.yml -o mapping.rml.ttl"
+            "\n-Use no arguments\n-Use arguments (in this order): -i yarrrml.yml -o mapping.rml.ttl"
             "\n####################################\n")
 
     return yaml_data
