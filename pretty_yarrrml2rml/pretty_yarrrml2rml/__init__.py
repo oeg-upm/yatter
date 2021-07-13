@@ -8,30 +8,7 @@ import pretty_yarrrml2rml.subject as subject_mod
 import pretty_yarrrml2rml.predicateobject as predicate_object_mod
 
 
-def open_inputs(yarrml_path):
-    with open(yarrml_path) as f:
-        yaml_data = yaml.safe_load(f)
-    return yaml_data
 
-
-def write_results(rml_content):
-    if len(sys.argv) == 1:
-        rml_output_path = input("Name the path for the output file:")
-    else:
-        rml_output_path = sys.argv[4]
-
-    rml_output_file = open(rml_output_path, "w")
-    rml_output_file.write(rml_content)
-    rml_output_file.close()
-
-    print("Validating the generated RDF file with RDFLib")
-    try:
-        graph = Graph()
-        graph.parse(rml_output_path, format="turtle")
-    except Exception as e:
-        print("------------------------ERROR-------------------------------")
-        print("File not created: " + str(e))
-        sys.exit()
 
 def translate(yarrrml_data):
     print("------------------------START TRANSLATING YARRRML TO RML-------------------------------")
@@ -58,8 +35,9 @@ def translate(yarrrml_data):
     except Exception as e:
         print("------------------------ERROR-------------------------------")
         print("RML content not generated: "+str(e))
-        sys.exit()
-
+		return None
+		
+		
     print("------------------------END TRANSLATION-------------------------------")
 
     return "".join(rml_mapping)
