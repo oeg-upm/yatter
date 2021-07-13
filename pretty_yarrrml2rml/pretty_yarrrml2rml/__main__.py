@@ -19,7 +19,7 @@ def run_parsing_system_inputs():
     return yaml_data
 
 
-yarrrml_data = pretty_yarrrml2rml.run_parsing_system_inputs()
+yarrrml_data = run_parsing_system_inputs()
 
 rml_content = pretty_yarrrml2rml.translate(yarrrml_data)
 
