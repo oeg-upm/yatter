@@ -10,8 +10,8 @@ We are working on inlcuding the following features which are not yet implemented
 ## Execution
 In order to execute the code run:
 ``` python
-python3 -m pip install -r requirements.txt
-python3 main.py -m path_to_input_yarrrml.yml -o path_to_output_rml.rml
+python3 -m pip install pretty-yarrrml2rml
+python3 -m pretty_yarrrml2rml -m path_to_input_yarrrml.yml -o path_to_output_rml.rml
 ```
 
 ## Authors
