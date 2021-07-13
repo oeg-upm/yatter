@@ -35,9 +35,9 @@ def translate(yarrrml_data):
     except Exception as e:
         print("------------------------ERROR-------------------------------")
         print("RML content not generated: "+str(e))
-		return None
+        return None
         
-		
+        
     print("------------------------END TRANSLATION-------------------------------")
 
     return "".join(rml_mapping)
