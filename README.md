@@ -8,10 +8,18 @@ We are working on inlcuding the following features which are not yet implemented
 - Functions included using the [FnO](https://fno.io/) Ontology
 
 ## Execution
-In order to execute the code run:
-``` python
+In order to execute the code run you can download de PyPi module:
+```bash
 python3 -m pip install pretty-yarrrml2rml
 python3 -m pretty_yarrrml2rml -m path_to_input_yarrrml.yml -o path_to_output_rml.rml
+```
+
+If you want to include the module in your implementation:
+```python
+import pretty_yarrrml2rml
+import yaml
+
+rml_content = pretty_yarrrml2rml.translate(yaml.safe_load(open("path-to-yarrrml")))
 ```
 
 ## Authors

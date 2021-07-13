@@ -1,25 +1,20 @@
 import sys
+import yaml
 import pretty_yarrrml2rml
 
-def write_results(rml_content):
+
+def write_results(rml_mapping):
     if len(sys.argv) == 1:
         rml_output_path = input("Name the path for the output file:")
     else:
         rml_output_path = sys.argv[4]
 
     rml_output_file = open(rml_output_path, "w")
-    rml_output_file.write(rml_content)
+    rml_output_file.write(rml_mapping)
     rml_output_file.close()
 
     print("Validating the generated RDF file with RDFLib")
-    try:
-        graph = Graph()
-        graph.parse(rml_output_path, format="turtle")
-    except Exception as e:
-        print("------------------------ERROR-------------------------------")
-        print("File not created: " + str(e))
-        
-        sys.exit(1)
+
 
 def run_parsing_system_inputs():
     if len(sys.argv) == 1:
@@ -36,7 +31,7 @@ def run_parsing_system_inputs():
             "\n####################################\nERROR: Wrong argument input. You can:"
             "\n-Use no arguments\n-Use arguments (in this order): -m yarrrml.yml -o mapping.rml.ttl"
             "\n####################################\n")
-            
+
     return yaml_data
 
 
