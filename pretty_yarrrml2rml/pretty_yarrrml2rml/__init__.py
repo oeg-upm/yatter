@@ -36,7 +36,7 @@ def translate(yarrrml_data):
         print("------------------------ERROR-------------------------------")
         print("RML content not generated: "+str(e))
 		return None
-		
+        
 		
     print("------------------------END TRANSLATION-------------------------------")
 
