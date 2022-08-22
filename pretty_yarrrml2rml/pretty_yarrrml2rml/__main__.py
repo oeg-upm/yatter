@@ -1,6 +1,6 @@
 import sys
 import yaml
-import pretty_yarrrml2rml
+from . import translate
 
 
 def write_results(rml_mapping):
@@ -37,6 +37,6 @@ def run_parsing_system_inputs():
 
 yarrrml_data = run_parsing_system_inputs()
 
-rml_content = pretty_yarrrml2rml.translate(yarrrml_data)
+rml_content = translate(yarrrml_data)
 
 write_results(rml_content)

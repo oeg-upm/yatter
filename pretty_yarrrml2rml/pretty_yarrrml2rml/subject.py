@@ -1,7 +1,5 @@
-import sys
-
-import pretty_yarrrml2rml.constants as constants
-import pretty_yarrrml2rml.termmap as termmap
+from .constants import *
+from .termmap import generate_rml_termmap
 
 
 ## Adds a subject or set of subjects to the given TriplesMap
@@ -10,12 +8,12 @@ def add_subject(data, mapping):
     rml_subjects = []
     only_one = False
 
-    if constants.YARRRML_SHORTCUT_SUBJECTS in data.get(constants.YARRRML_MAPPINGS).get(mapping):
-        subject = data.get(constants.YARRRML_MAPPINGS).get(mapping).get(constants.YARRRML_SHORTCUT_SUBJECTS)
-    elif constants.YARRRML_SUBJECTS in data.get(constants.YARRRML_MAPPINGS).get(mapping):
-        subject = data.get(constants.YARRRML_MAPPINGS).get(mapping).get(constants.YARRRML_SUBJECTS)
-    elif constants.YARRRML_SUBJECT in data.get(constants.YARRRML_MAPPINGS).get(mapping):
-        subject = data.get(constants.YARRRML_MAPPINGS).get(mapping).get(constants.YARRRML_SUBJECT)
+    if YARRRML_SHORTCUT_SUBJECTS in data.get(YARRRML_MAPPINGS).get(mapping):
+        subject = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_SHORTCUT_SUBJECTS)
+    elif YARRRML_SUBJECTS in data.get(YARRRML_MAPPINGS).get(mapping):
+        subject = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_SUBJECTS)
+    elif YARRRML_SUBJECT in data.get(YARRRML_MAPPINGS).get(mapping):
+        subject = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_SUBJECT)
         only_one = True
     else:
         raise Exception("ERROR: no subjects in mapping " + mapping)
@@ -28,13 +26,7 @@ def add_subject(data, mapping):
         rml_subjects = subject
 
     for subject in subjects:
-        subject_termmap = termmap.generate_rml_termmap(constants.R2RML_SUBJECT_PROPERTY, constants.R2RML_SUBJECT_CLASS, subject, "\t\t")
+        subject_termmap = generate_rml_termmap(R2RML_SUBJECT_PROPERTY, R2RML_SUBJECT_CLASS, subject, "\t\t")
         rml_subjects.append(subject_termmap)
 
     return rml_subjects
-
-
-
-
-
-
