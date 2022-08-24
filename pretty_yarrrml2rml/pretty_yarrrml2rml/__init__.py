@@ -37,13 +37,13 @@ def translate(yarrrml_data):
             rml_output_file.close()
             graph = Graph()
             graph.parse("tmp.nt", format="turtle")
-            #if os.path.exists("tmp.nt"):
-                #os.remove("tmp.nt")
+            if os.path.exists("tmp.nt"):
+                os.remove("tmp.nt")
         except Exception as e:
             print("------------------------ERROR-------------------------------")
             print("Validating the RDF generated: " + str(e))
-            #if os.path.exists("tmp.nt"):
-                #os.remove("tmp.nt")
+            if os.path.exists("tmp.nt"):
+                os.remove("tmp.nt")
             return None
     except Exception as e:
         print("------------------------ERROR-------------------------------")
