@@ -23,10 +23,8 @@ def add_subject(data, mapping):
     elif type(subject) == list and only_one:
         raise Exception("ERROR: Only one subject can be define using keyword 'subject'")
     else:
-        rml_subjects = subject
-
-    for subject in subjects:
-        subject_termmap = generate_rml_termmap(R2RML_SUBJECT_PROPERTY, R2RML_SUBJECT_CLASS, subject, "\t\t")
-        rml_subjects.append(subject_termmap)
+        for individual_subject in subject:
+            subject_termmap = generate_rml_termmap(R2RML_SUBJECT_PROPERTY, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")
+            rml_subjects.append(subject_termmap)
 
     return rml_subjects

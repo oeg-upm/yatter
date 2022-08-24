@@ -1,6 +1,6 @@
 from .constants import *
 from .mapping import add_prefix, add_mapping
-from .source import get_initial_sources, add_source
+from .source import get_initial_sources, add_source, generate_database_connections
 from .subject import add_subject
 from .predicateobject import add_predicate_object_maps
 import os
@@ -11,10 +11,11 @@ def translate(yarrrml_data):
     print("------------------------START TRANSLATING YARRRML TO RML-------------------------------")
     list_initial_sources = get_initial_sources(yarrrml_data)
     rml_mapping = [add_prefix(yarrrml_data)]
+    rml_mapping.extend(generate_database_connections(yarrrml_data))
     try:
         for mapping in yarrrml_data.get(YARRRML_MAPPINGS):
-            subject_list = add_subject(yarrrml_data, mapping)
             source_list = add_source(yarrrml_data, mapping, list_initial_sources)
+            subject_list = add_subject(yarrrml_data, mapping)
             pred = add_predicate_object_maps(yarrrml_data, mapping)
             it = 0
             for source in source_list:
