@@ -4,7 +4,6 @@ from .termmap import generate_rml_termmap
 
 ## Adds a subject or set of subjects to the given TriplesMap
 def add_subject(data, mapping):
-    subjects = []
     rml_subjects = []
     only_one = False
 
@@ -18,13 +17,14 @@ def add_subject(data, mapping):
     else:
         raise Exception("ERROR: no subjects in mapping " + mapping)
 
-    if type(subject) != list:
-        subjects.append(subject)
-    elif type(subject) == list and only_one:
+    if type(subject) == list and only_one:
         raise Exception("ERROR: Only one subject can be define using keyword 'subject'")
-    else:
-        for individual_subject in subject:
-            subject_termmap = generate_rml_termmap(R2RML_SUBJECT_PROPERTY, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")
-            rml_subjects.append(subject_termmap)
+
+    if type(subject) != list:
+        subject = [subject]
+
+    for individual_subject in subject:
+        subject_termmap = generate_rml_termmap(R2RML_SUBJECT_PROPERTY, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")
+        rml_subjects.append(subject_termmap)
 
     return rml_subjects
