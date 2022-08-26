@@ -1,4 +1,10 @@
 # Pretty-yarrrml2rml
+
+![GitHub](https://img.shields.io/github/license/oeg-upm/pretty-yarrrml2rml?style=flat)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7024501.svg)](https://doi.org/10.5281/zenodo.7024501)
+![PyPI](https://img.shields.io/pypi/v/pretty-yarrrml2rml?style=flat)
+![GitHub Release Date](https://img.shields.io/github/release-date/oeg-upm/pretty-yarrrml2rml)
+
 The tool translates mapping rules from YARRRML in a pretty turtle-based serialization of RML. The translation is based 
 on [RML]((https://rml.io/specs/rml/ "RML Spec") and [YARRRML]((https://rml.io/yarrrml/spec/ "YARRRML Spec") specifications.
 
