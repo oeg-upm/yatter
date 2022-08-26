@@ -24,7 +24,26 @@ def add_subject(data, mapping):
         subject = [subject]
 
     for individual_subject in subject:
-        subject_termmap = generate_rml_termmap(R2RML_SUBJECT_PROPERTY, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")
+        subject_termmap = generate_rml_termmap(R2RML_SUBJECT, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")
         rml_subjects.append(subject_termmap)
+
+    if YARRRML_GRAPHS in data.get(YARRRML_MAPPINGS).get(mapping):
+        graphs = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_GRAPHS)
+    elif YARRRML_GRAPH in data.get(YARRRML_MAPPINGS).get(mapping):
+        graphs = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_GRAPH)
+    elif YARRRML_SHORTCUT_GRAPH in data.get(YARRRML_MAPPINGS).get(mapping):
+        graphs = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_SHORTCUT_GRAPH)
+    else:
+        graphs = []
+
+    if type(graphs) != list:
+        graphs = [graphs]
+
+    for graph in graphs:
+        graph_termmap = generate_rml_termmap(R2RML_GRAPH, R2RML_GRAPH_CLASS, graph, "\t\t\t")
+        rml_subjects = list(map(lambda subject : subject[0:-4] + graph_termmap + "\t];\n", rml_subjects))
+
+
+
 
     return rml_subjects

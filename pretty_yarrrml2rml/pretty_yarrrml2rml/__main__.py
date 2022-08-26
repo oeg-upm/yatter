@@ -13,7 +13,7 @@ def write_results(rml_mapping):
     rml_output_file.write(rml_mapping)
     rml_output_file.close()
 
-    print("Validating the generated RDF file with RDFLib")
+    print("Output mapping saved")
 
 
 def run_parsing_system_inputs():

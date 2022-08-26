@@ -29,7 +29,7 @@ def translate(yarrrml_data):
                     rml_mapping.append(".\n\n\n")
                     it = it + 1
 
-        print("RML content successfully created!\n Starting the validation with RDFLib....")
+        print("RML content successfully created!\nStarting the validation with RDFLib....")
         rml_mapping_string = "".join(rml_mapping)
         try:
             rml_output_file = open("tmp.nt", "w")
@@ -39,6 +39,7 @@ def translate(yarrrml_data):
             graph.parse("tmp.nt", format="turtle")
             if os.path.exists("tmp.nt"):
                 os.remove("tmp.nt")
+            print("The mapping in RML was successfully validated.")
         except Exception as e:
             print("------------------------ERROR-------------------------------")
             print("Validating the RDF generated: " + str(e))

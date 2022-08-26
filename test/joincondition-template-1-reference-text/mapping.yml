@@ -10,7 +10,7 @@ mappings:
           condition:
             function: equal
             parameters:
-              - [str1, $(id)_, s]
+              - [str1, $(id), s]
               - [str2, $(id), o]
   project:
     sources:

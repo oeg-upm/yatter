@@ -24,14 +24,26 @@ def get_predicate_access(predicate_object_map):
     return predicate_access
 
 
-def get_predicate_object_access(mapping):
-    if YARRRML_PREDICATEOBJECT in mapping:
+def get_predicate_object_access(predicate_object_map):
+    if YARRRML_PREDICATEOBJECT in predicate_object_map:
         predicate_object_access = YARRRML_PREDICATEOBJECT
-    elif YARRRML_SHORTCUT_PREDICATEOBJECT in mapping:
+    elif YARRRML_SHORTCUT_PREDICATEOBJECT in predicate_object_map:
         predicate_object_access = YARRRML_SHORTCUT_PREDICATEOBJECT
     else:
-        raise Exception("There isn't a predicate_object_map key correctly specify in " + mapping)
+        raise Exception("There isn't a predicate_object_map key correctly specify in " + predicate_object_map)
     return predicate_object_access
+
+
+def get_graph_access(predicate_object_map):
+    if YARRRML_GRAPHS in predicate_object_map:
+        graph_access = YARRRML_GRAPHS
+    elif YARRRML_GRAPH in predicate_object_map:
+        graph_access = YARRRML_GRAPH
+    elif YARRRML_SHORTCUT_GRAPH in predicate_object_map:
+        graph_access = YARRRML_SHORTCUT_GRAPH
+    else:
+        graph_access = None
+    return graph_access
 
 
 def add_predicate_object_maps(data, mapping):
@@ -44,7 +56,8 @@ def add_predicate_object_maps(data, mapping):
         else:
             po_template += pom_text + add_predicate_object(data, mapping, predicate_object_map,
                                                            get_predicate_access(predicate_object_map),
-                                                           get_object_access(predicate_object_map)) + "\n"
+                                                           get_object_access(predicate_object_map),
+                                                           get_graph_access(predicate_object_map)) + "\n"
     return po_template
 
 
@@ -62,7 +75,7 @@ def get_object_list(predicate_object, object_access):
         else:
             object_list.extend(object_maps)
     else:
-        if len(predicate_object) == 3:
+        if object_access is None and len(predicate_object) == 3:
             object_list.append([object_maps, predicate_object[2]])
         else:
             object_list.append(object_maps)
@@ -81,11 +94,19 @@ def get_predicate_list(predicate_object, predicate_access):
         predicate_list.append(predicate_maps)
     return predicate_list
 
-
-def add_predicate_object(data, mapping, predicate_object, predicate_access=None, object_access=None):
+def get_graph_list(predicate_object,graph_access):
+    if graph_access is not None:
+        graphs = predicate_object.get(graph_access)
+        if type(graphs) is not list:
+            graphs = [graphs]
+    else:
+        graphs = []
+    return graphs
+def add_predicate_object(data, mapping, predicate_object, predicate_access=None, object_access=None, graph_access=None):
     template = ""
     predicate_list = get_predicate_list(predicate_object, predicate_access)
     object_list = get_object_list(predicate_object, object_access)
+    graph_list = get_graph_list(predicate_object, graph_access)
 
     for pm in predicate_list:
         template += generate_rml_termmap(R2RML_PREDICATE, R2RML_PREDICATE_CLASS, pm,
@@ -132,6 +153,10 @@ def add_predicate_object(data, mapping, predicate_object, predicate_access=None,
             if type(om) == list and YARRRML_LANGUAGE in om:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_LANGUAGE + " \"" \
                            + om.get(YARRRML_LANGUAGE) + "\"\n\t\t];\n"
+
+
+    for graph in graph_list:
+        template += generate_rml_termmap(R2RML_GRAPH, R2RML_GRAPH_CLASS, graph, "\t\t\t")
 
     return template + "\t];"
 

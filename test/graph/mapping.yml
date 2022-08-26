@@ -1,16 +1,27 @@
 prefixes:
   ex: http://example.com/
+  schema: http://schema.org/
 
 mappings:
   people:
-    graph: ex:myGraph
+    sources:
+      - [ 'data.csv~csv' ]
     subject: http://example.org/$(id)
+    graph: ex:myGraph
+    po:
+      - [ a, ex:MyClass ]
   cities:
-      graph: ex:$(h)
-      subject: http://example.org/$(id)
+    sources:
+      - [ 'data.csv~csv' ]
+    graph: ex:$(h)
+    subject: http://example.org/$(id)
+    po:
+      - [a, ex:MyClass]
   houses:
-        subject: http://example.org/$(id)
-        po:
-         - p: schema:name
-           o: $(name)
-           g: ex:myHouseGraph
+    sources:
+      - [ 'data.csv~csv' ]
+    subject: http://example.org/$(id)
+    po:
+     - p: schema:name
+       o: $(name)
+       g: ex:myHouseGraph
