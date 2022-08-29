@@ -11,7 +11,6 @@ on [RML]((https://rml.io/specs/rml/ "RML Spec") and [YARRRML]((https://rml.io/ya
 ## Limitations:
 We are working on inlcuding the following features which are not yet implemented:
 - Translation to [R2RML](https://www.w3.org/TR/r2rml)
-- [Named graphs](https://www.w3.org/TR/r2rml/#named-graphs) from R2RML
 - Functions included using the [FnO](https://fno.io/) Ontology
 
 ## Execution
