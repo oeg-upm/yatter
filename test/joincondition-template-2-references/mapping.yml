@@ -4,7 +4,7 @@ mappings:
       - [test.csv~csv]
     s: http://example.com/person/$(id)
     po:
-      - p: schema:creator
+      - p: rr:creator
         o:
           mapping: project
           condition:
@@ -17,4 +17,4 @@ mappings:
       - [test.csv~csv]
     s: http://example.com/project/$(id)
     po:
-      - [a, schema:Project]
+      - [a, rr:Project]

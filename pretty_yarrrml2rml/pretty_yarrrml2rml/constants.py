@@ -18,8 +18,6 @@ RDF_TYPE = 'rdf:type'
 RML_PREFIX = '@prefix'
 RML_BASE = '@base'
 RML_TRIPLES_MAP = 'rr:TriplesMap'
-
-
 RML_LOGICAL_SOURCE_CLASS = 'rml:LogicalSource'
 RML_LOGICAL_SOURCE = 'rml:logicalSource'
 RML_SOURCE = 'rml:source'
@@ -28,11 +26,9 @@ RML_ITERATOR = 'rml:iterator'
 RML_REFERENCE = 'rml:reference'
 
 
-
-
 R2RML_TEMPLATE = 'rr:template'
 R2RML_CONSTANT = 'rr:constant'
-R2RML_SUBJECT_PROPERTY = 'rr:subjectMap'
+R2RML_SUBJECT = 'rr:subjectMap'
 R2RML_SUBJECT_CLASS = 'rr:SubjectMap'
 R2RML_SQL_VERSION = 'rr:sqlVersion'
 R2RML_SQL_QUERY = 'rr:sqlQuery'
@@ -44,6 +40,8 @@ R2RML_PREDICATE_CLASS = 'rr:PredicateMap'
 R2RML_SHORTCUT_OBJECT = 'rr:object'
 R2RML_OBJECT = 'rr:objectMap'
 R2RML_OBJECT_CLASS = 'rr:ObjectMap'
+R2RML_GRAPH = 'rr:graphMap'
+R2RML_GRAPH_CLASS = 'rr:GraphMap'
 R2RML_DATATYPE = 'rr:datatype'
 R2RML_TERMTYPE = 'rr:termType'
 R2RML_LANGUAGE = 'rr:language'
@@ -70,7 +68,6 @@ D2RQ_PASS = 'd2rq:password'
 
 YARRRML_PREFIXES = 'prefixes'
 YARRRML_MAPPINGS = 'mappings'
-
 YARRRML_SOURCES = 'sources'
 YARRRML_SOURCE = 'source'
 YARRRML_ACCESS = 'access'
@@ -86,6 +83,9 @@ YARRRML_SHORTCUT_SUBJECTS = 's'
 YARRRML_SUBJECT = 'subject'
 YARRRML_SUBJECTS = 'subjects'
 
+YARRRML_GRAPHS = 'graphs'
+YARRRML_GRAPH = 'graph'
+YARRRML_SHORTCUT_GRAPH = 'g'
 
 YARRRML_PREDICATEOBJECT = 'predicateobjects'
 YARRRML_SHORTCUT_PREDICATEOBJECT = 'po'

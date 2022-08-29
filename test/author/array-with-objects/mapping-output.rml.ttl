@@ -19,7 +19,7 @@
 
 	rr:predicateObjectMap [
 		a rr:PredicateObjectMap;
-		rr:predicate a;
+		rr:predicate rdf:type;
 		rr:objectMap [ 
 			a rr:ObjectMap;
 			rr:constant ex:Person

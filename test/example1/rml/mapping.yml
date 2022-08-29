@@ -1,6 +1,7 @@
 prefixes:
  mail: "http://example.com/mail#"
  ex: "http://www.example.com/"
+ xsd: "http://www.w3.org/2001/XMLSchema#"
 
 sources:
   source1:
