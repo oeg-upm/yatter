@@ -1,9 +1,9 @@
-# yarrrml
+# yarrrml-translator
 
-![GitHub](https://img.shields.io/github/license/oeg-upm/yarrrml?style=flat)
+![GitHub](https://img.shields.io/github/license/oeg-upm/yarrrml-translator?style=flat)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7024501.svg)](https://doi.org/10.5281/zenodo.7024501)
-![PyPI](https://img.shields.io/pypi/v/pretty-yarrrml2rml?style=flat)
-![GitHub Release Date](https://img.shields.io/github/release-date/oeg-upm/yarrrml)
+![PyPI](https://img.shields.io/pypi/v/yarrrml-translator?style=flat)
+![GitHub Release Date](https://img.shields.io/github/release-date/oeg-upm/yarrrml-translator)
 
 The tool translates mapping rules from YARRRML in a turtle-based serialization of RML. The translation is based 
 on the [RML]((https://rml.io/specs/rml/ "RML Spec") and [YARRRML]((https://rml.io/yarrrml/spec/ "YARRRML Spec") specifications.
