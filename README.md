@@ -5,8 +5,8 @@
 ![PyPI](https://img.shields.io/pypi/v/pretty-yarrrml2rml?style=flat)
 ![GitHub Release Date](https://img.shields.io/github/release-date/oeg-upm/yarrrml)
 
-The tool translates mapping rules from YARRRML in a pretty turtle-based serialization of RML. The translation is based 
-on [RML]((https://rml.io/specs/rml/ "RML Spec") and [YARRRML]((https://rml.io/yarrrml/spec/ "YARRRML Spec") specifications.
+The tool translates mapping rules from YARRRML in a turtle-based serialization of RML. The translation is based 
+on the [RML]((https://rml.io/specs/rml/ "RML Spec") and [YARRRML]((https://rml.io/yarrrml/spec/ "YARRRML Spec") specifications.
 
 ## Limitations:
 We are working on inlcuding the following features which are not yet implemented:
