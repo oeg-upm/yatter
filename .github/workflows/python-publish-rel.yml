@@ -1,7 +1,7 @@
 # This workflows will upload a Python Package using Twine when a release is created
 # For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
 
-name: Upload Python Package (release)
+name: Upload Python Package
 
 on:
   release:
@@ -27,6 +27,6 @@ jobs:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        cd pretty_yarrrml2rml
+        cd yarrrml-translator
         python setup.py -k rel sdist bdist_wheel
         twine upload dist/*

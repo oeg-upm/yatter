@@ -16,25 +16,26 @@ with open("../README.md", "r") as fh:
 
 with open("../VERSION", "r") as fh:
     v = fh.read().replace("\n", "")
-    if parsed.kind == "rel":
-        vers_taged = v
-    else:
-        vers_taged = v+".dev"+v_time
+    vers_taged = v
 
 
 with open("../requirements.txt") as r:
     requirements = list(filter(None, r.read().split("\n")[0:]))
 
 setuptools.setup(
-    name="pretty_yarrrml2rml",
+    name="yarrrml-translator",
     version=vers_taged,
     author="David Chaves-Fraga",
     author_email="david.chaves@upm.es",
     license="Apache 2.0",
-    description="The tool translates mapping rules in RML from YARRRML serialization to RDF turtle in a pretty and interpreatable way for humans. The translation is based on RML and YARRRML specifications.",
+    description="A translator from YARRRML to RML mappings.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/oeg-upm/pretty-yarrrml2rml",
+    url="https://github.com/oeg-upm/yarrrml-translator",
+    project_urls={
+        'Source code': 'https://github.com/oeg-upm/yarrrml-translator',
+        'Issue tracker': 'https://github.com/oeg-upm/yarrrml-translator/issues',
+    },
     include_package_data=True,
     packages=setuptools.find_packages(),
     classifiers=[
@@ -42,7 +43,7 @@ setuptools.setup(
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
         "Environment :: Console",
-        "Intended Audience :: Science/Research",
+        'Intended Audience :: Information Technology',
         "Topic :: Utilities",
         "Topic :: Software Development :: Pre-processors",
         "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator"
