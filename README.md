@@ -6,26 +6,26 @@
 ![GitHub Release Date](https://img.shields.io/github/release-date/oeg-upm/yarrrml-translator)
 
 The tool translates mapping rules from YARRRML in a turtle-based serialization of RML. The translation is based 
-on the [RML]((https://rml.io/specs/rml/ "RML Spec") and [YARRRML]((https://rml.io/yarrrml/spec/ "YARRRML Spec") specifications.
+on the [RML](https://rml.io/specs/rml/) and [YARRRML](https://rml.io/yarrrml/spec/) specifications.
 
-## Limitations:
-We are working on inlcuding the following features which are not yet implemented:
+## Limitations
+We are working on including the following features which are not yet implemented:
 - Translation to [R2RML](https://www.w3.org/TR/r2rml)
-- Functions included using the [FnO](https://fno.io/) Ontology
+- Functions using the [FnO](https://fno.io/) Ontology
 
 ## Execution
 In order to execute the code run you can download de PyPi module:
 ```bash
-python3 -m pip install pretty-yarrrml2rml
-python3 -m pretty_yarrrml2rml -i path_to_input_yarrrml.yml -o path_to_output_rml.rml
+python3 -m pip install yarrrml-translator
+python3 -m yarrrml-translator -i path_to_input_yarrrml.yml -o path_to_output_rml.rml
 ```
 
 If you want to include the module in your implementation:
 ```python
-import pretty_yarrrml2rml
+import yarrrml-translator
 import yaml
 
-rml_content = pretty_yarrrml2rml.translate(yaml.safe_load(open("path-to-yarrrml")))
+rml_content = yarrrml-translator.translate(yaml.safe_load(open("path-to-yarrrml")))
 ```
 
 ## Authors
