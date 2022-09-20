@@ -14,9 +14,14 @@ We are working on including the following features which are not yet implemented
 - Functions using the [FnO](https://fno.io/) Ontology
 
 ## Execution
-In order to execute the code run you can download de PyPi module:
+
+Installation:
+```
+pip install yarrrml-translator
+```
+
+To execute from command line run the following:
 ```bash
-python3 -m pip install yarrrml-translator
 python3 -m yarrrml-translator -i path_to_input_yarrrml.yml -o path_to_output_rml.rml
 ```
 
