@@ -23,7 +23,7 @@ with open("../requirements.txt") as r:
     requirements = list(filter(None, r.read().split("\n")[0:]))
 
 setuptools.setup(
-    name="yarrrml-translator",
+    name="yarrrml_translator",
     version=vers_taged,
     author="David Chaves-Fraga",
     author_email="david.chaves@upm.es",

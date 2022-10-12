@@ -22,15 +22,15 @@ pip install yarrrml-translator
 
 To execute from command line run the following:
 ```bash
-python3 -m yarrrml-translator -i path_to_input_yarrrml.yml -o path_to_output_rml.rml
+python3 -m yarrrml_translator -i path_to_input_yarrrml.yml -o path_to_output_rml.rml
 ```
 
 If you want to include the module in your implementation:
 ```python
-import yarrrml-translator
+import yarrrml_translator
 import yaml
 
-rml_content = yarrrml-translator.translate(yaml.safe_load(open("path-to-yarrrml")))
+rml_content = yarrrml_translator.translate(yaml.safe_load(open("path-to-yarrrml")))
 ```
 
 ## Authors
