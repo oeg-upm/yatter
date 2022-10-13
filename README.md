@@ -17,7 +17,7 @@ We are working on including the following features which are not yet implemented
 
 Installation:
 ```
-pip install yarrrml-translator
+pip install yarrrml_translator
 ```
 
 To execute from command line run the following:
