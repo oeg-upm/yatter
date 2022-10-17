@@ -46,15 +46,15 @@ def get_graph_access(predicate_object_map):
     return graph_access
 
 
-def add_predicate_object_maps(data, mapping):
+def add_predicate_object_maps(data, mapping, mapping_format):
     po_template = ""
     pom_text = "\t" + R2RML_PREDICATE_OBJECT_MAP + " [\n"
     mapping_data = data.get(YARRRML_MAPPINGS).get(mapping)
     for predicate_object_map in mapping_data.get(get_predicate_object_access(mapping_data)):
         if type(predicate_object_map) is list:
-            po_template += pom_text + add_predicate_object(data, mapping, predicate_object_map) + "\n"
+            po_template += pom_text + add_predicate_object(data, mapping, predicate_object_map, mapping_format) + "\n"
         else:
-            po_template += pom_text + add_predicate_object(data, mapping, predicate_object_map,
+            po_template += pom_text + add_predicate_object(data, mapping, predicate_object_map, mapping_format,
                                                            get_predicate_access(predicate_object_map),
                                                            get_object_access(predicate_object_map),
                                                            get_graph_access(predicate_object_map)) + "\n"
@@ -102,7 +102,7 @@ def get_graph_list(predicate_object,graph_access):
     else:
         graphs = []
     return graphs
-def add_predicate_object(data, mapping, predicate_object, predicate_access=None, object_access=None, graph_access=None):
+def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI, predicate_access=None, object_access=None, graph_access=None):
     template = ""
     predicate_list = get_predicate_list(predicate_object, predicate_access)
     object_list = get_object_list(predicate_object, object_access)
@@ -119,7 +119,7 @@ def add_predicate_object(data, mapping, predicate_object, predicate_access=None,
                 object_value = om[0].split(YARRRML_IRI)[0]
                 iri = True
             template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,
-                                             object_value, "\t\t\t")
+                                             object_value, "\t\t\t", mapping_format)
             if len(om) == 2:
                 types = check_type(om[1])
                 if types != "error":
@@ -143,7 +143,7 @@ def add_predicate_object(data, mapping, predicate_object, predicate_access=None,
                     object_value = om.split(YARRRML_IRI)[0]
                     iri = True
             template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,
-                                             object_value, "\t\t\t")
+                                             object_value, "\t\t\t", mapping_format)
             if type(om) == list and YARRRML_DATATYPE in om:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_DATATYPE + " " \
                            + om.get(YARRRML_DATATYPE) + "\n\t\t];\n"

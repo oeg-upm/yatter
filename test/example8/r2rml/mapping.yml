@@ -17,4 +17,4 @@ mappings:
     - [simres:SourceModelSchema,"$(simres:SourceModelSchema)"]
     - [simres:DefaultPreferenceIndex,"$(simres:DefaultPreferenceIndex)", xsd:int]
     - [simres:LibraryLocation,"$(simres:LibraryLocation)"]
-    - [simres:LibraryName,"$(simres\\:LibraryName)"]
+    - [simres:LibraryName,"$(simres\\\\:LibraryName)"]

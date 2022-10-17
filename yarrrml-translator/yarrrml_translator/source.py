@@ -15,10 +15,11 @@ def get_sources(data, mapping):
         sources = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_SOURCES)
     elif YARRRML_SOURCE in data.get(YARRRML_MAPPINGS).get(mapping):
         sources = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_SOURCE)
-        if type(sources) is not list:
-            sources = [sources]
     else:
         raise Exception("ERROR: sources not defined in mapping " + mapping)
+
+    if type(sources) is not list:
+        sources = [sources]
 
     return sources
 
@@ -42,6 +43,36 @@ def add_source(data, mapping, list_initial_sources):
             final_list.append(source_template + add_source_simplified(mapping, source))
         else:
             raise Exception("ERROR: source " + source + " in mapping " + mapping + " not valid")
+    return final_list
+
+
+def add_table(data, mapping, list_initial_sources):
+    table_template = "\t" + R2RML_LOGICAL_TABLE + " [\n\t\ta " + R2RML_LOGICAL_TABLE_CLASS + \
+                     ";\n\t\t"
+
+    final_list = []
+    sources = get_sources(data, mapping)
+    for source in sources:
+        sql_version = False
+        if source in list_initial_sources:
+            source = data.get(YARRRML_SOURCES).get(source)
+
+        if YARRRML_ACCESS in source and YARRRML_QUERY in source:
+            r2rml_access = database_source(mapping, source)
+            sql_version = True
+        elif YARRRML_QUERY in source:
+            r2rml_access = R2RML_SQL_QUERY + " \"" + source.get(YARRRML_QUERY).replace("\n", " ").replace("\"", "\\\"") + "\""
+        elif YARRRML_TABLE in source:
+            r2rml_access = R2RML_TABLE_NAME + " \"" + source.get(YARRRML_TABLE) + "\""
+        else:
+            raise Exception("ERROR: table or query is not provided in " + source + " of mapping " + mapping)
+        if not sql_version:
+            if YARRRML_QUERY_FORMULATION in source:
+                r2rml_access += ";\n\t\t" + R2RML_SQL_VERSION + " rr:" + source.get(YARRRML_QUERY_FORMULATION).upper()
+            else:
+                r2rml_access += ";\n\t\t" + R2RML_SQL_VERSION + " rr:SQL2008"
+            r2rml_access += "\n\t];\n"
+        final_list.append(table_template + r2rml_access)
     return final_list
 
 
@@ -114,15 +145,19 @@ def database_source(mapping, source):
                 username = source.get(YARRRML_CREDENTIALS).get(YARRRML_USERNAME)
                 password = source.get(YARRRML_CREDENTIALS).get(YARRRML_PASSWORD)
                 hash_datasource = abs(hash(access + type + username + password))
-                source_rdf += "<#DataSource_" + str(hash_datasource) + ">;\n\t\t" \
-                              + R2RML_SQL_VERSION + " rr:SQL2008;\n\t\t" \
-                              + R2RML_SQL_QUERY + " \"" + source.get(YARRRML_QUERY) + "\";\n\t\t"
+                source_rdf += "<#DataSource_" + str(hash_datasource) + ">;\n\t\t"
+                if YARRRML_QUERY in source:
+                    source_rdf += R2RML_SQL_QUERY + " \"" + source.get(YARRRML_QUERY) + "\""
+                elif YARRRML_TABLE in source:
+                    source_rdf += R2RML_TABLE_NAME + " \"" + source.get(YARRRML_TABLE) + "\""
                 if YARRRML_REFERENCE_FORMULATION in source:
-                    source_rdf += "\t\t" + RML_REFERENCE_FORMULATION + " ql:" \
-                                  + switch_in_reference_formulation(
-                        source.get(YARRRML_REFERENCE_FORMULATION)) + "\n\t];\n"
+                    source_rdf += ";\n\t\t" + RML_REFERENCE_FORMULATION + " ql:" \
+                                  + switch_in_reference_formulation(source.get(YARRRML_REFERENCE_FORMULATION))
+                if YARRRML_QUERY_FORMULATION in source:
+                    source_rdf += ";\n\t\t" + R2RML_SQL_VERSION + " rr:" + source.get(YARRRML_QUERY_FORMULATION).upper()
                 else:
-                    source_rdf += "\n\t];\n"
+                    source_rdf += ";\n\t\t" + R2RML_SQL_VERSION + " rr:SQL2008"
+                source_rdf += "\n\t];\n"
         else:
             raise Exception("ERROR: no credentials to get access to source in mapping " + mapping)
     else:
@@ -154,7 +189,7 @@ def generate_database_connections(data):
     for mapping in data.get(YARRRML_MAPPINGS):
         sources = get_sources(data, mapping)
         for source in sources:
-            if YARRRML_ACCESS and YARRRML_QUERY in source:
+            if YARRRML_QUERY in source and YARRRML_ACCESS in source:
                 type = source.get(YARRRML_TYPE)
                 if type == "mysql":
                     driver = "com.mysql.jdbc.Driver"
