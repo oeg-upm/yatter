@@ -14,7 +14,7 @@ from rdflib import compare
 R2RML_URI = 'http://www.w3.org/ns/r2rml#'
 
 
-def test_r2rmltc0002d():
+def test_yarrrmltc0006():
     expected_mapping = Graph()
     expected_mapping.parse(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mapping.r2rml.ttl'), format="ttl")
 
