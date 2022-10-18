@@ -133,7 +133,7 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
                            + R2RML_IRI + "\n\t\t];\n"
         elif YARRRML_MAPPING in om:
-            template += join_mapping(data, mapping, om)
+            template += join_mapping(data, mapping, om, mapping_format)
         else:
             if YARRRML_VALUE in om:
                 object_value = om.get(YARRRML_VALUE)
@@ -161,7 +161,7 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
     return template + "\t];"
 
 
-def join_mapping(data, mapping, om):
+def join_mapping(data, mapping, om, mapping_format):
     list_mappings = []
     template = ""
     for mappings in data.get(YARRRML_MAPPINGS):
@@ -172,7 +172,10 @@ def join_mapping(data, mapping, om):
     if mapping_join in list_mappings:
         subject_list = add_subject(data, mapping_join)
         list_initial_sources = get_initial_sources(data)
-        source_list = add_source(data, mapping_join, list_initial_sources)
+        if mapping_format == R2RML_URI:
+            source_list = add_table(data, mapping_join, list_initial_sources)
+        else:
+            source_list = add_source(data, mapping_join, list_initial_sources)
 
         number_joins_rml = len(subject_list) * len(source_list)
         for i in range(number_joins_rml):
@@ -195,7 +198,7 @@ def join_mapping(data, mapping, om):
                                         ";\n\t\t\t\t" + R2RML_PARENT + " " + parent + ";\n\t\t\t]; \n"
 
                         else:
-                            raise Exception("Error: more than two parameters in join condition in mapping1 " + mapping)
+                            raise Exception("Error: more than two parameters in join condition in mapping " + mapping)
                 template += "\t\t];\n"
             else:
                 template += "\n\t\t]\n"

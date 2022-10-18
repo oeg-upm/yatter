@@ -2,3 +2,4 @@
 lib/__pychache__
 .idea
 venv
+.pytest_cache

@@ -30,7 +30,10 @@ def generate_rml_termmap(rml_property, rml_class, text, identation, mapping_form
     if term_map != "rr:constant":
         template += term_map + " \"" + text + "\";\n"+identation[0:-1]+"];\n"
     else:
-        template += term_map + " " + text + ";\n"+identation[0:-1]+"];\n"
+        if text.startswith("http"):
+            template += term_map + " <" + text + ">;\n" + identation[0:-1] + "];\n"
+        else:
+            template += term_map + " " + text + ";\n"+identation[0:-1]+"];\n"
 
     return template
 
