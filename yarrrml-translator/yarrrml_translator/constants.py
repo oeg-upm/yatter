@@ -13,6 +13,7 @@ QL_URI = 'http://semweb.mmlab.be/ns/ql#'
 EXAMPLE_URI = 'http://example.com/ns#'
 RDFS_URI = 'http://www.w3.org/2000/01/rdf-schema#'
 XSD_URI = 'http://www.w3.org/2001/XMLSchema#'
+FOAF_URI ='http://xmlns.com/foaf/0.1/'
 RDF_TYPE = 'rdf:type'
 
 RML_PREFIX = '@prefix'

@@ -30,6 +30,8 @@ def add_prefix(data):
         template.append(RML_PREFIX + " ql: <" + QL_URI + ">.\n")
     if "d2rq" not in common_prefixes:
         template.append(RML_PREFIX + " d2rq: <" + D2RQ_URI + ">.\n")
+    if "foaf" not in common_prefixes:
+        template.append(RML_PREFIX + " foaf: <" + FOAF_URI + ">.\n")
     if "base" not in common_prefixes:
         template.append(RML_BASE + " <" + EXAMPLE_URI + ">.\n")
     template.append("\n\n")

@@ -1,14 +1,19 @@
+import logging, coloredlogs
 from .constants import *
 from .mapping import add_prefix, add_mapping
 from .source import get_initial_sources, add_source, generate_database_connections, add_table
 from .subject import add_subject
 from .predicateobject import add_predicate_object_maps
-import os
 from rdflib import Graph
 
 
 def translate(yarrrml_data, mapping_format=RML_URI):
-    print("------------------------START TRANSLATING YARRRML TO RML-------------------------------")
+    # configure logging with colors
+    logger = logging.getLogger(__name__)
+    coloredlogs.install(level='DEBUG', fmt='%(asctime)s,%(msecs)03d | %(levelname)s: %(message)s')
+
+    logger.info("Translating YARRRML mapping to [R2]RML")
+
     list_initial_sources = get_initial_sources(yarrrml_data)
     rml_mapping = [add_prefix(yarrrml_data)]
     rml_mapping.extend(generate_database_connections(yarrrml_data))
@@ -32,28 +37,21 @@ def translate(yarrrml_data, mapping_format=RML_URI):
                     rml_mapping.append(".\n\n\n")
                     it = it + 1
 
-        print("RML content successfully created!\nStarting the validation with RDFLib....")
+        logger.info("RML content is created!")
         rml_mapping_string = "".join(rml_mapping)
         try:
-            rml_output_file = open("tmp.nt", "w")
-            rml_output_file.write(rml_mapping_string)
-            rml_output_file.close()
             graph = Graph()
-            graph.parse("tmp.nt", format="turtle")
-            if os.path.exists("tmp.nt"):
-                os.remove("tmp.nt")
-            print("The mapping in RML was successfully validated.")
+            graph.parse(data=rml_mapping_string, format="turtle")
+            logger.info("Mapping has been syntactically validated.")
         except Exception as e:
-            print("------------------------ERROR-------------------------------")
-            print("Validating the RDF generated: " + str(e))
-            if os.path.exists("tmp.nt"):
-                os.remove("tmp.nt")
+            logger.error("ERROR: There is a syntactic error in the generated mapping")
+            logger.error(str(e))
             return None
     except Exception as e:
-        print("------------------------ERROR-------------------------------")
-        print("RML content not generated: " + str(e))
+        logger.error("ERROR: The YARRRML mapping has not been translated")
+        logger.error(str(e))
         return None
 
-    print("------------------------END TRANSLATION-------------------------------")
+    logger.info("Translation has finished successfully.")
 
     return rml_mapping_string

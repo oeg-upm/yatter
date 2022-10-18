@@ -14,8 +14,6 @@ def write_results(rml_mapping):
     rml_output_file.write(rml_mapping)
     rml_output_file.close()
 
-    print("Output mapping saved")
-
 
 def run_parsing_system_inputs():
     mapping_format = RML_URI
