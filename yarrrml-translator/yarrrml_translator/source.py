@@ -81,7 +81,7 @@ def add_source_simplified(mapping, source):
     file_path = re.sub("~.*", "", source[0])
     reference_formulation = source[0].split('~')[1]
     source_extension = file_path.split('.')[1]
-    ref_formulation_rml = reference_formulation.replace("json", "JSON").replace("csv", "CSV").replace("xpath", "XPath")
+    ref_formulation_rml = reference_formulation.replace("jsonpath", "JSONPath").replace("csv", "CSV").replace("xpath", "XPath")
     if switch_in_reference_formulation(reference_formulation) != source_extension:
         raise Exception(
             "ERROR: mismatch extension and referenceFormulation in source " + source + " in mapping " + mapping)
@@ -108,7 +108,7 @@ def add_source_full(mapping, source):
     if YARRRML_REFERENCE_FORMULATION in source:
         reference_formulation = str(source.get(YARRRML_REFERENCE_FORMULATION))
         format_from_reference = switch_in_reference_formulation(reference_formulation.lower())
-        ref_formulation_rml = reference_formulation.replace("json", "JSON").replace("csv", "CSV").replace("xpath",
+        ref_formulation_rml = reference_formulation.replace("jsonpath", "JSONPath").replace("csv", "CSV").replace("xpath",
                                                                                                           "XPath")
         if extension != format_from_reference or format_from_reference == "ERROR":
             raise Exception("ERROR: not referenceFormulation found or mismatch between the format and "
