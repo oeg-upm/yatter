@@ -1,7 +1,10 @@
+prefixes:
+  schema: http://schema.org/
+
 mappings:
   person:
     sources:
      - ["person.csv~csv"]
-    s: $(id)\:\:number
+    s: $(id)::number
     po:
       - [a, schema:Person]

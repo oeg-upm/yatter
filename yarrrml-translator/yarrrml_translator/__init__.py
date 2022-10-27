@@ -6,12 +6,11 @@ from .subject import add_subject
 from .predicateobject import add_predicate_object_maps
 from rdflib import Graph
 
+logger = logging.getLogger(__name__)
+coloredlogs.install(level='DEBUG', fmt='%(asctime)s,%(msecs)03d | %(levelname)s: %(message)s')
+
 
 def translate(yarrrml_data, mapping_format=RML_URI):
-    # configure logging with colors
-    logger = logging.getLogger(__name__)
-    coloredlogs.install(level='DEBUG', fmt='%(asctime)s,%(msecs)03d | %(levelname)s: %(message)s')
-
     logger.info("Translating YARRRML mapping to [R2]RML")
 
     list_initial_sources = get_initial_sources(yarrrml_data)
@@ -55,3 +54,7 @@ def translate(yarrrml_data, mapping_format=RML_URI):
     logger.info("Translation has finished successfully.")
 
     return rml_mapping_string
+
+
+def inverse_translation(rdf_mapping, mapping_format=RML_URI):
+    return ""
