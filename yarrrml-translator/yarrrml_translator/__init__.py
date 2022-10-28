@@ -1,13 +1,12 @@
-import logging, coloredlogs
+
 from .constants import *
 from .mapping import add_prefix, add_mapping
-from .source import get_initial_sources, add_source, generate_database_connections, add_table
+from .source import get_initial_sources, add_source, generate_database_connections, add_table, add_inverse_source
 from .subject import add_subject
 from .predicateobject import add_predicate_object_maps
-from rdflib import Graph
+import rdflib
 
-logger = logging.getLogger(__name__)
-coloredlogs.install(level='DEBUG', fmt='%(asctime)s,%(msecs)03d | %(levelname)s: %(message)s')
+
 
 
 def translate(yarrrml_data, mapping_format=RML_URI):
@@ -39,7 +38,7 @@ def translate(yarrrml_data, mapping_format=RML_URI):
         logger.info("RML content is created!")
         rml_mapping_string = "".join(rml_mapping)
         try:
-            graph = Graph()
+            graph = rdflib.Graph()
             graph.parse(data=rml_mapping_string, format="turtle")
             logger.info("Mapping has been syntactically validated.")
         except Exception as e:
@@ -57,4 +56,25 @@ def translate(yarrrml_data, mapping_format=RML_URI):
 
 
 def inverse_translation(rdf_mapping, mapping_format=RML_URI):
+    # ToDo: add prefixes
+    yarrrml_mapping = {'prefixes': [], 'mappings': []}
+    rdf_mapping.bind('rml', rdflib.term.URIRef(RML_NS))
+    rdf_mapping.bind('rr', rdflib.term.URIRef(R2RML_NS))
+    rdf_mapping.bind('ql', rdflib.term.URIRef(QL_NS))
+
+    query = f'SELECT ?triplesMap WHERE {{ ?triplesMap {RDF_TYPE} {R2RML_TRIPLES_MAP} . }} '
+    triples_map = [tm[rdflib.Variable('triplesMap')] for tm in rdf_mapping.query(query).bindings]
+
+    for tm in triples_map:
+        tm_text = tm.split("/")[-1]
+        yarrrml_tm = {tm_text: {}}
+        source = add_inverse_source(tm, rdf_mapping, mapping_format)
+        yarrrml_tm[tm_text] = source
+        query = f'SELECT ?subject  WHERE {{ <{tm}> {R2RML_SUBJECT} ?subject . }} '
+        subject = [tm[rdflib.Variable('subject')] for tm in rdf_mapping.query(query).bindings][0]
+        # ToDo: generate the subject from its id
+
+        query = f'SELECT ?predicateObjectMap  WHERE {{ <{tm}> {R2RML_PREDICATE_OBJECT_MAP} ?predicateObjectMap . }} '
+        poms = [tm[rdflib.Variable('predicateObjectMap')] for tm in rdf_mapping.query(query).bindings]
+        # ToDo: generate the poms from their id
     return ""

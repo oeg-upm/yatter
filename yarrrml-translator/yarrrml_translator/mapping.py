@@ -2,7 +2,7 @@ from .import *
 
 
 def add_mapping(mapping, it):
-    map_template = "<#" + mapping + "_" + str(it) + "> a " + RML_TRIPLES_MAP + ";\n\n"
+    map_template = "<#" + mapping + "_" + str(it) + "> a " + R2RML_TRIPLES_MAP + ";\n\n"
     return map_template
 
 

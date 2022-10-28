@@ -1,5 +1,4 @@
-
-
+import logging, coloredlogs
 
 ##############################################################################
 #############################   RML CONSTANTS  ###############################
@@ -18,7 +17,6 @@ RDF_TYPE = 'rdf:type'
 
 RML_PREFIX = '@prefix'
 RML_BASE = '@base'
-RML_TRIPLES_MAP = 'rr:TriplesMap'
 RML_LOGICAL_SOURCE_CLASS = 'rml:LogicalSource'
 RML_LOGICAL_SOURCE = 'rml:logicalSource'
 RML_SOURCE = 'rml:source'
@@ -28,6 +26,7 @@ RML_REFERENCE = 'rml:reference'
 
 
 R2RML_TEMPLATE = 'rr:template'
+R2RML_TRIPLES_MAP = 'rr:TriplesMap'
 R2RML_CONSTANT = 'rr:constant'
 R2RML_SUBJECT = 'rr:subjectMap'
 R2RML_SUBJECT_CLASS = 'rr:SubjectMap'
@@ -113,6 +112,16 @@ YARRRML_IRI = '~iri'
 YARRRML_LANG = '~lang'
 
 
+##############################################################################
+###########################   [R2]RML NAMESPACES  ############################
+##############################################################################
+
+
+R2RML_NS = 'http://www.w3.org/ns/r2rml#'
+RML_NS = 'http://semweb.mmlab.be/ns/rml#'
+QL_NS = 'http://semweb.mmlab.be/ns/ql#'
 
 
 
+logger = logging.getLogger(__name__)
+coloredlogs.install(level='DEBUG', fmt='%(asctime)s,%(msecs)03d | %(levelname)s: %(message)s')
