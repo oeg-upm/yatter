@@ -14,6 +14,7 @@ RDFS_URI = 'http://www.w3.org/2000/01/rdf-schema#'
 XSD_URI = 'http://www.w3.org/2001/XMLSchema#'
 FOAF_URI ='http://xmlns.com/foaf/0.1/'
 RDF_TYPE = 'rdf:type'
+SCHEMA_URI = 'http://schema.org/'
 
 RML_PREFIX = '@prefix'
 RML_BASE = '@base'
@@ -110,16 +111,6 @@ YARRRML_PARAMETERS = 'parameters'
 
 YARRRML_IRI = '~iri'
 YARRRML_LANG = '~lang'
-
-
-##############################################################################
-###########################   [R2]RML NAMESPACES  ############################
-##############################################################################
-
-
-R2RML_NS = 'http://www.w3.org/ns/r2rml#'
-RML_NS = 'http://semweb.mmlab.be/ns/rml#'
-QL_NS = 'http://semweb.mmlab.be/ns/ql#'
 
 
 

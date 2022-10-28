@@ -1,6 +1,6 @@
 
 from .constants import *
-from .mapping import add_prefix, add_mapping
+from .mapping import add_prefix, add_mapping, add_inverse_prefix
 from .source import get_initial_sources, add_source, generate_database_connections, add_table, add_inverse_source
 from .subject import add_subject
 from .predicateobject import add_predicate_object_maps
@@ -56,12 +56,11 @@ def translate(yarrrml_data, mapping_format=RML_URI):
 
 
 def inverse_translation(rdf_mapping, mapping_format=RML_URI):
-    # ToDo: add prefixes
     yarrrml_mapping = {'prefixes': [], 'mappings': []}
-    rdf_mapping.bind('rml', rdflib.term.URIRef(RML_NS))
-    rdf_mapping.bind('rr', rdflib.term.URIRef(R2RML_NS))
-    rdf_mapping.bind('ql', rdflib.term.URIRef(QL_NS))
-
+    rdf_mapping.bind('rml', rdflib.term.URIRef(RML_URI))
+    rdf_mapping.bind('rr', rdflib.term.URIRef(R2RML_URI))
+    rdf_mapping.bind('ql', rdflib.term.URIRef(QL_URI))
+    yarrrml_mapping['prefixes'] = add_inverse_prefix(rdf_mapping)
     query = f'SELECT ?triplesMap WHERE {{ ?triplesMap {RDF_TYPE} {R2RML_TRIPLES_MAP} . }} '
     triples_map = [tm[rdflib.Variable('triplesMap')] for tm in rdf_mapping.query(query).bindings]
 
@@ -77,4 +76,7 @@ def inverse_translation(rdf_mapping, mapping_format=RML_URI):
         query = f'SELECT ?predicateObjectMap  WHERE {{ <{tm}> {R2RML_PREDICATE_OBJECT_MAP} ?predicateObjectMap . }} '
         poms = [tm[rdflib.Variable('predicateObjectMap')] for tm in rdf_mapping.query(query).bindings]
         # ToDo: generate the poms from their id
+
+        yarrrml_mapping['mappings'].append(yarrrml_tm)
+
     return ""

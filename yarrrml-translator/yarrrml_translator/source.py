@@ -62,7 +62,8 @@ def add_table(data, mapping, list_initial_sources):
             r2rml_access = database_source(mapping, source)
             sql_version = True
         elif YARRRML_QUERY in source:
-            r2rml_access = R2RML_SQL_QUERY + " \"" + source.get(YARRRML_QUERY).replace("\n", " ").replace("\"", "\\\"") + "\""
+            r2rml_access = R2RML_SQL_QUERY + " \"" + source.get(YARRRML_QUERY).replace("\n", " ").replace("\"",
+                                                                                                          "\\\"") + "\""
         elif YARRRML_TABLE in source:
             r2rml_access = R2RML_TABLE_NAME + " \"" + source.get(YARRRML_TABLE) + "\""
         else:
@@ -82,7 +83,8 @@ def add_source_simplified(mapping, source):
     file_path = re.sub("~.*", "", source[0])
     reference_formulation = source[0].split('~')[1]
     source_extension = file_path.split('.')[1]
-    ref_formulation_rml = reference_formulation.replace("jsonpath", "JSONPath").replace("csv", "CSV").replace("xpath", "XPath")
+    ref_formulation_rml = reference_formulation.replace("jsonpath", "JSONPath").replace("csv", "CSV").replace("xpath",
+                                                                                                              "XPath")
     if switch_in_reference_formulation(reference_formulation) != source_extension:
         raise Exception(
             "ERROR: mismatch extension and referenceFormulation in source " + source + " in mapping " + mapping)
@@ -109,8 +111,9 @@ def add_source_full(mapping, source):
     if YARRRML_REFERENCE_FORMULATION in source:
         reference_formulation = str(source.get(YARRRML_REFERENCE_FORMULATION))
         format_from_reference = switch_in_reference_formulation(reference_formulation.lower())
-        ref_formulation_rml = reference_formulation.replace("jsonpath", "JSONPath").replace("csv", "CSV").replace("xpath",
-                                                                                                          "XPath")
+        ref_formulation_rml = reference_formulation.replace("jsonpath", "JSONPath").replace("csv", "CSV").replace(
+            "xpath",
+            "XPath")
         if extension != format_from_reference or format_from_reference == "ERROR":
             raise Exception("ERROR: not referenceFormulation found or mismatch between the format and "
                             "referenceFormulation in source " + access + "in mapping " + mapping)
@@ -236,11 +239,11 @@ def add_inverse_source(tm, rdf_mapping, mapping_format):
 
     return yarrrml
 
-def get_logical_table(yarrrml, logical_table_id, rdf_mapping):
 
-    table_name = rdf_mapping.value(subject=logical_table_id, predicate=rdflib.Namespace(R2RML_NS).tableName)
-    sql_query = rdf_mapping.value(subject=logical_table_id, predicate=rdflib.Namespace(R2RML_NS).sqlQuery)
-    sql_version = rdf_mapping.value(subject=logical_table_id, predicate=rdflib.Namespace(R2RML_NS).sqlVersion)
+def get_logical_table(yarrrml, logical_table_id, rdf_mapping):
+    table_name = rdf_mapping.value(subject=logical_table_id, predicate=rdflib.Namespace(R2RML_URI).tableName)
+    sql_query = rdf_mapping.value(subject=logical_table_id, predicate=rdflib.Namespace(R2RML_URI).sqlQuery)
+    sql_version = rdf_mapping.value(subject=logical_table_id, predicate=rdflib.Namespace(R2RML_URI).sqlVersion)
 
     if table_name is None and sql_query is None:
         logger.error("Mapping does not define neither tableName nor sqlQuery")
@@ -252,32 +255,35 @@ def get_logical_table(yarrrml, logical_table_id, rdf_mapping):
         yarrrml['sources'].append({"query": sql_query.value})
 
     if sql_version:
-        yarrrml['sources'].append({"queryFormulation": sql_version.toPython().replace(R2RML_NS, '').lower()})
+        yarrrml['sources'].append({"queryFormulation": sql_version.toPython().replace(R2RML_URI, '').lower()})
 
 
 def get_logical_source(yarrrml, logical_source_id, rdf_mapping):
-    source = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(RML_NS).source)
-    iterator = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(RML_NS).iterator)
-    reference_formulation = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(RML_NS).referenceFormulation)
-    sql_query = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(R2RML_NS).sqlQuery)
-    sql_version = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(R2RML_NS).sqlVersion)
+    source = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(RML_URI).source)
+    iterator = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(RML_URI).iterator)
+    reference_formulation = rdf_mapping.value(subject=logical_source_id,
+                                              predicate=rdflib.Namespace(RML_URI).referenceFormulation)
+    sql_query = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(R2RML_URI).sqlQuery)
+    sql_version = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(R2RML_URI).sqlVersion)
 
     if source is None:
         logger.error("Mapping does not define source access")
         raise Exception()
 
     if source and reference_formulation and iterator:
-        yarrrml['sources'].append([source.value + '~' + reference_formulation.toPython().replace(QL_NS,'').lower(), iterator.value])
+        yarrrml['sources'].append(
+            [source.value + '~' + reference_formulation.toPython().replace(QL_URI, '').lower(), iterator.value])
     elif source and sql_query:
-        #this means a database source
+        # this means a database source
         yarrrml['sources'].append({"query": sql_query.value})
-        yarrrml['sources'].append({"source": source.value}) #ToDo: extend to get d2rq access
+        yarrrml['sources'].append({"source": source.value})  # ToDo: extend to get d2rq access
         if reference_formulation:
-            yarrrml['sources'].append({"referenceFormulation":  reference_formulation.toPython().replace(QL_NS,'').lower()})
+            yarrrml['sources'].append(
+                {"referenceFormulation": reference_formulation.toPython().replace(QL_URI, '').lower()})
         if sql_version:
-            yarrrml['sources'].append({"queryFormulation": sql_version.toPython().replace(R2RML_NS, '').lower()})
+            yarrrml['sources'].append({"queryFormulation": sql_version.toPython().replace(R2RML_URI, '').lower()})
     elif source and reference_formulation:
-        yarrrml['sources'].append([source.value + '~' + reference_formulation.toPython().replace(QL_NS, '').lower()])
+        yarrrml['sources'].append([source.value + '~' + reference_formulation.toPython().replace(QL_URI, '').lower()])
     else:
         if source.endsWith(".csv"):
             yarrrml['sources'].append([source.value + '~csv'])

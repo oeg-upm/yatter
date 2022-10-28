@@ -34,6 +34,8 @@ def add_prefix(data):
         template.append(RML_PREFIX + " foaf: <" + FOAF_URI + ">.\n")
     if "base" not in common_prefixes:
         template.append(RML_BASE + " <" + EXAMPLE_URI + ">.\n")
+    if "schema" not in common_prefixes:
+        template.append(RML_PREFIX + " schema: <" + SCHEMA_URI + ">.\n")
     template.append("\n\n")
 
     return "".join(template)
@@ -55,3 +57,11 @@ def check_common_prefixes(prefix_uri, common_prefixes):
         common_prefixes.append("rdfs")
     elif prefix_uri == XSD_URI:
         common_prefixes.append("xsd")
+
+
+def add_inverse_prefix(rdf_mapping):
+    prefixes = []
+    for prefix, uri in rdf_mapping.namespaces():
+        if prefix:
+            prefixes.append({prefix: uri.toPython()})
+    return prefixes
