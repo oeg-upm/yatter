@@ -16,7 +16,7 @@ R2RML_URI = 'http://www.w3.org/ns/r2rml#'
 
 def test_yarrrmltc0009():
     expected_mapping = Graph()
-    expected_mapping.parse(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'r2rml7d.ttl'), format="ttl")
+    expected_mapping.parse(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mapping.r2rml.ttl'), format="ttl")
 
     translated_mapping = Graph()
     mapping_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mapping.yml')

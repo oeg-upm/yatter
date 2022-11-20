@@ -8,6 +8,7 @@ mappings:
     sources:
       - table: Student
     s: $(Name)
+    po:
     - p: rdf:type
       o: [foaf:Person, ex:Student]
     - p: foaf:Name
