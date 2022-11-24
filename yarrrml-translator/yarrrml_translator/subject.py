@@ -64,7 +64,7 @@ def add_inverse_subject(tm, rdf_mapping):
         subject = '$(' + subject + ')'
     else:
         if '{' in subject:
-            subject = subject.replace('{', "$(").replace('}',')')
+            subject = subject.replace('{', "$(").replace('}', ')')
 
     query = f'SELECT ?class_value  WHERE {{ <{tm}> {R2RML_SUBJECT} ?subject . ' \
             f'?subject {R2RML_CLASS} ?class_value }} '

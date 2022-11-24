@@ -248,14 +248,16 @@ def get_logical_table(yarrrml, logical_table_id, rdf_mapping):
     if table_name is None and sql_query is None:
         logger.error("Mapping does not define neither tableName nor sqlQuery")
         raise Exception()
-
+    source = {}
     if table_name:
-        yarrrml['sources'].append({"table": table_name.value})
+        source["table"] = table_name.value
     elif sql_query:
-        yarrrml['sources'].append({"query": sql_query.value})
+        source["query"] = sql_query.value
 
     if sql_version:
-        yarrrml['sources'].append({"queryFormulation": sql_version.toPython().replace(R2RML_URI, '').lower()})
+        source["queryFormulation"] = sql_version.toPython().replace(R2RML_URI, '').lower()
+
+    yarrrml['sources'].append(source)
 
 
 def get_logical_source(yarrrml, logical_source_id, rdf_mapping):
@@ -275,13 +277,12 @@ def get_logical_source(yarrrml, logical_source_id, rdf_mapping):
             [source.value + '~' + reference_formulation.toPython().replace(QL_URI, '').lower(), iterator.value])
     elif source and sql_query:
         # this means a database source
-        yarrrml['sources'].append({"query": sql_query.value})
-        yarrrml['sources'].append({"source": source.value})  # ToDo: extend to get d2rq access
+        source_dict = {"query": sql_query.value, "source": source.value}
         if reference_formulation:
-            yarrrml['sources'].append(
-                {"referenceFormulation": reference_formulation.toPython().replace(QL_URI, '').lower()})
+            source_dict["referenceFormulation"] = reference_formulation.toPython().replace(QL_URI, '').lower()
         if sql_version:
-            yarrrml['sources'].append({"queryFormulation": sql_version.toPython().replace(R2RML_URI, '').lower()})
+            source_dict["queryFormulation"] = sql_version.toPython().replace(R2RML_URI, '').lower()
+        yarrrml['sources'].append(source_dict)
     elif source and reference_formulation:
         yarrrml['sources'].append([source.value + '~' + reference_formulation.toPython().replace(QL_URI, '').lower()])
     else:

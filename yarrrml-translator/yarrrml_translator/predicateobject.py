@@ -1,3 +1,5 @@
+import rdflib
+
 from . import *
 from .source import get_initial_sources, add_source
 from .subject import add_subject
@@ -94,7 +96,8 @@ def get_predicate_list(predicate_object, predicate_access):
         predicate_list.append(predicate_maps)
     return predicate_list
 
-def get_graph_list(predicate_object,graph_access):
+
+def get_graph_list(predicate_object, graph_access):
     if graph_access is not None:
         graphs = predicate_object.get(graph_access)
         if type(graphs) is not list:
@@ -102,7 +105,10 @@ def get_graph_list(predicate_object,graph_access):
     else:
         graphs = []
     return graphs
-def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI, predicate_access=None, object_access=None, graph_access=None):
+
+
+def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI, predicate_access=None,
+                         object_access=None, graph_access=None):
     template = ""
     predicate_list = get_predicate_list(predicate_object, predicate_access)
     object_list = get_object_list(predicate_object, object_access)
@@ -153,7 +159,6 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
             if type(om) == list and YARRRML_LANGUAGE in om:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_LANGUAGE + " \"" \
                            + om.get(YARRRML_LANGUAGE) + "\"\n\t\t];\n"
-
 
     for graph in graph_list:
         template += generate_rml_termmap(R2RML_GRAPH, R2RML_GRAPH_CLASS, graph, "\t\t\t")
@@ -207,3 +212,58 @@ def join_mapping(data, mapping, om, mapping_format):
         raise Exception("Error in reference mapping another mapping in mapping " + mapping)
 
     return template
+
+
+def add_inverse_pom(tm, rdf_mapping, classes):
+    yarrrml_poms = []
+
+    for c in classes:
+        yarrrml_poms.append(['rdf:type', c])
+
+    query = f'SELECT ?predicate ?predicateValue ?object ?objectValue ?termtype ?datatype ' \
+            f'?parentTriplesMap ?child ?parent' \
+            f' WHERE {{ ' \
+            f'<{tm}> {R2RML_PREDICATE_OBJECT_MAP} ?predicateObjectMap . ' \
+            f'?predicateObjectMap {R2RML_PREDICATE}|{R2RML_SHORTCUT_PREDICATE} ?predicate .' \
+            f'OPTIONAL {{ ?predicate {R2RML_CONSTANT} ?predicateValue . }}' \
+            f'?predicateObjectMap {R2RML_OBJECT}|{R2RML_SHORTCUT_OBJECT} ?object .' \
+            f'OPTIONAL {{ ' \
+            f'?object {R2RML_TEMPLATE}|{R2RML_COLUMN}|{R2RML_CONSTANT}|{RML_REFERENCE} ?objectValue .' \
+            f'OPTIONAL {{ ?object {R2RML_TERMTYPE} ?termtype . }}' \
+            f'OPTIONAL {{ ?object {R2RML_DATATYPE} ?datatype .}} }} ' \
+            f'OPTIONAL {{ ?object {R2RML_PARENT_TRIPLESMAP} ?parentTriplesMap .' \
+            f'?object {R2RML_JOIN_CONITION} ?join_condition .' \
+            f'?join_condition {R2RML_CHILD} ?child .' \
+            f'?join_condition {R2RML_PARENT} ?parent }} }}'
+
+    for tm in rdf_mapping.query(query):
+        yarrrml_pom = []
+        if tm['predicateValue']:
+            predicate = tm['predicateValue'].toPython()
+        else:
+            predicate = tm['predicate'].toPython()
+
+        if tm['parentTriplesMap']:
+            yarrrml_pom = {'p': predicate, 'o': {'mapping': None, 'condition':
+                {'function': 'equal', 'parameters': []}}}
+            yarrrml_pom['o']['mapping'] = tm['parentTriplesMap'].split("/")[-1]
+            yarrrml_pom['o']['condition']['parameters'].append(['str1', tm['child'].replace('{', "$(").replace('}', ')')])
+            yarrrml_pom['o']['condition']['parameters'].append(['str2', tm['parent'].replace('{', "$(").replace('}', ')')])
+
+        else:
+            yarrrml_pom.append(predicate)
+            if tm['objectValue']: # we have extended objectMap version
+                object = tm['objectValue'].replace('{', "$(").replace('}', ')')
+                if tm['termtype']:
+                    if tm['termtype'] == rdflib.URIRef(R2RML_IRI):
+                        object = object + '~iri'
+                yarrrml_pom.append(object)
+                if tm['datatype']:
+                    yarrrml_pom.append(tm['datatype'])
+
+            elif tm['object'] and not tm['parentTriplesMap']: # we have object shortcut
+                yarrrml_pom.append(tm['object'].replace('{', "$(").replace('}', ')'))
+
+        yarrrml_poms.append(yarrrml_pom)
+
+    return yarrrml_poms

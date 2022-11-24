@@ -52,7 +52,10 @@ if __name__ == "__main__":
     args = define_args().parse_args()
     mapping_format, mapping_data = parse_inputs()
     if type(mapping_data) is Graph:
-        mapping_content = inverse_translation(mapping_data, mapping_format)
+        yaml_dict = inverse_translation(mapping_data, mapping_format)
+        print(yaml_dict)
+        mapping_content = str(yaml.dump(yaml_dict, default_flow_style=None, sort_keys=False)).replace("'\"", '"').replace(
+            "\"'", ' " ').replace('\'', '')
     else:
         mapping_content = translate(mapping_data, mapping_format)
     write_results(mapping_content)

@@ -60,8 +60,8 @@ def check_common_prefixes(prefix_uri, common_prefixes):
 
 
 def add_inverse_prefix(rdf_mapping):
-    prefixes = []
+    prefixes = {}
     for prefix, uri in rdf_mapping.namespaces():
         if prefix:
-            prefixes.append({prefix: uri.toPython()})
+            prefixes[prefix] = uri.toPython()
     return prefixes
