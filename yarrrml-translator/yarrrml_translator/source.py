@@ -231,16 +231,16 @@ def add_inverse_source(tm, rdf_mapping, mapping_format):
         logger.error("Logical Source or Logical Table is not defined in the mapping")
         logger.error(str(e))
 
-    yarrrml = {'sources': []}
+
     if mapping_format == R2RML_URI:
-        get_logical_table(yarrrml, source, rdf_mapping)
+        yarrrml_source = get_logical_table(source, rdf_mapping)
     else:
-        get_logical_source(yarrrml, source, rdf_mapping)
+        yarrrml_source = get_logical_source(source, rdf_mapping)
 
-    return yarrrml
+    return yarrrml_source
 
 
-def get_logical_table(yarrrml, logical_table_id, rdf_mapping):
+def get_logical_table(logical_table_id, rdf_mapping):
     table_name = rdf_mapping.value(subject=logical_table_id, predicate=rdflib.Namespace(R2RML_URI).tableName)
     sql_query = rdf_mapping.value(subject=logical_table_id, predicate=rdflib.Namespace(R2RML_URI).sqlQuery)
     sql_version = rdf_mapping.value(subject=logical_table_id, predicate=rdflib.Namespace(R2RML_URI).sqlVersion)
@@ -248,19 +248,19 @@ def get_logical_table(yarrrml, logical_table_id, rdf_mapping):
     if table_name is None and sql_query is None:
         logger.error("Mapping does not define neither tableName nor sqlQuery")
         raise Exception()
-    source = {}
+    yarrrml_source = {}
     if table_name:
-        source["table"] = table_name.value
+        yarrrml_source["table"] = table_name.value
     elif sql_query:
-        source["query"] = sql_query.value
+        yarrrml_source["query"] = sql_query.value
 
     if sql_version:
-        source["queryFormulation"] = sql_version.toPython().replace(R2RML_URI, '').lower()
+        yarrrml_source["queryFormulation"] = sql_version.toPython().replace(R2RML_URI, '').lower()
 
-    yarrrml['sources'].append(source)
+    return yarrrml_source
 
 
-def get_logical_source(yarrrml, logical_source_id, rdf_mapping):
+def get_logical_source(logical_source_id, rdf_mapping):
     source = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(RML_URI).source)
     iterator = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(RML_URI).iterator)
     reference_formulation = rdf_mapping.value(subject=logical_source_id,
@@ -271,9 +271,10 @@ def get_logical_source(yarrrml, logical_source_id, rdf_mapping):
     if source is None:
         logger.error("Mapping does not define source access")
         raise Exception()
-
+    yarrrml_source = []
     if source and reference_formulation and iterator:
-        yarrrml['sources'].append(
+
+        yarrrml_source.append(
             [source.value + '~' + reference_formulation.toPython().replace(QL_URI, '').lower(), iterator.value])
     elif source and sql_query:
         # this means a database source
@@ -282,11 +283,13 @@ def get_logical_source(yarrrml, logical_source_id, rdf_mapping):
             source_dict["referenceFormulation"] = reference_formulation.toPython().replace(QL_URI, '').lower()
         if sql_version:
             source_dict["queryFormulation"] = sql_version.toPython().replace(R2RML_URI, '').lower()
-        yarrrml['sources'].append(source_dict)
+        yarrrml_source.append(source_dict)
     elif source and reference_formulation:
-        yarrrml['sources'].append([source.value + '~' + reference_formulation.toPython().replace(QL_URI, '').lower()])
+        yarrrml_source.append([source.value + '~' + reference_formulation.toPython().replace(QL_URI, '').lower()])
     else:
         if source.endsWith(".csv"):
-            yarrrml['sources'].append([source.value + '~csv'])
+            yarrrml_source.append([source.value + '~csv'])
         else:
-            yarrrml['sources'].append([source.value])
+            yarrrml_source.append([source.value])
+
+    return yarrrml_source

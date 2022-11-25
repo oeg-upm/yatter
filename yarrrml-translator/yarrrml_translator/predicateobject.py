@@ -214,7 +214,7 @@ def join_mapping(data, mapping, om, mapping_format):
     return template
 
 
-def add_inverse_pom(tm, rdf_mapping, classes):
+def add_inverse_pom(tm, rdf_mapping, classes, prefixes):
     yarrrml_poms = []
 
     for c in classes:
@@ -239,7 +239,11 @@ def add_inverse_pom(tm, rdf_mapping, classes):
     for tm in rdf_mapping.query(query):
         yarrrml_pom = []
         if tm['predicateValue']:
-            predicate = tm['predicateValue'].toPython()
+            prefix = list({i for i in prefixes if tm['predicateValue'].toPython().startswith(prefixes[i])})
+            if len(prefix) > 0:
+                predicate = tm['predicateValue'].toPython().replace(prefixes[prefix[0]], prefix[0] + ":")
+            else:
+                predicate = tm['predicateValue'].toPython()
         else:
             predicate = tm['predicate'].toPython()
 

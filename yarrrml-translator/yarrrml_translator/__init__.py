@@ -66,9 +66,9 @@ def inverse_translation(rdf_mapping, mapping_format=RML_URI):
 
     for tm in triples_map:
         tm_name = tm.split("/")[-1]
-        yarrrml_tm = add_inverse_source(tm, rdf_mapping, mapping_format)
+        yarrrml_tm = {'sources': [add_inverse_source(tm, rdf_mapping, mapping_format)]}
         yarrrml_tm['s'], classes = add_inverse_subject(tm, rdf_mapping)
-        yarrrml_tm['po'] = add_inverse_pom(tm, rdf_mapping, classes)
+        yarrrml_tm['po'] = add_inverse_pom(tm, rdf_mapping, classes, yarrrml_mapping['prefixes'])
         yarrrml_mapping['mappings'][tm_name] = yarrrml_tm
 
     return yarrrml_mapping
