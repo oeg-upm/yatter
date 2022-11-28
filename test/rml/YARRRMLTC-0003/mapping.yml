@@ -4,12 +4,18 @@ prefixes:
 mappings:
   student:
     sources:
-      - query: |
+    - access: http://localhost/example
+      type: mysql
+      credentials:
+        username: root
+        password: root
+      queryFormulation: mysql
+      query: >
           Select ('Student' || "ID" ) AS StudentId
           , "ID"
           , "Name"
           from "Student"
-        queryFormulation: mysql
+      referenceFormulation: csv
     s: http://example.com/$(ID)/$(Name)
     po:
       - [foaf:name, $(Name)]
