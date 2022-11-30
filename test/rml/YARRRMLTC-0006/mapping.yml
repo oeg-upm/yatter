@@ -7,12 +7,15 @@ prefixes:
 mappings:
   venue:
     sources:
-      - access: http://localhost/example
-        type: mysql
-        credentials:
-          username: root
-          password: root
-        queryFormulation: mysql
+    - access: http://localhost/example
+      type: mysql
+      credentials:
+        username: root
+        password: root
+      queryFormulation: mysql
+      query: >
+          Select * from "Venue4"
+      referenceFormulation: csv
     subjects: "http://loc.example.com/city/$(city)"
     po:
      - [a, schema:City]

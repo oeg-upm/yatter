@@ -4,12 +4,15 @@ prefixes:
 
 sources:
   source1:
-    - access: http://localhost/example
-      type: mysql
-      credentials:
-        username: root
-        password: root
-      queryFormulation: mysql
+  - access: http://localhost/example
+    type: mysql
+    credentials:
+      username: root
+      password: root
+    queryFormulation: mysql
+    query: >
+        Select * from "example"
+    referenceFormulation: csv
 mappings:
   FromToMaps:
     sources: source1
