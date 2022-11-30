@@ -1,0 +1,22 @@
+<#student_0> a rr:TriplesMap;
+
+	rml:logicalTable [
+		a rml:LogicalTable;
+		rml:query "Select ('Student' || \"ID\" ) AS StudentId , \"ID\" , \"Name\" from \"Student\" ";
+		rr:sqlVersion rr:SQL2008
+        rml:referenceFormulation q1:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://example.com/{ID}/{Name}";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant foaf:name;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "Name";
+		];
+	].
