@@ -78,8 +78,8 @@ def get_non_asserted_mappings(yarrrml_data, mappings):
             if type(yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)) is list:
                 values_list = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)
                 for value in values_list:
-                    if 'quotedNonAsserted' in value:
-                        mappings[value['quotedNonAsserted']] = "non_asserted"
-                    elif 'o' in value and 'quotedNonAsserted' in value['o'][0]:
-                            mappings[value['o'][0]['quotedNonAsserted']] = "non_asserted"
+                    if YARRRML_NON_ASSERTED in value:
+                        mappings[value[YARRRML_NON_ASSERTED]] = "non_asserted"
+                    elif 'o' in value and YARRRML_NON_ASSERTED in value['o'][0]:
+                            mappings[value['o'][0][YARRRML_NON_ASSERTED]] = "non_asserted"
     return mappings

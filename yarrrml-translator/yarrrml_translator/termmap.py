@@ -11,7 +11,7 @@ def get_termmap_type(text, mapping_format):
                return RML_REFERENCE
         else:
             return R2RML_TEMPLATE
-    elif 'quoted' in text or 'quotedNonAsserted' in text:
+    elif YARRRML_QUOTED in text or YARRRML_NON_ASSERTED in text:
         return STAR_QUOTED
     else:
         return R2RML_CONSTANT
@@ -30,9 +30,9 @@ def generate_rml_termmap(rml_property, rml_class, text, identation, mapping_form
 
     if term_map == STAR_QUOTED:
         if 'quoted' in text:
-            template += term_map + " <#" + text['quoted'] + "_0>;\n" + identation[0:-1] + "];\n"
+            template += term_map + " <#" + text[YARRRML_QUOTED] + "_0>;\n" + identation[0:-1] + "];\n"
         else:
-            template += term_map + " <#" + text['quotedNonAsserted'] + "_0>;\n" + identation[0:-1] + "];\n"
+            template += term_map + " <#" + text[YARRRML_NON_ASSERTED] + "_0>;\n" + identation[0:-1] + "];\n"
     elif term_map != "rr:constant":
         template += term_map + " \"" + text + "\";\n"+identation[0:-1]+"];\n"
     else:

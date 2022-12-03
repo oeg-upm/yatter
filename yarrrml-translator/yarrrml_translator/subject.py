@@ -25,7 +25,7 @@ def add_subject(data, mapping):
         subject = [subject]
 
     for individual_subject in subject:
-        if 'quoted' in individual_subject or 'quotedNonAsserted' in individual_subject :
+        if YARRRML_QUOTED in individual_subject or YARRRML_NON_ASSERTED in individual_subject:
             subject_termmap = generate_rml_termmap(STAR_SUBJECT, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")
         else:
             subject_termmap = generate_rml_termmap(R2RML_SUBJECT, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")

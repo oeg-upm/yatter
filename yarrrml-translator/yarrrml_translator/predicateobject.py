@@ -138,8 +138,13 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
             if iri:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
                            + R2RML_IRI + "\n\t\t];\n"
-        elif YARRRML_MAPPING in om:
-            template += join_mapping(data, mapping, om, mapping_format)
+        elif YARRRML_MAPPING in om or YARRRML_NON_ASSERTED in om or YARRRML_QUOTED in om:
+            if YARRRML_MAPPING in om:
+                template += ref_mapping(data, mapping, om, YARRRML_MAPPING, R2RML_PARENT_TRIPLESMAP, mapping_format)
+            elif YARRRML_NON_ASSERTED in om:
+                template += ref_mapping(data, mapping, om, YARRRML_NON_ASSERTED, STAR_QUOTED, mapping_format)
+            else:
+                template += ref_mapping(data, mapping, om, YARRRML_QUOTED, STAR_QUOTED, mapping_format)
         else:
             if YARRRML_VALUE in om:
                 object_value = om.get(YARRRML_VALUE)
@@ -166,13 +171,13 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
     return template + "\t];"
 
 
-def join_mapping(data, mapping, om, mapping_format):
+def ref_mapping(data, mapping, om, yarrrml_key, ref_type_property, mapping_format):
     list_mappings = []
     template = ""
     for mappings in data.get(YARRRML_MAPPINGS):
         list_mappings.append(mappings)
 
-    mapping_join = om.get(YARRRML_MAPPING)
+    mapping_join = om.get(yarrrml_key)
 
     if mapping_join in list_mappings:
         subject_list = add_subject(data, mapping_join)
@@ -186,7 +191,7 @@ def join_mapping(data, mapping, om, mapping_format):
         for i in range(number_joins_rml):
             template += "\t\t" + R2RML_OBJECT + \
                         " [ \n\t\t\ta " + R2RML_REFOBJECT_CLASS + \
-                        ";\n\t\t\t" + R2RML_PARENT_TRIPLESMAP + " <#" + mapping_join + "_" + str(i) + ">;\n"
+                        ";\n\t\t\t" + ref_type_property + " <#" + mapping_join + "_" + str(i) + ">;\n"
             if YARRRML_CONDITION in om:
                 conditions = om.get(YARRRML_CONDITION)
                 if type(conditions) is not list:

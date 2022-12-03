@@ -121,6 +121,9 @@ YARRRML_IRI = '~iri'
 YARRRML_LANG = '~lang'
 
 
+YARRRML_QUOTED = 'quoted'
+YARRRML_NON_ASSERTED = 'quotedNonAsserted'
+
 
 logger = logging.getLogger(__name__)
 coloredlogs.install(level='DEBUG', fmt='%(asctime)s,%(msecs)03d | %(levelname)s: %(message)s')
