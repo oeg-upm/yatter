@@ -11,7 +11,7 @@ def get_termmap_type(text, mapping_format):
                return RML_REFERENCE
         else:
             return R2RML_TEMPLATE
-    elif 'quoted' in text:
+    elif 'quoted' in text or 'quotedNonAsserted' in text:
         return STAR_QUOTED
     else:
         return R2RML_CONSTANT
@@ -29,7 +29,10 @@ def generate_rml_termmap(rml_property, rml_class, text, identation, mapping_form
         text = RDF_TYPE
 
     if term_map == STAR_QUOTED:
-        template += term_map + " <#" + text['quoted'] + "_0>;\n" + identation[0:-1] + "];\n"
+        if 'quoted' in text:
+            template += term_map + " <#" + text['quoted'] + "_0>;\n" + identation[0:-1] + "];\n"
+        else:
+            template += term_map + " <#" + text['quotedNonAsserted'] + "_0>;\n" + identation[0:-1] + "];\n"
     elif term_map != "rr:constant":
         template += term_map + " \"" + text + "\";\n"+identation[0:-1]+"];\n"
     else:

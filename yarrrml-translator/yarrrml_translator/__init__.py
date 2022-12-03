@@ -1,5 +1,5 @@
 from .constants import *
-from .mapping import add_prefix, add_mapping, add_inverse_prefix
+from .mapping import add_prefix, add_mapping, add_inverse_prefix, get_non_asserted_mappings
 from .source import get_initial_sources, add_source, generate_database_connections, add_table, add_inverse_source
 from .subject import add_subject, add_inverse_subject
 from .predicateobject import add_predicate_object_maps, add_inverse_pom
@@ -14,6 +14,7 @@ def translate(yarrrml_data, mapping_format=RML_URI):
     rml_mapping = [add_prefix(yarrrml_data)]
     rml_mapping.extend(generate_database_connections(yarrrml_data))
     try:
+        mappings = get_non_asserted_mappings(yarrrml_data,  dict.fromkeys(list(yarrrml_data.get(YARRRML_MAPPINGS).keys())))
         for mapping in yarrrml_data.get(YARRRML_MAPPINGS):
             if mapping_format == R2RML_URI:
                 source_list = add_table(yarrrml_data, mapping, list_initial_sources)
@@ -24,7 +25,7 @@ def translate(yarrrml_data, mapping_format=RML_URI):
             it = 0
             for source in source_list:
                 for subject in subject_list:
-                    map_aux = add_mapping(mapping, it)
+                    map_aux = add_mapping(mapping, mappings, it)
                     if type(source) is list:
                         rml_mapping.append(map_aux + source[0] + subject + pred + source[1])
                     else:

@@ -1,8 +1,12 @@
 from .import *
 
 
-def add_mapping(mapping, it):
-    map_template = "<#" + mapping + "_" + str(it) + "> a " + R2RML_TRIPLES_MAP + ";\n\n"
+def add_mapping(mapping, mappings, it):
+    map_template = "<#" + mapping + "_" + str(it) + "> a "
+    if mappings[mapping]:
+        if mappings[mapping] == "non_asserted":
+            map_template += STAR_NON_ASSERTED_CLASS + ", "
+    map_template += R2RML_TRIPLES_MAP + ";\n\n"
     return map_template
 
 
@@ -65,3 +69,17 @@ def add_inverse_prefix(rdf_mapping):
         if prefix:
             prefixes[prefix] = uri.toPython()
     return prefixes
+
+
+def get_non_asserted_mappings(yarrrml_data, mappings):
+    for mapping in yarrrml_data.get(YARRRML_MAPPINGS):
+        keys = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).keys()
+        for key in keys:
+            if type(yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)) is list:
+                values_list = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)
+                for value in values_list:
+                    if 'quotedNonAsserted' in value:
+                        mappings[value['quotedNonAsserted']] = "non_asserted"
+                    elif 'o' in value and 'quotedNonAsserted' in value['o'][0]:
+                            mappings[value['o'][0]['quotedNonAsserted']] = "non_asserted"
+    return mappings
