@@ -26,6 +26,13 @@ RML_ITERATOR = 'rml:iterator'
 RML_REFERENCE = 'rml:reference'
 
 
+STAR_CLASS = 'rml:StarMap'
+STAR_NON_ASSERTED_CLASS = 'rml:NonAssertedTriplesMap'
+STAR_QUOTED = 'rml:quotedTriplesMap'
+STAR_SUBJECT = 'rml:subjectMap'
+STAR_OBJECT = 'rml:objectMap'
+
+
 R2RML_TEMPLATE = 'rr:template'
 R2RML_TRIPLES_MAP = 'rr:TriplesMap'
 R2RML_CONSTANT = 'rr:constant'

@@ -25,7 +25,10 @@ def add_subject(data, mapping):
         subject = [subject]
 
     for individual_subject in subject:
-        subject_termmap = generate_rml_termmap(R2RML_SUBJECT, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")
+        if 'quoted' in individual_subject:
+            subject_termmap = generate_rml_termmap(STAR_SUBJECT, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")
+        else:
+            subject_termmap = generate_rml_termmap(R2RML_SUBJECT, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")
         rml_subjects.append(subject_termmap)
 
     if YARRRML_GRAPHS in data.get(YARRRML_MAPPINGS).get(mapping):
