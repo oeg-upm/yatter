@@ -1,8 +1,12 @@
 from .import *
 
 
-def add_mapping(mapping, it):
-    map_template = "<#" + mapping + "_" + str(it) + "> a " + RML_TRIPLES_MAP + ";\n\n"
+def add_mapping(mapping, mappings, it):
+    map_template = "<#" + mapping + "_" + str(it) + "> a "
+    if mappings[mapping]:
+        if mappings[mapping] == "non_asserted":
+            map_template += STAR_NON_ASSERTED_CLASS + ", "
+    map_template += R2RML_TRIPLES_MAP + ";\n\n"
     return map_template
 
 
@@ -34,6 +38,8 @@ def add_prefix(data):
         template.append(RML_PREFIX + " foaf: <" + FOAF_URI + ">.\n")
     if "base" not in common_prefixes:
         template.append(RML_BASE + " <" + EXAMPLE_URI + ">.\n")
+    if "schema" not in common_prefixes:
+        template.append(RML_PREFIX + " schema: <" + SCHEMA_URI + ">.\n")
     template.append("\n\n")
 
     return "".join(template)
@@ -55,3 +61,25 @@ def check_common_prefixes(prefix_uri, common_prefixes):
         common_prefixes.append("rdfs")
     elif prefix_uri == XSD_URI:
         common_prefixes.append("xsd")
+
+
+def add_inverse_prefix(rdf_mapping):
+    prefixes = {}
+    for prefix, uri in rdf_mapping.namespaces():
+        if prefix:
+            prefixes[prefix] = uri.toPython()
+    return prefixes
+
+
+def get_non_asserted_mappings(yarrrml_data, mappings):
+    for mapping in yarrrml_data.get(YARRRML_MAPPINGS):
+        keys = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).keys()
+        for key in keys:
+            if type(yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)) is list:
+                values_list = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)
+                for value in values_list:
+                    if YARRRML_NON_ASSERTED in value:
+                        mappings[value[YARRRML_NON_ASSERTED]] = "non_asserted"
+                    elif 'o' in value and YARRRML_NON_ASSERTED in value['o'][0]:
+                            mappings[value['o'][0][YARRRML_NON_ASSERTED]] = "non_asserted"
+    return mappings

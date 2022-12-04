@@ -11,6 +11,8 @@ def get_termmap_type(text, mapping_format):
                return RML_REFERENCE
         else:
             return R2RML_TEMPLATE
+    elif YARRRML_QUOTED in text or YARRRML_NON_ASSERTED in text:
+        return STAR_QUOTED
     else:
         return R2RML_CONSTANT
 
@@ -20,14 +22,18 @@ def generate_rml_termmap(rml_property, rml_class, text, identation, mapping_form
     template = identation[0:-1] + rml_property + " [\n"+identation+"a " + rml_class + ";\n" + identation
     term_map = get_termmap_type(text, mapping_format)
     if term_map == R2RML_TEMPLATE:
-        text = text.replace("$(", "{")
-        text = text.replace(")", "}")
+        text = text.replace("$(", "{").replace(")", "}")
     elif term_map == RML_REFERENCE or term_map == R2RML_COLUMN:
-        text = text.replace("$(", "")
-        text = text.replace(")", "")
+        text = text.replace("$(", "").replace(")", "")
     elif term_map == R2RML_CONSTANT and text == "a":
         text = RDF_TYPE
-    if term_map != "rr:constant":
+
+    if term_map == STAR_QUOTED:
+        if 'quoted' in text:
+            template += term_map + " <#" + text[YARRRML_QUOTED] + "_0>;\n" + identation[0:-1] + "];\n"
+        else:
+            template += term_map + " <#" + text[YARRRML_NON_ASSERTED] + "_0>;\n" + identation[0:-1] + "];\n"
+    elif term_map != "rr:constant":
         template += term_map + " \"" + text + "\";\n"+identation[0:-1]+"];\n"
     else:
         if text.startswith("http"):

@@ -1,4 +1,5 @@
 import re
+import rdflib
 from .constants import *
 
 
@@ -61,7 +62,8 @@ def add_table(data, mapping, list_initial_sources):
             r2rml_access = database_source(mapping, source)
             sql_version = True
         elif YARRRML_QUERY in source:
-            r2rml_access = R2RML_SQL_QUERY + " \"" + source.get(YARRRML_QUERY).replace("\n", " ").replace("\"", "\\\"") + "\""
+            r2rml_access = R2RML_SQL_QUERY + " \"" + source.get(YARRRML_QUERY).replace("\n", " ").replace("\"",
+                                                                                                          "\\\"") + "\""
         elif YARRRML_TABLE in source:
             r2rml_access = R2RML_TABLE_NAME + " \"" + source.get(YARRRML_TABLE) + "\""
         else:
@@ -81,7 +83,8 @@ def add_source_simplified(mapping, source):
     file_path = re.sub("~.*", "", source[0])
     reference_formulation = source[0].split('~')[1]
     source_extension = file_path.split('.')[1]
-    ref_formulation_rml = reference_formulation.replace("jsonpath", "JSONPath").replace("csv", "CSV").replace("xpath", "XPath")
+    ref_formulation_rml = reference_formulation.replace("jsonpath", "JSONPath").replace("csv", "CSV").replace("xpath",
+                                                                                                              "XPath")
     if switch_in_reference_formulation(reference_formulation) != source_extension:
         raise Exception(
             "ERROR: mismatch extension and referenceFormulation in source " + source + " in mapping " + mapping)
@@ -108,8 +111,9 @@ def add_source_full(mapping, source):
     if YARRRML_REFERENCE_FORMULATION in source:
         reference_formulation = str(source.get(YARRRML_REFERENCE_FORMULATION))
         format_from_reference = switch_in_reference_formulation(reference_formulation.lower())
-        ref_formulation_rml = reference_formulation.replace("jsonpath", "JSONPath").replace("csv", "CSV").replace("xpath",
-                                                                                                          "XPath")
+        ref_formulation_rml = reference_formulation.replace("jsonpath", "JSONPath").replace("csv", "CSV").replace(
+            "xpath",
+            "XPath")
         if extension != format_from_reference or format_from_reference == "ERROR":
             raise Exception("ERROR: not referenceFormulation found or mismatch between the format and "
                             "referenceFormulation in source " + access + "in mapping " + mapping)
@@ -217,3 +221,75 @@ def generate_database_connections(data):
                                         + D2RQ_USER + " \"" + username + "\";\n\t"
                                         + D2RQ_PASS + " \"" + password + "\".\n\n")
     return database
+
+
+def add_inverse_source(tm, rdf_mapping, mapping_format):
+    try:
+        query = f'SELECT ?source  WHERE {{ <{tm}> {R2RML_LOGICAL_TABLE}|{RML_LOGICAL_SOURCE} ?source . }} '
+        source = [tm[rdflib.Variable('source')] for tm in rdf_mapping.query(query).bindings][0]
+    except Exception as e:
+        logger.error("Logical Source or Logical Table is not defined in the mapping")
+        logger.error(str(e))
+
+
+    if mapping_format == R2RML_URI:
+        yarrrml_source = get_logical_table(source, rdf_mapping)
+    else:
+        yarrrml_source = get_logical_source(source, rdf_mapping)
+
+    return yarrrml_source
+
+
+def get_logical_table(logical_table_id, rdf_mapping):
+    table_name = rdf_mapping.value(subject=logical_table_id, predicate=rdflib.Namespace(R2RML_URI).tableName)
+    sql_query = rdf_mapping.value(subject=logical_table_id, predicate=rdflib.Namespace(R2RML_URI).sqlQuery)
+    sql_version = rdf_mapping.value(subject=logical_table_id, predicate=rdflib.Namespace(R2RML_URI).sqlVersion)
+
+    if table_name is None and sql_query is None:
+        logger.error("Mapping does not define neither tableName nor sqlQuery")
+        raise Exception()
+    yarrrml_source = {}
+    if table_name:
+        yarrrml_source["table"] = table_name.value
+    elif sql_query:
+        yarrrml_source["query"] = sql_query.value
+
+    if sql_version:
+        yarrrml_source["queryFormulation"] = sql_version.toPython().replace(R2RML_URI, '').lower()
+
+    return yarrrml_source
+
+
+def get_logical_source(logical_source_id, rdf_mapping):
+    source = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(RML_URI).source)
+    iterator = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(RML_URI).iterator)
+    reference_formulation = rdf_mapping.value(subject=logical_source_id,
+                                              predicate=rdflib.Namespace(RML_URI).referenceFormulation)
+    sql_query = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(R2RML_URI).sqlQuery)
+    sql_version = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(R2RML_URI).sqlVersion)
+
+    if source is None:
+        logger.error("Mapping does not define source access")
+        raise Exception()
+    yarrrml_source = []
+    if source and reference_formulation and iterator:
+
+        yarrrml_source.append(
+            [source.value + '~' + reference_formulation.toPython().replace(QL_URI, '').lower(), iterator.value])
+    elif source and sql_query:
+        # this means a database source
+        source_dict = {"query": sql_query.value, "source": source.value}
+        if reference_formulation:
+            source_dict["referenceFormulation"] = reference_formulation.toPython().replace(QL_URI, '').lower()
+        if sql_version:
+            source_dict["queryFormulation"] = sql_version.toPython().replace(R2RML_URI, '').lower()
+        yarrrml_source.append(source_dict)
+    elif source and reference_formulation:
+        yarrrml_source.append([source.value + '~' + reference_formulation.toPython().replace(QL_URI, '').lower()])
+    else:
+        if source.endsWith(".csv"):
+            yarrrml_source.append([source.value + '~csv'])
+        else:
+            yarrrml_source.append([source.value])
+
+    return yarrrml_source

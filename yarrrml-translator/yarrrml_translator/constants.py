@@ -1,5 +1,4 @@
-
-
+import logging, coloredlogs
 
 ##############################################################################
 #############################   RML CONSTANTS  ###############################
@@ -15,10 +14,10 @@ RDFS_URI = 'http://www.w3.org/2000/01/rdf-schema#'
 XSD_URI = 'http://www.w3.org/2001/XMLSchema#'
 FOAF_URI ='http://xmlns.com/foaf/0.1/'
 RDF_TYPE = 'rdf:type'
+SCHEMA_URI = 'http://schema.org/'
 
 RML_PREFIX = '@prefix'
 RML_BASE = '@base'
-RML_TRIPLES_MAP = 'rr:TriplesMap'
 RML_LOGICAL_SOURCE_CLASS = 'rml:LogicalSource'
 RML_LOGICAL_SOURCE = 'rml:logicalSource'
 RML_SOURCE = 'rml:source'
@@ -27,10 +26,19 @@ RML_ITERATOR = 'rml:iterator'
 RML_REFERENCE = 'rml:reference'
 
 
+STAR_CLASS = 'rml:StarMap'
+STAR_NON_ASSERTED_CLASS = 'rml:NonAssertedTriplesMap'
+STAR_QUOTED = 'rml:quotedTriplesMap'
+STAR_SUBJECT = 'rml:subjectMap'
+STAR_OBJECT = 'rml:objectMap'
+
+
 R2RML_TEMPLATE = 'rr:template'
+R2RML_TRIPLES_MAP = 'rr:TriplesMap'
 R2RML_CONSTANT = 'rr:constant'
 R2RML_SUBJECT = 'rr:subjectMap'
 R2RML_SUBJECT_CLASS = 'rr:SubjectMap'
+R2RML_CLASS = 'rr:class'
 R2RML_SQL_VERSION = 'rr:sqlVersion'
 R2RML_SQL_QUERY = 'rr:sqlQuery'
 R2RML_PREDICATE_OBJECT_MAP = 'rr:predicateObjectMap'
@@ -113,6 +121,9 @@ YARRRML_IRI = '~iri'
 YARRRML_LANG = '~lang'
 
 
+YARRRML_QUOTED = 'quoted'
+YARRRML_NON_ASSERTED = 'quotedNonAsserted'
 
 
-
+logger = logging.getLogger(__name__)
+coloredlogs.install(level='DEBUG', fmt='%(asctime)s,%(msecs)03d | %(levelname)s: %(message)s')

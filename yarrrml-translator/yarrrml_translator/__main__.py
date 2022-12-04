@@ -1,45 +1,58 @@
 import sys
 import yaml
-from . import translate
-from .constants import RML_URI, R2RML_URI
+import argparse
+from rdflib import Graph
+from . import translate, inverse_translation
+from .constants import *
 
 
-def write_results(rml_mapping):
-    if len(sys.argv) == 1:
-        rml_output_path = input("Name the path for the output file:")
-    else:
-        rml_output_path = sys.argv[sys.argv.index("-o") + 1]
-
-    rml_output_file = open(rml_output_path, "w")
-    rml_output_file.write(rml_mapping)
-    rml_output_file.close()
+def write_results(mapping):
+    output_file = open(args.output_mapping_path, "w")
+    output_file.write(mapping)
+    output_file.close()
 
 
-def run_parsing_system_inputs():
-    mapping_format = RML_URI
-    if len(sys.argv) == 1:
-        file = input("Introduce the .yml file you want to convert to RML")
-        with open(file) as f:
-            yaml_data = yaml.safe_load(f)
+def parse_inputs():
+    input_format = RML_URI
 
-    elif (len(sys.argv) == 5 or len(sys.argv) == 7) and "-i" in sys.argv and "-o" in sys.argv:
-        with open(sys.argv[sys.argv.index("-i") + 1]) as f:
-            yaml_data = yaml.safe_load(f)
-        if "-f" in sys.argv:
-            if sys.argv[sys.argv.index("-f") + 1] == "R2RML":
-                mapping_format = R2RML_URI
+    if args.input_mapping_path and args.output_mapping_path:
+        if args.input_mapping_path.endswith('.yml') or args.input_mapping_path.endswith('.yaml'):
+            with open(args.input_mapping_path) as f:
+                input_data = yaml.safe_load(f)
+        elif args.input_mapping_path.endswith('.ttl') or args.input_mapping_path.endswith(
+                '.rml') or args.input_mapping_path.endswith('.r2rml'):
+            input_data = Graph()
+            input_data.parse(args.input_mapping_path, format="turtle")
+        else:
+            sys.tracebacklimit = 0
+            logger.error("Input mapping does not have a valid extension (.yml, .yaml, .ttl, .rml, or .r2rml)")
+            raise Exception("Change your mapping extension to a valid one")
+
+        if args.format is not None and args.format == "R2RML":
+            input_format = R2RML_URI
+
     else:
         sys.tracebacklimit = 0
-        raise Exception(
-            "\n####################################\nERROR: Wrong argument input. You can:"
-            "\n-Use no arguments\n-Use arguments (in this order): -i yarrrml.yml -o mapping.rml.ttl"
-            "\n####################################\n")
+        logger.error("No correct arguments, run python3 -m yarrrml_translator -h to see the help)")
+        raise Exception("")
 
-    return mapping_format, yaml_data
+    return input_format, input_data
 
 
-mapping_format, yarrrml_data = run_parsing_system_inputs()
+def define_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i", "--input_mapping_path", required=True, help="Input mapping path in YARRRML or RML")
+    parser.add_argument("-o", "--output_mapping_path", required=True, help="Output path for the generated mapping")
+    parser.add_argument("-f", "--format", required=False,
+                        help="Mapping input format. Values: R2RML or RML (RML by default)")
+    return parser
 
-rml_content = translate(yarrrml_data, mapping_format)
 
-write_results(rml_content)
+if __name__ == "__main__":
+    args = define_args().parse_args()
+    mapping_format, mapping_data = parse_inputs()
+    if type(mapping_data) is Graph:
+        mapping_content = inverse_translation(mapping_data, mapping_format)
+    else:
+        mapping_content = translate(mapping_data, mapping_format)
+    write_results(mapping_content)
