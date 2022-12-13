@@ -4,16 +4,24 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @base <http://example.com/base/> .
 
-<TriplesMap1>
-     a rr:TriplesMap;
+<#TriplesMap1_0> a rr:TriplesMap;
 
-     rr:logicalTable [ rr:tableName "\"Student\"" ];
-
-    rr:subjectMap [ rr:template "http://example.com/Student{ID}";  ];
-	
-    rr:predicateObjectMap
-    [ 
-      rr:predicate		foaf:name ; 
-      rr:objectMap		[ rr:template "{FirstName} {LastName}"; rr:termType rr:Literal; ]
-    ]
-    .	
+	rr:logicalTable [
+		a rr:LogicalTable;
+		rr:tableName "Student";
+		rr:sqlVersion rr:SQL2008
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://example.com/Student{ID}";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant foaf:Name;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "{FirstName} {LastName}";
+		];
+	].

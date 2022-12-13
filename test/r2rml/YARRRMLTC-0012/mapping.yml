@@ -5,7 +5,7 @@ mappings:
   student:
     sources:
       - table: IOUs
-    s: $(amount)_$(fname)_$(lname)
+    s: $(fname)_$(lname)_$(amount)
     s: $(amount)_$(fname)_$(lname)
     po:
       - [foaf:name, $(fname) $(lname)]

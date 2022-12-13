@@ -9,6 +9,10 @@
 	rr:subjectMap [
 		a rr:SubjectMap;
 		rr:template "http://example.com/resource/student_{ID}";
+		rr:GraphMap [
+      		a rr:GraphMap;
+      		rr:constant "http://example.com/graph/students";
+    	];
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
@@ -19,6 +23,10 @@
 			a rr:ObjectMap;
 			rml:reference "Name";
 		];
+		rr:GraphMap [
+      		a rr:GraphMap;
+      		rr:constant "http://example.com/graph/students";
+    	];
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
@@ -33,6 +41,10 @@
 				rr:parent "Name";
 			];
 		];
+		rr:GraphMap [
+      		a rr:GraphMap;
+      		rr:constant "http://example.com/graph/practises";
+    	];
 	].
 
 
@@ -47,6 +59,10 @@
 	rr:subjectMap [
 		a rr:SubjectMap;
 		rr:template "http://example.com/resource/sport_{ID}";
+		rr:GraphMap [
+      		a rr:GraphMap;
+      		rr:constant "http://example.com/graph/students";
+    	];
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [

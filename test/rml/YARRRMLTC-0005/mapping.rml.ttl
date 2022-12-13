@@ -1,9 +1,10 @@
 <#FromToMaps_0> a rr:TriplesMap;
 
-	rr:logicalTable [
-		a rr:LogicalTable;
-		rr:tableName "example";
-		rr:sqlVersion rr:MYSQL
+	rml:logicalTable [
+		a rml:LogicalTable;
+		rml:query "Select * from \"example\"";
+		rr:sqlVersion rr:SQL2008
+        rml:referenceFormulation q1:CSV
 	];
 	rr:subjectMap [
 		a rr:SubjectMap;
