@@ -4,7 +4,7 @@ on: push
 name: test
 jobs:
   test:
-  name: test cases for yarrrml-translator
+  name: Test cases for Translator
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
