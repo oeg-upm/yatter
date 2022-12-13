@@ -1,11 +1,13 @@
 name: Test actions on push
 
-on: push
-name: test
+on: [push]
+
+
 jobs:
   test:
-  name: Test cases for Translator
+
     runs-on: ubuntu-latest
+    
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python
