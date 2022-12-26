@@ -24,7 +24,10 @@ RML_SOURCE = 'rml:source'
 RML_REFERENCE_FORMULATION = 'rml:referenceFormulation'
 RML_ITERATOR = 'rml:iterator'
 RML_REFERENCE = 'rml:reference'
-
+RML_LANGUAGE_MAP = 'rml:languageMap'
+RML_LANGUAGE_MAP_CLASS = 'rml:LanguageMap'
+RML_DATATYPE_MAP = 'rml:datatypeMap'
+RML_DATATYPE_MAP_CLASS = 'rml:DatatypeMap'
 
 STAR_CLASS = 'rml:StarMap'
 STAR_NON_ASSERTED_CLASS = 'rml:NonAssertedTriplesMap'

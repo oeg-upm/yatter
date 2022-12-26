@@ -75,7 +75,13 @@ def get_object_list(predicate_object, object_access):
             for i in range(len(object_maps)):
                 object_list.append([object_maps[i], predicate_object[2]])
         else:
-            object_list.extend(object_maps)
+            for object in object_maps:
+                if YARRRML_LANGUAGE in object:
+                    object_list.append([object[YARRRML_VALUE],object[YARRRML_LANGUAGE]+"~lang"])
+                elif YARRRML_DATATYPE in object:
+                    object_list.append([object[YARRRML_VALUE], object[YARRRML_DATATYPE]])
+                elif YARRRML_TYPE in object:
+                    object_list.append([object[YARRRML_VALUE]+"~"+object[YARRRML_TYPE]])
     else:
         if object_access is None and len(predicate_object) == 3:
             object_list.append([object_maps, predicate_object[2]])
@@ -130,10 +136,18 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                 types = check_type(om[1])
                 if types != "error":
                     if types == YARRRML_LANGUAGE:
-                        template = template[0:len(template) - 5] + "\t\t\t" + R2RML_LANGUAGE + " \"" \
+                        if "$(" in om[1]:
+                            template = template[0:len(template) - 5] + generate_rml_termmap(RML_LANGUAGE_MAP, RML_LANGUAGE_MAP_CLASS,
+                                             om[1].replace("~lang",""), "\t\t\t\t", mapping_format) + "\n\t\t];\n"
+                        else:
+                            template = template[0:len(template) - 5] + "\t\t\t" + R2RML_LANGUAGE + " \"" \
                                    + om[1].replace(YARRRML_LANG, "") + "\"\n\t\t];\n"
                     elif types == YARRRML_DATATYPE:
-                        template = template[0:len(template) - 5] + "\t\t\t" + R2RML_DATATYPE + " " \
+                        if "$(" in om[1]:
+                            template = template[0:len(template) - 5] + generate_rml_termmap(RML_DATATYPE_MAP, RML_DATATYPE_MAP_CLASS,
+                                             om[1], "\t\t\t\t", mapping_format) + "\n\t\t];\n"
+                        else:
+                            template = template[0:len(template) - 5] + "\t\t\t" + R2RML_DATATYPE + " " \
                                    + om[1] + "\n\t\t];\n"
             if iri:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
@@ -145,6 +159,7 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                 template += ref_mapping(data, mapping, om, YARRRML_NON_ASSERTED, STAR_QUOTED, mapping_format)
             else:
                 template += ref_mapping(data, mapping, om, YARRRML_QUOTED, STAR_QUOTED, mapping_format)
+        # This could be removed
         else:
             if YARRRML_VALUE in om:
                 object_value = om.get(YARRRML_VALUE)
