@@ -26,4 +26,6 @@ jobs:
       run: |
         cd yarrrml-translator
         pip install .
+        cd ..
+        cd test
         pytest
