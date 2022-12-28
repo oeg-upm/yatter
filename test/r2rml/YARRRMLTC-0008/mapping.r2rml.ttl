@@ -23,5 +23,6 @@
 		rr:objectMap [
 			a rr:ObjectMap;
 			rr:template "{FirstName} {LastName}";
+			rr:termType rr:Literal
 		];
 	].
