@@ -240,8 +240,8 @@ def add_inverse_pom(tm, rdf_mapping, classes, prefixes):
     for c in classes:
         yarrrml_poms.append(['rdf:type', c])
 
-    query = f'SELECT ?predicate ?predicateValue ?object ?objectValue ?termtype ?datatype ' \
-            f'?parentTriplesMap ?child ?parent' \
+    query = f'SELECT ?predicate ?predicateValue ?object ?objectValue ?termtype ?datatype ?datatypeValueMap ' \
+            f'?language ?languageMapValue ?parentTriplesMap ?child ?parent' \
             f' WHERE {{ ' \
             f'<{tm}> {R2RML_PREDICATE_OBJECT_MAP} ?predicateObjectMap . ' \
             f'?predicateObjectMap {R2RML_PREDICATE}|{R2RML_SHORTCUT_PREDICATE} ?predicate .' \
@@ -251,6 +251,13 @@ def add_inverse_pom(tm, rdf_mapping, classes, prefixes):
             f'?object {R2RML_TEMPLATE}|{R2RML_COLUMN}|{R2RML_CONSTANT}|{RML_REFERENCE} ?objectValue .' \
             f'OPTIONAL {{ ?object {R2RML_TERMTYPE} ?termtype . }}' \
             f'OPTIONAL {{ ?object {R2RML_DATATYPE} ?datatype .}} }} ' \
+            f'OPTIONAL {{ ' \
+                f' ?object {RML_DATATYPE_MAP} ?datatypeMap .' \
+                f' ?datatypeMap {R2RML_TEMPLATE}|{R2RML_CONSTANT}|{RML_REFERENCE} ?datatypeValueMap .}} }} ' \
+            f'OPTIONAL {{ ?object {R2RML_LANGUAGE} ?language .}} }} ' \
+            f'OPTIONAL {{ ' \
+                f' ?object {RML_LANGUAGE_MAP} ?languageMap .' \
+                f' ?languageMap {R2RML_TEMPLATE}|{R2RML_CONSTANT}|{RML_REFERENCE} ?languageMapValue .}} }} ' \
             f'OPTIONAL {{ ?object {R2RML_PARENT_TRIPLESMAP} ?parentTriplesMap .' \
             f'?object {R2RML_JOIN_CONITION} ?join_condition .' \
             f'?join_condition {R2RML_CHILD} ?child .' \
@@ -277,13 +284,19 @@ def add_inverse_pom(tm, rdf_mapping, classes, prefixes):
         else:
             yarrrml_pom.append(predicate)
             if tm['objectValue']: # we have extended objectMap version
-                object = tm['objectValue'].replace('{', "$(").replace('}', ')')
+                object = tm['objectValue'].replace('{', '$(').replace('}', ')')
                 if tm['termtype']:
                     if tm['termtype'] == rdflib.URIRef(R2RML_IRI):
                         object = object + '~iri'
                 yarrrml_pom.append(object)
                 if tm['datatype']:
                     yarrrml_pom.append(tm['datatype'])
+                elif tm['datatypeMapValue']:
+                    yarrrml_pom.append(tm['datatypeMapValue'].replace('{', '$(').replace('}', ')'))
+                if tm['language']:
+                    yarrrml_pom.append(tm['language']+"~lang")
+                elif tm['languageMapValue']:
+                    yarrrml_pom.append(tm['languageMapValue'].replace('{', '$(').replace('}', ')')+"~lang")
 
             elif tm['object'] and not tm['parentTriplesMap']: # we have object shortcut
                 yarrrml_pom.append(tm['object'].replace('{', "$(").replace('}', ')'))
