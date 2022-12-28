@@ -22,8 +22,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install setuptools wheel twine
         pip install -r requirements.txt
-    - name: Test with pytest
-      run: |
         cd yarrrml-translator
         pip install .
+    - name: Test with pytest
+      run: |
+        cd test
         pytest
