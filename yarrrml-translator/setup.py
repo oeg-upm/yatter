@@ -49,5 +49,5 @@ setuptools.setup(
         "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator"
     ],
     install_requires=requirements,
-    python_requires='>=3.6',
+    python_requires='>=3.7',
 )
