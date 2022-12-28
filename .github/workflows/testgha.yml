@@ -1,4 +1,4 @@
-name: Test actions on push
+name: Build and test for continuous integration
 
 on: [push]
 
