@@ -19,14 +19,12 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        pwd
         python -m pip install --upgrade pip
         pip install setuptools wheel twine
         pip install -r requirements.txt
-        pwd
     - name: Test with pytest
       run: |
         cd yarrrml-translator
         pip install .
-        cd yarrrml-translator/test
+        cd /home/runner/work/yarrrml-translator/yarrrml-translator/test
         pytest
