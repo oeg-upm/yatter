@@ -76,19 +76,19 @@ def inverse_translation(rdf_mapping, mapping_format=RML_URI):
 
 
 def merge_mappings(yarrrrml_list):
-    combined_mapping = {'mappings':{}}
+    combined_mapping = {YARRRML_MAPPINGS:{}}
     prefixes_list = []
     for mapping in yarrrrml_list:
-            prefixes_list.append(mapping["prefixes"])
-    combined_mapping = combined_mapping | merge_mapping_section_by_key("prefixes", prefixes_list)
+            prefixes_list.append(mapping[YARRRML_PREFIXES])
+    combined_mapping = combined_mapping | merge_mapping_section_by_key(YARRRML_PREFIXES, prefixes_list)
 
-    triples_map_ids = yarrrrml_list[0]['mappings'].keys()
+    triples_map_ids = yarrrrml_list[0][YARRRML_MAPPINGS].keys()
     for individual_id in triples_map_ids:
         mapping_content_list = []
         for mapping in yarrrrml_list:
-            if individual_id in mapping['mappings']:
-                mapping_content_list.append(mapping['mappings'][individual_id])
-        combined_mapping['mappings'] = combined_mapping['mappings'] | merge_mapping_section_by_key(individual_id, mapping_content_list)
+            if individual_id in mapping[YARRRML_MAPPINGS]:
+                mapping_content_list.append(mapping[YARRRML_MAPPINGS][individual_id])
+        combined_mapping[YARRRML_MAPPINGS] = combined_mapping[YARRRML_MAPPINGS] | merge_mapping_section_by_key(individual_id, mapping_content_list)
 
     string_content = str(yaml.dump(combined_mapping, default_flow_style=None, sort_keys=False)).replace("'\"",
                                                                                                        '"').replace(
