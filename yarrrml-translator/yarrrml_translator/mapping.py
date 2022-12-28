@@ -83,3 +83,10 @@ def get_non_asserted_mappings(yarrrml_data, mappings):
                     elif 'o' in value and YARRRML_NON_ASSERTED in value['o'][0]:
                             mappings[value['o'][0][YARRRML_NON_ASSERTED]] = "non_asserted"
     return mappings
+
+
+def merge_mapping_section_by_key(key,yarrrml_list):
+    output = {key:{}}
+    for yarrrml_mapping in yarrrml_list:
+        output[key] =  output[key] | yarrrml_mapping
+    return output

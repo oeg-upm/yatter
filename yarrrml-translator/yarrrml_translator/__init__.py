@@ -1,5 +1,5 @@
 from .constants import *
-from .mapping import add_prefix, add_mapping, add_inverse_prefix, get_non_asserted_mappings
+from .mapping import add_prefix, add_mapping, add_inverse_prefix, get_non_asserted_mappings, merge_mapping_section_by_key
 from .source import get_initial_sources, add_source, generate_database_connections, add_table, add_inverse_source
 from .subject import add_subject, add_inverse_subject
 from .predicateobject import add_predicate_object_maps, add_inverse_pom
@@ -71,6 +71,26 @@ def inverse_translation(rdf_mapping, mapping_format=RML_URI):
         yarrrml_mapping['mappings'][tm_name] = yarrrml_tm
 
     string_content = str(yaml.dump(yarrrml_mapping, default_flow_style=None, sort_keys=False)).replace("'\"",
+                        '"').replace("\"'", ' " ').replace('\'', '')
+    return string_content
+
+
+def merge_mappings(yarrrrml_list):
+    combined_mapping = {'mappings':{}}
+    prefixes_list = []
+    for mapping in yarrrrml_list:
+            prefixes_list.append(mapping["prefixes"])
+    combined_mapping = combined_mapping | merge_mapping_section_by_key("prefixes", prefixes_list)
+
+    triples_map_ids = yarrrrml_list[0]['mappings'].keys()
+    for individual_id in triples_map_ids:
+        mapping_content_list = []
+        for mapping in yarrrrml_list:
+            if individual_id in mapping['mappings']:
+                mapping_content_list.append(mapping['mappings'][individual_id])
+        combined_mapping['mappings'] = combined_mapping['mappings'] | merge_mapping_section_by_key(individual_id, mapping_content_list)
+
+    string_content = str(yaml.dump(combined_mapping, default_flow_style=None, sort_keys=False)).replace("'\"",
                                                                                                        '"').replace(
         "\"'", ' " ').replace('\'', '')
     return string_content
