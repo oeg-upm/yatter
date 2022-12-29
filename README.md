@@ -66,7 +66,7 @@ yarrrml_content = yarrrml_translator.inverse_translate("rdf_mapping_content", ma
 ```python
 import yarrrml_translator
 list_yarrrml_mappings = ["content_mapping_yarrrml1", "content_mapping_yarrrml1"]
-yarrrml_content = yarrrml_translator.translate(list_yarrrml_mappings)
+yarrrml_content = yarrrml_translator.merge_mappings(list_yarrrml_mappings)
 ```
 
 ## Authors
