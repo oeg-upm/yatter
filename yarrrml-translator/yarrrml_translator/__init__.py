@@ -55,20 +55,20 @@ def translate(yarrrml_data, mapping_format=RML_URI):
 
 
 def inverse_translation(rdf_mapping, mapping_format=RML_URI):
-    yarrrml_mapping = {'prefixes': [], 'mappings': {}}
+    yarrrml_mapping = {YARRRML_PREFIXES: {}, YARRRML_MAPPINGS: {}}
     rdf_mapping.bind('rml', rdflib.term.URIRef(RML_URI))
     rdf_mapping.bind('rr', rdflib.term.URIRef(R2RML_URI))
     rdf_mapping.bind('ql', rdflib.term.URIRef(QL_URI))
-    yarrrml_mapping['prefixes'] = add_inverse_prefix(rdf_mapping)
+    yarrrml_mapping[YARRRML_PREFIXES] = add_inverse_prefix(rdf_mapping)
     query = f'SELECT ?triplesMap WHERE {{ ?triplesMap {RDF_TYPE} {R2RML_TRIPLES_MAP} . }} '
     triples_map = [tm[rdflib.Variable('triplesMap')] for tm in rdf_mapping.query(query).bindings]
 
     for tm in triples_map:
         tm_name = tm.split("/")[-1]
-        yarrrml_tm = {'sources': [add_inverse_source(tm, rdf_mapping, mapping_format)]}
-        yarrrml_tm['s'], classes = add_inverse_subject(tm, rdf_mapping)
-        yarrrml_tm['po'] = add_inverse_pom(tm, rdf_mapping, classes, yarrrml_mapping['prefixes'])
-        yarrrml_mapping['mappings'][tm_name] = yarrrml_tm
+        yarrrml_tm = {YARRRML_MAPPINGS: [add_inverse_source(tm, rdf_mapping, mapping_format)]}
+        yarrrml_tm[YARRRML_SHORTCUT_SUBJECTS], classes = add_inverse_subject(tm, rdf_mapping)
+        yarrrml_tm[YARRRML_SHORTCUT_PREDICATEOBJECT] = add_inverse_pom(tm, rdf_mapping, classes, yarrrml_mapping[YARRRML_PREFIXES])
+        yarrrml_mapping[YARRRML_MAPPINGS][tm_name] = yarrrml_tm
 
     string_content = str(yaml.dump(yarrrml_mapping, default_flow_style=None, sort_keys=False)).replace("'\"",
                         '"').replace("\"'", ' " ').replace('\'', '')
