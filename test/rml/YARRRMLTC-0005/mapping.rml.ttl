@@ -1,0 +1,133 @@
+<#FromToMaps_0> a rr:TriplesMap;
+
+	rml:logicalTable [
+		a rml:LogicalTable;
+		rml:query "Select * from \"example\"";
+		rr:sqlVersion rr:SQL2008
+        rml:referenceFormulation q1:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://www.example.com/note/{@id}";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant mail:note;
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant mail:when;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "{@year}-{@month}-{@day}";
+			rr:datatype xsd:date
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant mail:from;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "from";
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant mail:to;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "to";
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant mail:heading;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "heading";
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant mail:body;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "body";
+		];
+	].
+
+
+<#DateTime_0> a rr:TriplesMap;
+
+	rr:logicalTable [
+		a rr:LogicalTable;
+		rr:tableName "example";
+		rr:sqlVersion rr:MYSQL
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://www.example.com/DateTime/{@year}{@month}{@day}";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant ex:DateTime;
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ex:day;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "--{@day}";
+			rr:datatype xsd:gDay
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ex:month;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "--{@month}";
+			rr:datatype xsd:gMonth
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ex:year;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "@year";
+			rr:datatype xsd:gYear
+		];
+	].
+
+
