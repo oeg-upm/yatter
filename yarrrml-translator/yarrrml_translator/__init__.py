@@ -4,7 +4,7 @@ from .source import get_initial_sources, add_source, generate_database_connectio
 from .subject import add_subject, add_inverse_subject
 from .predicateobject import add_predicate_object_maps, add_inverse_pom
 import rdflib
-import yaml
+import ruamel.yaml as yaml
 
 
 def translate(yarrrml_data, mapping_format=RML_URI):
@@ -65,13 +65,12 @@ def inverse_translation(rdf_mapping, mapping_format=RML_URI):
 
     for tm in triples_map:
         tm_name = tm.split("/")[-1]
-        yarrrml_tm = {YARRRML_MAPPINGS: [add_inverse_source(tm, rdf_mapping, mapping_format)]}
+        yarrrml_tm = {YARRRML_SOURCE: add_inverse_source(tm, rdf_mapping, mapping_format)}
         yarrrml_tm[YARRRML_SHORTCUT_SUBJECTS], classes = add_inverse_subject(tm, rdf_mapping)
         yarrrml_tm[YARRRML_SHORTCUT_PREDICATEOBJECT] = add_inverse_pom(tm, rdf_mapping, classes, yarrrml_mapping[YARRRML_PREFIXES])
         yarrrml_mapping[YARRRML_MAPPINGS][tm_name] = yarrrml_tm
 
-    string_content = str(yaml.dump(yarrrml_mapping, default_flow_style=None, sort_keys=False)).replace("'\"",
-                        '"').replace("\"'", ' " ').replace('\'', '')
+    string_content = str(yaml.dump(yarrrml_mapping))
     return string_content
 
 
@@ -90,7 +89,5 @@ def merge_mappings(yarrrrml_list):
                 mapping_content_list.append(mapping[YARRRML_MAPPINGS][individual_id])
         combined_mapping[YARRRML_MAPPINGS] = combined_mapping[YARRRML_MAPPINGS] | merge_mapping_section_by_key(individual_id, mapping_content_list)
 
-    string_content = str(yaml.dump(combined_mapping, default_flow_style=None, sort_keys=False)).replace("'\"",
-                                                                                                       '"').replace(
-        "\"'", ' " ').replace('\'', '')
+    string_content = str(yaml.dump(combined_mapping))
     return string_content

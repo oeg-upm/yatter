@@ -240,7 +240,7 @@ def add_inverse_pom(tm, rdf_mapping, classes, prefixes):
     for c in classes:
         yarrrml_poms.append(['rdf:type', c])
 
-    query = f'SELECT ?predicate ?predicateValue ?object ?objectValue ?termtype ?datatype ?datatypeValueMap ' \
+    query = f'SELECT ?predicate ?predicateValue ?object ?objectValue ?termtype ?datatype ?datatypeMapValue ' \
             f'?language ?languageMapValue ?parentTriplesMap ?child ?parent' \
             f' WHERE {{ ' \
             f'<{tm}> {R2RML_PREDICATE_OBJECT_MAP} ?predicateObjectMap . ' \
@@ -250,11 +250,11 @@ def add_inverse_pom(tm, rdf_mapping, classes, prefixes):
             f'OPTIONAL {{ ' \
             f'?object {R2RML_TEMPLATE}|{R2RML_COLUMN}|{R2RML_CONSTANT}|{RML_REFERENCE} ?objectValue .' \
             f'OPTIONAL {{ ?object {R2RML_TERMTYPE} ?termtype . }}' \
-            f'OPTIONAL {{ ?object {R2RML_DATATYPE} ?datatype .}} }} ' \
+            f'OPTIONAL {{ ?object {R2RML_DATATYPE} ?datatype .}} ' \
             f'OPTIONAL {{ ' \
                 f' ?object {RML_DATATYPE_MAP} ?datatypeMap .' \
-                f' ?datatypeMap {R2RML_TEMPLATE}|{R2RML_CONSTANT}|{RML_REFERENCE} ?datatypeValueMap .}} }} ' \
-            f'OPTIONAL {{ ?object {R2RML_LANGUAGE} ?language .}} }} ' \
+                f' ?datatypeMap {R2RML_TEMPLATE}|{R2RML_CONSTANT}|{RML_REFERENCE} ?datatypeMapValue .}} ' \
+            f'OPTIONAL {{ ?object {R2RML_LANGUAGE} ?language .}} ' \
             f'OPTIONAL {{ ' \
                 f' ?object {RML_LANGUAGE_MAP} ?languageMap .' \
                 f' ?languageMap {R2RML_TEMPLATE}|{R2RML_CONSTANT}|{RML_REFERENCE} ?languageMapValue .}} }} ' \

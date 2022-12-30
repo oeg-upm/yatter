@@ -1,5 +1,5 @@
 import sys
-import yaml
+import ruamel.yaml as yaml
 import argparse
 from rdflib import Graph
 from . import translate, inverse_translation, merge_mappings

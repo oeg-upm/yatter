@@ -1,0 +1,23 @@
+mappings:
+  firstTM:
+    sources:
+    - [data.csv~csv]
+    s: http://example/$(c1)
+    po:
+    - [ex:p, http://example/$(c2)~iri]
+  secondTM:
+    po:
+    - [ex:q, $(c2)]
+    - p: ex:myProperty
+      o:
+      - quotedNonAsserted: firstTM
+        condition:
+          function: equal
+          parameters:
+          - [str1, $(value1)]
+          - [str2, $(value2)]
+    sources:
+    - [data.csv~csv]
+    s:
+    - {quotedNonAsserted: firstTM}
+prefixes: {ex: http://example.org/, dct: http://example.org/, foaf: http://example.org/}
