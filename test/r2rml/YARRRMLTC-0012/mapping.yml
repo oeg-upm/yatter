@@ -6,7 +6,6 @@ mappings:
     sources:
       - table: IOUs
     s: $(fname)_$(lname)_$(amount)
-    s: $(amount)_$(fname)_$(lname)
     po:
       - [foaf:name, $(fname) $(lname)]
       - [ex:amount, $(amount)]

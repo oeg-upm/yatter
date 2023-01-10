@@ -9,7 +9,7 @@
 @base <http://example.com/ns#>.
 
 
-<#student_0> a rr:TriplesMap;
+<student_0> a rr:TriplesMap;
 
 	rr:logicalTable [
 		a rr:LogicalTable;
@@ -19,10 +19,6 @@
 	rr:subjectMap [
 		a rr:SubjectMap;
 		rr:template "http://example.com/resource/student_{ID}";
-    rr:GraphMap [
-      a rr:GraphMap;
-      rr:constant "http://example.com/graph/students";
-    ];
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
@@ -33,10 +29,6 @@
 			a rr:ObjectMap;
 			rr:column "Name";
 		];
-    rr:GraphMap [
-      a rr:GraphMap;
-      rr:constant "http://example.com/graph/students";
-    ];
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
@@ -45,20 +37,16 @@
 		];
 		rr:objectMap [
 			a rr:RefObjectMap;
-			rr:parentTriplesMap <#sport_0>;
+			rr:parentTriplesMap <sport_0>;
 			rr:joinCondition [
 				rr:child "Sport";
 				rr:parent "Name";
 			];
 		];
-    rr:GraphMap [
-      a rr:GraphMap;
-      rr:constant "http://example.com/graph/practises";
-    ];
 	].
 
 
-<#sport_0> a rr:TriplesMap;
+<sport_0> a rr:TriplesMap;
 
 	rr:logicalTable [
 		a rr:LogicalTable;
@@ -68,10 +56,6 @@
 	rr:subjectMap [
 		a rr:SubjectMap;
 		rr:template "http://example.com/resource/sport_{ID}";
-    rr:GraphMap [
-      a rr:GraphMap;
-      rr:constant "http://example.com/graph/sports";
-    ];
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [

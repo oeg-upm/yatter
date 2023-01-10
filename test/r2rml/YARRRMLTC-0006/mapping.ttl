@@ -11,7 +11,7 @@
 @base <http://example.com/ns#>.
 
 
-<#FromToMaps_0> a rr:TriplesMap;
+<FromToMaps_0> a rr:TriplesMap;
 
 	rr:logicalTable [
 		a rr:LogicalTable;
@@ -29,8 +29,7 @@
 		];
 		rr:objectMap [
 			a rr:ObjectMap;
-			rr:constant mail:note;
-			rr:termType rr:IRI
+			rr:constant mail:Note
 		];
 	];
 	rr:predicateObjectMap [
@@ -86,7 +85,7 @@
 	].
 
 
-<#DateTime_0> a rr:TriplesMap;
+<DateTime_0> a rr:TriplesMap;
 
 	rr:logicalTable [
 		a rr:LogicalTable;
@@ -104,8 +103,7 @@
 		];
 		rr:objectMap [
 			a rr:ObjectMap;
-			rr:constant ex:DateTime;
-			rr:termType rr:IRI
+			rr:constant ex:DateTime
 		];
 	];
 	rr:predicateObjectMap [

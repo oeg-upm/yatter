@@ -13,7 +13,7 @@
 @base <http://example.com/ns#>.
 
 
-<#venue_0> a rr:TriplesMap;
+<venue_0> a rr:TriplesMap;
 
 	rr:logicalTable [
 		a rr:LogicalTable;

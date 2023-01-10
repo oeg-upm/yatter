@@ -5,6 +5,7 @@ mappings:
   student:
     sources:
       - table: IOUs
+    s: http://example.com/$(fname)
     po:
-      - [foaf:name, $(fname) $(lname)]
+      - [foaf:name, "$(fname) $(lname)"]
       - [ex:amount, $(amount)]

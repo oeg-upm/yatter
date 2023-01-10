@@ -10,7 +10,7 @@
 @base <http://example.com/ns#>.
 
 
-<#student_0> a rr:TriplesMap;
+<student_0> a rr:TriplesMap;
 
 	rr:logicalTable [
 		a rr:LogicalTable;
@@ -20,10 +20,6 @@
 	rr:subjectMap [
 		a rr:SubjectMap;
 		rr:template "{fname}_{lname}_{amount}";
-	];
-	rr:subjectMap [
-		a rr:SubjectMap;
-		rr:template "{amount}_{fname}_{lname}";
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [

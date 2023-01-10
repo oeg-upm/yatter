@@ -6,7 +6,7 @@
 @base <http://example.com/base/> .
 
 
-<#TriplesMap1_0> a rr:TriplesMap;
+<TriplesMap1_0> a rr:TriplesMap;
 
 	rr:logicalTable [
 		a rr:LogicalTable;
