@@ -8,9 +8,7 @@ mappings:
  firstTM:
   sources:
    - ['data.csv~csv']
-  s:
-   - value: $(c1)
-     type: blank
+  s: http://example/$(c1)
   po:
    - [ex:p, http://example/$(c2)]
 

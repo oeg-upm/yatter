@@ -6,28 +6,29 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix ql: <http://semweb.mmlab.be/ns/ql#>.
 @prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#>.
+@prefix ex: <http://example.org/> .
 @base <http://example.com/ns#>.
 
-<#firstTM_0> a rml:QuotedTriplesMap;
+<#firstTM_0> a rml:NonAssertedTriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
-		rml:source "data1.csv";
+		rml:source "data.csv";
 		rml:referenceFormulation ql:CSV
 	];
-	rr:subjectMap [
+	rml:subjectMap [
 		a rr:SubjectMap;
-		rml:reference "c1-1";
-        rr:termType rr:BlankNode
+		rr:template "http://example/{c1}";
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
 			rr:constant ex:p;
 		];
-		rr:objectMap [
+		rml:objectMap [
 			a rr:ObjectMap;
-			rr:template "http://example/$(c1-2)";
+			rr:template "http://example/{c2}";
+			rr:termType rr:IRI
 		];
 	].
 
@@ -35,23 +36,21 @@
 
 	rml:logicalSource [
 		a rml:LogicalSource;
-		rml:source "data2.csv";
+		rml:source "data.csv";
 		rml:referenceFormulation ql:CSV
 	];
-	rr:subjectMap [
-		a rr:refSubjectMap;
-			rml:quotedTriplesMap <#firstTM_0>;
-			rr:joinCondition [
-				rr:child "c2-2";
-				rr:parent "c1-3";
+	rml:subjectMap [
+		a rml:StarMap;
+		rml:quotedTriplesMap <#firstTM_0>;
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
 			rr:constant ex:q;
 		];
-		rr:objectMap [
+		rml:objectMap [
 			a rr:ObjectMap;
-			rml:reference "c2-1";
+			rr:template "http://example/{c3}";
+			rr:termType rr:IRI
 		];
 	].

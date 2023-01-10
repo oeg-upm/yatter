@@ -16,19 +16,19 @@
 		rml:source "data.csv";
 		rml:referenceFormulation ql:CSV
 	];
-	rr:subjectMap [
+	rml:subjectMap [
 		a rr:SubjectMap;
-		rml:reference "c1";
-        rr:termType rr:BlankNode
+		rml:template "http://example/{c1}"
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant ex:p;
+			rr:constant ex:p
 		];
-		rr:objectMap [
+		rml:objectMap [
 			a rr:ObjectMap;
-			rr:template "http://example/$(c2)";
+			rr:template "http://example/{c2}";
+			rr:termType rr:IRI
 		];
 	].
 
@@ -39,17 +39,17 @@
 		rml:source "data.csv";
 		rml:referenceFormulation ql:CSV
 	];
-	rr:subjectMap [
-		a rr:SubjectMap;
+	rml:subjectMap [
+		a rml:StarMap;
 		rml:quotedTriplesMap <#firstTM_0>
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant ex:q;
+			rr:constant ex:q
 		];
-		rr:objectMap [
+		rml:objectMap [
 			a rr:ObjectMap;
-			rml:reference "c3";
+			rml:reference "c3"
 		];
 	].

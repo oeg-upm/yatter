@@ -6,6 +6,7 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix ql: <http://semweb.mmlab.be/ns/ql#>.
 @prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#>.
+@prefix ex: <http://example.org/> .
 @base <http://example.com/ns#>.
 
 <#elementaryTM1_0> a rml:NonAssertedTriplesMap;
@@ -15,40 +16,41 @@
 		rml:source "data.csv";
 		rml:referenceFormulation ql:CSV
 	];
-	rr:subjectMap [
+	rml:subjectMap [
 		a rr:SubjectMap;
-		rr:template "http://example/$(c1)";
+		rr:template "http://example/{c1}"
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant ex:p1;
+			rr:constant ex:p1
 		];
-		rr:objectMap [
+		rml:objectMap [
 			a rr:ObjectMap;
-			rr:template "http://example/$(c2)";
+			rr:template "http://example/{c2}";
+			rr:termType rr:IRI
 		];
 	].
 
-<#firstJoinTM_0> rml:NonAssertedTriplesMap;
+<#firstJoinTM_0> a rml:NonAssertedTriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
 		rml:source "data.csv";
 		rml:referenceFormulation ql:CSV
 	];
-	rr:subjectMap [
-		a rr:SubjectMap;
-        rml:quotedTriplesMap <#elementaryTM1_0>;
+	rml:subjectMap [
+		a rml:StarMap;
+        rml:quotedTriplesMap <#elementaryTM1_0>
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
 			rr:constant ex:q1;
 		];
-		rr:objectMap [
-			a rr:ObjectMap;
-			rml:quotedTriplesMap <#elementaryTM2_0>;
+		rml:objectMap [
+			a rml:StarMap;
+			rml:quotedTriplesMap <#elementaryTM2_0>
 		];
 	].
 
@@ -59,18 +61,19 @@
 		rml:source "data.csv";
 		rml:referenceFormulation ql:CSV
 	];
-	rr:subjectMap [
+	rml:subjectMap [
 		a rr:SubjectMap;
-		rr:template "http://example/$(c3)";
+		rr:template "http://example/{c3}"
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant ex:p2;
+			rr:constant ex:p2
 		];
-		rr:objectMap [
+		rml:objectMap [
 			a rr:ObjectMap;
-			rr:template "http://example/$(c4)";
+			rr:template "http://example/{c4}";
+			rr:termType rr:IRI
 		];
 	].
 
@@ -81,18 +84,18 @@
 		rml:source "data.csv";
 		rml:referenceFormulation ql:CSV
 	];
-	rr:subjectMap [
-		a rr:SubjectMap;
-        rml:quotedTriplesMap <#firstJoinTM_0>;
+	rml:subjectMap [
+		a rml:StarMap;
+        rml:quotedTriplesMap <#firstJoinTM_0>
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant ex:q2;
+			rr:constant ex:q2
 		];
-		rr:objectMap [
-			a rr:ObjectMap;
-			rml:quotedTriplesMap <#secondJoinTM_0>;
+		rml:objectMap [
+			a rml:StarMap;
+			rml:quotedTriplesMap <#secondJoinTM_0>
 		];
 	].
 
@@ -103,18 +106,19 @@
 		rml:source "data.csv";
 		rml:referenceFormulation ql:CSV
 	];
-	rr:subjectMap [
+	rml:subjectMap [
 		a rr:SubjectMap;
-		rr:template "http://example/$(c5)";
+		rr:template "http://example/{c5}";
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
 			rr:constant ex:p3;
 		];
-		rr:objectMap [
+		rml:objectMap [
 			a rr:ObjectMap;
-			rr:template "http://example/$(c6)";
+			rr:template "http://example/{c6}";
+			rr:termType rr:IRI
 		];
 	].
 
@@ -125,18 +129,18 @@
 		rml:source "data.csv";
 		rml:referenceFormulation ql:CSV
 	];
-	rr:subjectMap [
-		a rr:SubjectMap;
-        rml:quotedTriplesMap <#elementaryTM3_0>;
+	rml:subjectMap [
+		a rml:StarMap;
+        rml:quotedTriplesMap <#elementaryTM3_0>
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant ex:q3;
+			rr:constant ex:q3
 		];
-		rr:objectMap [
-			a rr:ObjectMap;
-			rml:quotedTriplesMap <#elementaryTM4_0>;
+		rml:objectMap [
+			a rml:StarMap;
+			rml:quotedTriplesMap <#elementaryTM4_0>
 		];
 	].
 
@@ -147,17 +151,17 @@
 		rml:source "data.csv";
 		rml:referenceFormulation ql:CSV
 	];
-	rr:subjectMap [
+	rml:subjectMap [
 		a rr:SubjectMap;
-		rr:template "http://example/$(c7)";
+		rr:template "http://example/{c7}"
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant ex:p4;
+			rr:constant ex:p4
 		];
-		rr:objectMap [
+		rml:objectMap [
 			a rr:ObjectMap;
-			rr:template "http://example/$(c8)";
+			rr:template "http://example/{c8}"
 		];
 	].
