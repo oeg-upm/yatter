@@ -5,7 +5,9 @@ from .subject import add_subject, add_inverse_subject
 from .predicateobject import add_predicate_object_maps, add_inverse_pom
 import rdflib
 import ruamel.yaml as yaml
-
+from ruamel.yaml import YAML
+from ruamel.yaml.compat import StringIO
+import sys
 
 def translate(yarrrml_data, mapping_format=RML_URI):
     logger.info("Translating YARRRML mapping to [R2]RML")
@@ -70,9 +72,8 @@ def inverse_translation(rdf_mapping, mapping_format=RML_URI):
         yarrrml_tm[YARRRML_SHORTCUT_PREDICATEOBJECT] = add_inverse_pom(tm, rdf_mapping, classes, yarrrml_mapping[YARRRML_PREFIXES])
         yarrrml_mapping[YARRRML_MAPPINGS][tm_name] = yarrrml_tm
 
-    string_content = str(yaml.dump(yarrrml_mapping))
+    string_content = yaml.dump(yarrrml_mapping)
     return string_content
-
 
 def merge_mappings(yarrrrml_list):
     combined_mapping = {YARRRML_MAPPINGS:{}}
@@ -89,5 +90,5 @@ def merge_mappings(yarrrrml_list):
                 mapping_content_list.append(mapping[YARRRML_MAPPINGS][individual_id])
         combined_mapping[YARRRML_MAPPINGS] = combined_mapping[YARRRML_MAPPINGS] | merge_mapping_section_by_key(individual_id, mapping_content_list)
 
-    string_content = str(yaml.dump(combined_mapping))
+    string_content = yaml.dump(combined_mapping)
     return string_content

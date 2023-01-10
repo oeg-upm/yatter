@@ -8,47 +8,27 @@
 @prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#>.
 @base <http://example.com/ns#>.
 
-<#firstTM_0> a rr:QuotedTriplesMap;
+
+<student_0> a rr:TriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
-		rml:source "data.csv";
+		rml:source "student.csv";
 		rml:referenceFormulation ql:CSV
 	];
 	rr:subjectMap [
 		a rr:SubjectMap;
-		rml:reference "c1";
-        rr:termType rr:BlankNode
+		rr:template "http://example.com/{Name}";
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant ex:p;
+			rr:constant foaf:name;
 		];
 		rr:objectMap [
 			a rr:ObjectMap;
-			rr:template "http://example/$(c2)";
+			rml:reference "Name";
 		];
 	].
 
-<#secondTM_0> a rr:TriplesMap;
 
-	rml:logicalSource [
-		a rml:LogicalSource;
-		rml:source "data.csv";
-		rml:referenceFormulation ql:CSV
-	];
-	rr:subjectMap [
-		a rr:SubjectMap;
-		rml:quotedTriplesMap <#firstTM_0>
-	];
-	rr:predicateObjectMap [
-		rr:predicateMap [
-			a rr:PredicateMap;
-			rr:constant ex:q;
-		];
-		rr:objectMap [
-			a rr:ObjectMap;
-			rml:reference "c3";
-		];
-	].

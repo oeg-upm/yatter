@@ -16,7 +16,7 @@ RMLSTAR_URI = 'http://semweb.mmlab.be/ns/rml#'
 
 def test_yarrrmltc0001():
     expected_mapping = Graph()
-    expected_mapping.parse(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mapping.rmls.ttl'), format="ttl")
+    expected_mapping.parse(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mapping.ttl'), format="ttl")
 
     translated_mapping = Graph()
     mapping_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mapping.yml')
