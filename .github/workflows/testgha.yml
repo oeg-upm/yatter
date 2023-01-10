@@ -1,6 +1,6 @@
 name: Build and test for continuous integration
 
-on: [push]
+on: [push, pull_request]
 
 
 jobs:
@@ -22,10 +22,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install setuptools wheel twine pytest
         pip install -r requirements.txt
-    - name: Build and test with pytest
+    - name: Build yarrrml-translator
       run: |
         cd yarrrml-translator
         pip install .
-        cd ..
-        cd test
+    - name: Test with pytest
+      run: |
         pytest
