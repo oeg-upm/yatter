@@ -151,7 +151,8 @@ def database_source(mapping, source):
                 hash_datasource = abs(hash(access + type + username + password))
                 source_rdf += "<#DataSource_" + str(hash_datasource) + ">;\n\t\t"
                 if YARRRML_QUERY in source:
-                    source_rdf += R2RML_SQL_QUERY + " \"" + source.get(YARRRML_QUERY) + "\""
+                    source_rdf += R2RML_SQL_QUERY + " \"" + source.get(YARRRML_QUERY).replace("\n", " ").replace("\"",
+                                                                                                          "\\\"") + "\""
                 elif YARRRML_TABLE in source:
                     source_rdf += R2RML_TABLE_NAME + " \"" + source.get(YARRRML_TABLE) + "\""
                 if YARRRML_REFERENCE_FORMULATION in source:
@@ -173,7 +174,7 @@ def database_source(mapping, source):
 def switch_in_reference_formulation(value):
     value = value.lower()
     if value == "csv":
-        switcher = value
+        switcher = value.upper()
     elif "json" in value:
         if "path" in value:
             switcher = "json"
@@ -210,12 +211,12 @@ def generate_database_connections(data):
                 if not hash_datasource in hash_ids:
                     hash_ids.append(hash_datasource)
                     if driver is None:
-                        database.append("<#DataSource_" + str(hash_datasource) + "> a " + D2RQ_DATABASE_CLASS + ";\n\t"
+                        database.append("<DataSource_" + str(hash_datasource) + "> a " + D2RQ_DATABASE_CLASS + ";\n\t"
                                         + D2RQ_DSN + " \"" + access + "\";\n\t"
                                         + D2RQ_USER + " \"" + username + "\";\n\t"
                                         + D2RQ_PASS + " \"" + password + "\".\n\n")
                     else:
-                        database.append("<#DataSource_" + str(hash_datasource) + "> a " + D2RQ_DATABASE_CLASS + ";\n\t"
+                        database.append("<DataSource_" + str(hash_datasource) + "> a " + D2RQ_DATABASE_CLASS + ";\n\t"
                                         + D2RQ_DSN + " \"" + access + "\";\n\t"
                                         + D2RQ_DRIVER + " \"" + driver + "\";\n\t"
                                         + D2RQ_USER + " \"" + username + "\";\n\t"

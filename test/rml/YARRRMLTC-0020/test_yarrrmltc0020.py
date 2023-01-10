@@ -14,9 +14,9 @@ from rdflib import compare
 RML_URI = 'http://semweb.mmlab.be/ns/rml#'
 
 
-def test_yarrrmltc0005():
+def test_yarrrmltc0020():
     expected_mapping = Graph()
-    expected_mapping.parse(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mapping.rml.ttl'), format="ttl")
+    expected_mapping.parse(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mapping.ttl'), format="ttl")
 
     translated_mapping = Graph()
     mapping_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mapping.yml')

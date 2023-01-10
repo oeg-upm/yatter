@@ -9,7 +9,7 @@
 @prefix ex: <http://example.org/> .
 @base <http://example.com/ns#>.
 
-<#elementaryTM1_0> a rml:NonAssertedTriplesMap;
+<elementaryTM1_0> a rml:NonAssertedTriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
@@ -32,7 +32,7 @@
 		];
 	].
 
-<#firstJoinTM_0> a rml:NonAssertedTriplesMap;
+<firstJoinTM_0> a rml:NonAssertedTriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
@@ -41,7 +41,7 @@
 	];
 	rml:subjectMap [
 		a rml:StarMap;
-        rml:quotedTriplesMap <#elementaryTM1_0>
+        rml:quotedTriplesMap <elementaryTM1_0>
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
@@ -50,11 +50,11 @@
 		];
 		rml:objectMap [
 			a rml:StarMap;
-			rml:quotedTriplesMap <#elementaryTM2_0>
+			rml:quotedTriplesMap <elementaryTM2_0>
 		];
 	].
 
-<#elementaryTM2_0> a rml:NonAssertedTriplesMap;
+<elementaryTM2_0> a rml:NonAssertedTriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
@@ -77,7 +77,7 @@
 		];
 	].
 
-<#centralJoinTM_0> a rr:TriplesMap;
+<centralJoinTM_0> a rr:TriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
@@ -86,7 +86,7 @@
 	];
 	rml:subjectMap [
 		a rml:StarMap;
-        rml:quotedTriplesMap <#firstJoinTM_0>
+        rml:quotedTriplesMap <firstJoinTM_0>
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
@@ -95,11 +95,11 @@
 		];
 		rml:objectMap [
 			a rml:StarMap;
-			rml:quotedTriplesMap <#secondJoinTM_0>
+			rml:quotedTriplesMap <secondJoinTM_0>
 		];
 	].
 
-<#elementaryTM3_0> a rml:NonAssertedTriplesMap;
+<elementaryTM3_0> a rml:NonAssertedTriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
@@ -122,7 +122,7 @@
 		];
 	].
 
-<#secondJoinTM_0> a rml:NonAssertedTriplesMap;
+<secondJoinTM_0> a rml:NonAssertedTriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
@@ -131,7 +131,7 @@
 	];
 	rml:subjectMap [
 		a rml:StarMap;
-        rml:quotedTriplesMap <#elementaryTM3_0>
+        rml:quotedTriplesMap <elementaryTM3_0>
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
@@ -140,11 +140,11 @@
 		];
 		rml:objectMap [
 			a rml:StarMap;
-			rml:quotedTriplesMap <#elementaryTM4_0>
+			rml:quotedTriplesMap <elementaryTM4_0>
 		];
 	].
 
-<#elementaryTM4_0> a rml:NonAssertedTriplesMap;
+<elementaryTM4_0> a rml:NonAssertedTriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;

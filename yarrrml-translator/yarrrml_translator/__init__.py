@@ -38,6 +38,7 @@ def translate(yarrrml_data, mapping_format=RML_URI):
 
         logger.info("RML content is created!")
         rml_mapping_string = "".join(rml_mapping)
+        print(rml_mapping_string)
         try:
             graph = rdflib.Graph()
             graph.parse(data=rml_mapping_string, format="turtle")

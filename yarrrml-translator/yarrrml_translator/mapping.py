@@ -2,7 +2,7 @@ from .import *
 
 
 def add_mapping(mapping, mappings, it):
-    map_template = "<#" + mapping + "_" + str(it) + "> a "
+    map_template = "<" + mapping + "_" + str(it) + "> a "
     if mappings[mapping]:
         if mappings[mapping] == "non_asserted":
             map_template += STAR_NON_ASSERTED_CLASS + ", "

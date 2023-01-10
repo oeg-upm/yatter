@@ -8,6 +8,5 @@ mappings:
 
   secondTM:
     sources:
-      - [ data.csv~csv ]
-    s:
-      - quotedNonAsserted: firstTM
+      - [data.csv~csv]
+    s: http//example/$(c1)

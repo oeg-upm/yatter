@@ -10,10 +10,10 @@ mappings:
 
   secondTM:
     po:
-      - [ ex:q, $(c2) ]
+      - [ex:q, $(c2)]
       - p: ex:myProperty
         o:
-          - quotedNonAsserted: firstTM
+          - mapping: firstTM
             condition:
               function: equal
               parameters:

@@ -13,13 +13,14 @@
 @base <http://example.com/ns#>.
 
 
-<#venue_0> a rr:TriplesMap;
+<venue_0> a rr:TriplesMap;
 
 	rml:logicalTable [
 		a rml:LogicalTable;
+		rml:source <DataSource_1122994696426680972>;
 		rml:query "Select * from \"Venue4\" ";
-		rr:sqlVersion rr:SQL2008
-        rml:referenceFormulation q1:CSV
+		rr:sqlVersion rr:MySQL;
+        rml:referenceFormulation ql:CSV
 	];
 	rr:subjectMap [
 		a rr:SubjectMap;
@@ -76,4 +77,8 @@
 		];
 	].
 
-
+<DataSource_1122994696426680972> a d2rq:Database;
+	d2rq:jdbcDSN "http://localhost/example";
+	d2rq:jdbcDriver "com.mysql.jdbc.Driver";
+	d2rq:username "root";
+	d2rq:password "root".

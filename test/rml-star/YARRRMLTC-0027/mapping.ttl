@@ -9,7 +9,7 @@
 @prefix ex: <http://example.org/> .
 @base <http://example.com/ns#>.
 
-<#firstTM_0> a rml:NonAssertedTriplesMap;
+<firstTM_0> a rml:NonAssertedTriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
@@ -32,7 +32,7 @@
 		];
 	].
 
-<#secondTM_0> a rr:TriplesMap;
+<secondTM_0> a rr:TriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
@@ -41,7 +41,7 @@
 	];
 	rml:subjectMap [
 		a rml:StarMap;
-		rml:quotedTriplesMap <#firstTM_0>;
+		rml:quotedTriplesMap <firstTM_0>;
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
