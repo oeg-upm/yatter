@@ -75,13 +75,12 @@ def get_non_asserted_mappings(yarrrml_data, mappings):
     for mapping in yarrrml_data.get(YARRRML_MAPPINGS):
         keys = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).keys()
         for key in keys:
-            if type(yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)) is list:
-                values_list = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)
-                for value in values_list:
-                    if YARRRML_NON_ASSERTED in value:
-                        mappings[value[YARRRML_NON_ASSERTED]] = "non_asserted"
-                    elif 'o' in value and YARRRML_NON_ASSERTED in value['o'][0]:
-                            mappings[value['o'][0][YARRRML_NON_ASSERTED]] = "non_asserted"
+            if type(yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)) is dict:
+                values = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)
+                if YARRRML_NON_ASSERTED in values:
+                    mappings[values[YARRRML_NON_ASSERTED]] = "non_asserted"
+                    #elif value['o']['quotedNonAssertedº']:
+                            #mappings[value['o'][0][YARRRML_NON_ASSERTED]] = "non_asserted"
     return mappings
 
 

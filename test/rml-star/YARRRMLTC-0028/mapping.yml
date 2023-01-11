@@ -18,4 +18,4 @@ mappings:
   s: http://example/$(c3)
   p: ex:q
   o:
-   - quotedNonAsserted: firstTM
+   quotedNonAsserted: firstTM

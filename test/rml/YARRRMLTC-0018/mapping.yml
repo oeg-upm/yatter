@@ -4,7 +4,7 @@ prefixes:
 mappings:
   student:
     sources:
-    - access: http://localhost/example
+      access: http://localhost/example
       type: mysql
       credentials:
         username: root

@@ -3,7 +3,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix ex: <http://example.com/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@base <http://example.com/base/> .
+@base <http://example.com/ns#>.
 
 
 <TriplesMap1_0> a rr:TriplesMap;

@@ -22,7 +22,7 @@ def translate(yarrrml_data, mapping_format=RML_URI):
                 source_list = add_table(yarrrml_data, mapping, list_initial_sources)
             else:
                 source_list = add_source(yarrrml_data, mapping, list_initial_sources)
-            subject_list = add_subject(yarrrml_data, mapping)
+            subject_list = add_subject(yarrrml_data, mapping, mapping_format)
             pred = add_predicate_object_maps(yarrrml_data, mapping, mapping_format)
             it = 0
             for source in source_list:
@@ -38,7 +38,6 @@ def translate(yarrrml_data, mapping_format=RML_URI):
 
         logger.info("RML content is created!")
         rml_mapping_string = "".join(rml_mapping)
-        print(rml_mapping_string)
         try:
             graph = rdflib.Graph()
             graph.parse(data=rml_mapping_string, format="turtle")

@@ -4,7 +4,7 @@ import rdflib
 
 
 ## Adds a subject or set of subjects to the given TriplesMap
-def add_subject(data, mapping):
+def add_subject(data, mapping, mapping_format):
     rml_subjects = []
     only_one = False
 
@@ -28,7 +28,7 @@ def add_subject(data, mapping):
         if YARRRML_QUOTED in individual_subject or YARRRML_NON_ASSERTED in individual_subject:
             subject_termmap = generate_rml_termmap(STAR_SUBJECT, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")
         else:
-            subject_termmap = generate_rml_termmap(R2RML_SUBJECT, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")
+            subject_termmap = generate_rml_termmap(R2RML_SUBJECT, R2RML_SUBJECT_CLASS, individual_subject, "\t\t", mapping_format)
         rml_subjects.append(subject_termmap)
 
     if YARRRML_GRAPHS in data.get(YARRRML_MAPPINGS).get(mapping):

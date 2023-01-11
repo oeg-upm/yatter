@@ -11,11 +11,11 @@ mappings:
   s: http://example/$(c1)
   po:
    - [ex:p, http://example/$(c2)~iri]
-	
+
  secondTM:
   sources:
    - ['data.csv~csv']
   s:
-   - quotedNonAsserted: firstTM
+   quotedNonAsserted: firstTM
   po:
    - [ex:q, http://example/$(c3)~iri]

@@ -82,6 +82,10 @@ def get_object_list(predicate_object, object_access):
                     object_list.append([object[YARRRML_VALUE], object[YARRRML_DATATYPE]])
                 elif YARRRML_TYPE in object:
                     object_list.append([object[YARRRML_VALUE]+"~"+object[YARRRML_TYPE]])
+                elif YARRRML_VALUE in object:
+                    object_list.append([object[YARRRML_VALUE]])
+                else:
+                    object_list.append([object])
     else:
         if object_access is None and len(predicate_object) == 3:
             object_list.append([object_maps, predicate_object[2]])
@@ -170,13 +174,17 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                     iri = True
             template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,
                                              object_value, "\t\t\t", mapping_format)
-            if type(om) == list and YARRRML_DATATYPE in om:
+            if YARRRML_DATATYPE in om:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_DATATYPE + " " \
                            + om.get(YARRRML_DATATYPE) + "\n\t\t];\n"
-            if (type(om) == list and YARRRML_TYPE in om and om.get(YARRRML_TYPE) == "iri") or iri:
-                template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
+            if YARRRML_TYPE in om:
+                if om.get(YARRRML_TYPE) == "iri" or iri:
+                    template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
                            + R2RML_IRI + "\n\t\t];\n"
-            if type(om) == list and YARRRML_LANGUAGE in om:
+                elif om.get(YARRRML_TYPE) == "literal":
+                    template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
+                               + R2RML_LITERAL + "\n\t\t];\n"
+            if YARRRML_LANGUAGE in om:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_LANGUAGE + " \"" \
                            + om.get(YARRRML_LANGUAGE) + "\"\n\t\t];\n"
 
@@ -195,7 +203,7 @@ def ref_mapping(data, mapping, om, yarrrml_key, ref_type_property, mapping_forma
     mapping_join = om.get(yarrrml_key)
 
     if mapping_join in list_mappings:
-        subject_list = add_subject(data, mapping_join)
+        subject_list = add_subject(data, mapping_join, mapping_format)
         list_initial_sources = get_initial_sources(data)
         if mapping_format == R2RML_URI:
             source_list = add_table(data, mapping_join, list_initial_sources)
@@ -206,7 +214,7 @@ def ref_mapping(data, mapping, om, yarrrml_key, ref_type_property, mapping_forma
         for i in range(number_joins_rml):
             template += "\t\t" + R2RML_OBJECT + \
                         " [ \n\t\t\ta " + R2RML_REFOBJECT_CLASS + \
-                        ";\n\t\t\t" + ref_type_property + " <#" + mapping_join + "_" + str(i) + ">;\n"
+                        ";\n\t\t\t" + ref_type_property + " <" + mapping_join + "_" + str(i) + ">;\n"
             if YARRRML_CONDITION in om:
                 conditions = om.get(YARRRML_CONDITION)
                 if type(conditions) is not list:
