@@ -10,11 +10,11 @@
 
 <student_0> a rr:TriplesMap;
 
-	rr:logicalTable [
-		a rml:LogicalTable;
+	rml:logicalSource [
+		a rml:LogicalSource;
 		rml:query "Select ('Student' || \"ID\" ) AS StudentId , \"ID\" , \"Name\" from \"Student\" ";
-		rml:source <DataSource_1122994696426680972>;
-		rr:sqlVersion rr:MySQL;
+		rml:source <DataSource_student>;
+		rr:sqlVersion rr:MYSQL;
         rml:referenceFormulation ql:CSV
 	];
 	rr:subjectMap [
@@ -32,7 +32,7 @@
 		];
 	].
 
-<DataSource_1122994696426680972> a d2rq:Database;
+<DataSource_student> a d2rq:Database;
 	d2rq:jdbcDSN "http://localhost/example";
 	d2rq:jdbcDriver "com.mysql.jdbc.Driver";
 	d2rq:username "root";

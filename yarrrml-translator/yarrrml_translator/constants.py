@@ -28,6 +28,7 @@ RML_LANGUAGE_MAP = 'rml:languageMap'
 RML_LANGUAGE_MAP_CLASS = 'rml:LanguageMap'
 RML_DATATYPE_MAP = 'rml:datatypeMap'
 RML_DATATYPE_MAP_CLASS = 'rml:DatatypeMap'
+RML_QUERY = 'rml:query'
 
 STAR_CLASS = 'rml:StarMap'
 STAR_NON_ASSERTED_CLASS = 'rml:NonAssertedTriplesMap'

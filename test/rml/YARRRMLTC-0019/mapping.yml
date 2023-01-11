@@ -10,7 +10,7 @@ mappings:
     s: http://example.com/resource/student_$(ID)
     po:
       - [rdf:type, http://example.com/ontology/Student]
-      - p: foaf:Name
+      - p: foaf:name
         o: $(Name)
         graph: http://example.com/graph/students
       - p: http://example.com/ontology/practises

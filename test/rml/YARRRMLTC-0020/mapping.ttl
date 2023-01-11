@@ -5,17 +5,18 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix ql: <http://semweb.mmlab.be/ns/ql#>.
 @prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#>.
-@prefix mail: <http://example.com/mail#>
+@prefix mail: <http://example.com/mail#> .
+@prefix ex: <http://www.example.com/> .
 @base <http://example.com/ns#>.
 
 <FromToMaps_0> a rr:TriplesMap;
 
-	rml:logicalTable [
-		a rml:LogicalTable;
-		rml:source <DataSource_1122994696426680972>;
-		rml:query "Select * from \"example\"";
-		rr:sqlVersion rr:MySQL;
-        rml:referenceFormulation ql:CSV
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source <DataSource_source1>;
+		rml:query "Select * from \"example\" ";
+		rml:referenceFormulation ql:CSV;
+		rr:sqlVersion rr:MYSQL
 	];
 	rr:subjectMap [
 		a rr:SubjectMap;
@@ -28,7 +29,7 @@
 		];
 		rr:objectMap [
 			a rr:ObjectMap;
-			rr:constant mail:Note
+			rr:constant mail:Note;
 		];
 	];
 	rr:predicateObjectMap [
@@ -86,12 +87,12 @@
 
 <DateTime_0> a rr:TriplesMap;
 
-	rr:logicalTable [
-		a rr:LogicalTable;
-		rml:source <DataSource_1122994696426680972>;
-		rr:tableName "example";
-		rr:sqlVersion rr:MySQL;
-		rml:referenceFormulation ql:CSV
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source <DataSource_source1>;
+		rml:query "Select * from \"example\" ";
+		rml:referenceFormulation ql:CSV;
+		rr:sqlVersion rr:MYSQL
 	];
 	rr:subjectMap [
 		a rr:SubjectMap;
@@ -104,7 +105,7 @@
 		];
 		rr:objectMap [
 			a rr:ObjectMap;
-			rr:constant ex:DateTime
+			rr:constant ex:DateTime;
 		];
 	];
 	rr:predicateObjectMap [
@@ -142,7 +143,7 @@
 	].
 
 
-<DataSource_1122994696426680972> a d2rq:Database;
+<DataSource_source1> a d2rq:Database;
 	d2rq:jdbcDSN "http://localhost/example";
 	d2rq:jdbcDriver "com.mysql.jdbc.Driver";
 	d2rq:username "root";

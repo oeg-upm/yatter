@@ -19,10 +19,20 @@
 	rr:subjectMap [
 		a rr:SubjectMap;
 		rr:template "http://example.com/resource/student_{ID}";
-		rr:GraphMap [
+		rr:graphMap [
       		a rr:GraphMap;
-      		rr:constant "http://example.com/graph/students";
+      		rr:constant <http://example.com/graph/students>;
     	];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant <http://example.com/ontology/Student>;
+		];
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
@@ -33,9 +43,9 @@
 			a rr:ObjectMap;
 			rml:reference "Name";
 		];
-		rr:GraphMap [
+		rr:graphMap [
       		a rr:GraphMap;
-      		rr:constant "http://example.com/graph/students";
+      		rr:constant <http://example.com/graph/students>;
     	];
 	];
 	rr:predicateObjectMap [
@@ -51,9 +61,9 @@
 				rr:parent "Name";
 			];
 		];
-		rr:GraphMap [
+		rr:graphMap [
       		a rr:GraphMap;
-      		rr:constant "http://example.com/graph/practises";
+      		rr:constant <http://example.com/graph/practise>;
     	];
 	].
 
@@ -69,10 +79,20 @@
 	rr:subjectMap [
 		a rr:SubjectMap;
 		rr:template "http://example.com/resource/sport_{ID}";
-		rr:GraphMap [
+		rr:graphMap [
       		a rr:GraphMap;
-      		rr:constant "http://example.com/graph/students";
+      		rr:constant <http://example.com/graph/sports>;
     	];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant <http://example.com/ontology/Sport>;
+		];
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [

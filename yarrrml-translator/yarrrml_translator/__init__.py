@@ -14,7 +14,7 @@ def translate(yarrrml_data, mapping_format=RML_URI):
 
     list_initial_sources = get_initial_sources(yarrrml_data)
     rml_mapping = [add_prefix(yarrrml_data)]
-    rml_mapping.extend(generate_database_connections(yarrrml_data))
+    rml_mapping.extend(generate_database_connections(yarrrml_data, list_initial_sources))
     try:
         mappings = get_non_asserted_mappings(yarrrml_data,  dict.fromkeys(list(yarrrml_data.get(YARRRML_MAPPINGS).keys())))
         for mapping in yarrrml_data.get(YARRRML_MAPPINGS):

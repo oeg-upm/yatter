@@ -11,7 +11,7 @@ mappings:
   s: http://example/$(c1)
   po:
    - [ex:p1, http://example/$(c2)~iri]
-	
+
  firstJoinTM:
   sources:
    - ['data.csv~csv']
