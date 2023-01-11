@@ -7,7 +7,7 @@ __email__ = "david.chaves@upm.es"
 
 
 import os
-import yaml
+import _ruamel_yaml as yaml
 import yarrrml_translator
 from rdflib.graph import Graph
 from rdflib import compare
