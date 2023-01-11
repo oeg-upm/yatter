@@ -1,5 +1,5 @@
 import sys
-import ruamel.yaml as yaml
+from ruamel.yaml import YAML
 import argparse
 from rdflib import Graph
 from . import translate, inverse_translation, merge_mappings
@@ -18,7 +18,8 @@ def parse_inputs():
     if args.input_mapping_path and args.output_mapping_path:
         if args.input_mapping_path.endswith('.yml') or args.input_mapping_path.endswith('.yaml'):
             with open(args.input_mapping_path) as f:
-                input_data = yaml.safe_load(f)
+                yaml = YAML(typ='safe', pure=True)
+                input_data = yaml.load(f)
         elif args.input_mapping_path.endswith('.ttl') or args.input_mapping_path.endswith('.rml') or args.input_mapping_path.endswith('.r2rml'):
             input_data = Graph()
             input_data.parse(args.input_mapping_path, format="turtle")
