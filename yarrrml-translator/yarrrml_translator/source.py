@@ -31,13 +31,14 @@ def add_source(data, mapping, list_initial_sources):
     final_list = []
     sources = get_sources(data, mapping)
     for source in sources:
-
+        db_identifier = mapping
         if source in list_initial_sources:
+            db_identifier = source
             source = data.get(YARRRML_SOURCES).get(source)
 
         if YARRRML_ACCESS in source:
             if YARRRML_QUERY in source:
-                final_list.append(source_template + database_source(mapping, source))
+                final_list.append(source_template + database_source(mapping, source, db_identifier))
             else:
                 final_list.append(source_template + add_source_full(mapping, source))
         elif type(source) is list:
@@ -55,11 +56,13 @@ def add_table(data, mapping, list_initial_sources):
     sources = get_sources(data, mapping)
     for source in sources:
         sql_version = False
+        db_identifier = mapping
         if source in list_initial_sources:
+            db_identifier = source
             source = data.get(YARRRML_SOURCES).get(source)
 
         if YARRRML_ACCESS in source and YARRRML_QUERY in source:
-            r2rml_access = database_source(mapping, source)
+            r2rml_access = database_source(mapping, source, db_identifier)
             sql_version = True
         elif YARRRML_QUERY in source:
             r2rml_access = R2RML_SQL_QUERY + " \"" + source.get(YARRRML_QUERY).replace("\n", " ").replace("\"",
@@ -112,8 +115,7 @@ def add_source_full(mapping, source):
         reference_formulation = str(source.get(YARRRML_REFERENCE_FORMULATION))
         format_from_reference = switch_in_reference_formulation(reference_formulation.lower())
         ref_formulation_rml = reference_formulation.replace("jsonpath", "JSONPath").replace("csv", "CSV").replace(
-            "xpath",
-            "XPath")
+            "xpath","XPath")
         if extension != format_from_reference or format_from_reference == "ERROR":
             raise Exception("ERROR: not referenceFormulation found or mismatch between the format and "
                             "referenceFormulation in source " + access + "in mapping " + mapping)
@@ -139,24 +141,20 @@ def add_source_full(mapping, source):
     return source_rdf
 
 
-def database_source(mapping, source):
+def database_source(mapping, source, db_identifier):
     source_rdf = ""
     if YARRRML_ACCESS in source:
         if YARRRML_CREDENTIALS in source:
             if YARRRML_TYPE in source:
-                type = source.get(YARRRML_TYPE)
-                access = source.get(YARRRML_ACCESS)
-                username = source.get(YARRRML_CREDENTIALS).get(YARRRML_USERNAME)
-                password = source.get(YARRRML_CREDENTIALS).get(YARRRML_PASSWORD)
-                hash_datasource = abs(hash(access + type + username + password))
-                source_rdf += "<#DataSource_" + str(hash_datasource) + ">;\n\t\t"
+                source_rdf += "<DataSource_" + str(db_identifier) + ">;\n\t\t"
                 if YARRRML_QUERY in source:
-                    source_rdf += R2RML_SQL_QUERY + " \"" + source.get(YARRRML_QUERY) + "\""
+                    source_rdf += RML_QUERY + " \"" + source.get(YARRRML_QUERY).replace("\n", " ").replace("\"",
+                                                                                                          "\\\"") + "\""
                 elif YARRRML_TABLE in source:
                     source_rdf += R2RML_TABLE_NAME + " \"" + source.get(YARRRML_TABLE) + "\""
                 if YARRRML_REFERENCE_FORMULATION in source:
                     source_rdf += ";\n\t\t" + RML_REFERENCE_FORMULATION + " ql:" \
-                                  + switch_in_reference_formulation(source.get(YARRRML_REFERENCE_FORMULATION))
+                                  + switch_in_reference_formulation(source.get(YARRRML_REFERENCE_FORMULATION)).upper()
                 if YARRRML_QUERY_FORMULATION in source:
                     source_rdf += ";\n\t\t" + R2RML_SQL_VERSION + " rr:" + source.get(YARRRML_QUERY_FORMULATION).upper()
                 else:
@@ -187,35 +185,43 @@ def switch_in_reference_formulation(value):
     return switcher
 
 
-def generate_database_connections(data):
+def generate_database_connections(data, list_initial_sources):
     database = []
-    hash_ids = []
+    sources_ids = set()
     for mapping in data.get(YARRRML_MAPPINGS):
         sources = get_sources(data, mapping)
         for source in sources:
-            if YARRRML_QUERY in source and YARRRML_ACCESS in source:
-                type = source.get(YARRRML_TYPE)
-                if type == "mysql":
-                    driver = "com.mysql.jdbc.Driver"
-                elif type == "postgresql":
-                    driver = "org.postgresql.Driver"
-                elif type == "sqlserver":
-                    driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-                else:
-                    driver = None
-                access = source.get(YARRRML_ACCESS)
-                username = source.get(YARRRML_CREDENTIALS).get(YARRRML_USERNAME)
-                password = source.get(YARRRML_CREDENTIALS).get(YARRRML_PASSWORD)
-                hash_datasource = abs(hash(access + type + username + password))
-                if not hash_datasource in hash_ids:
-                    hash_ids.append(hash_datasource)
+            db_identifier = mapping
+            external = False
+            number_external_sources = len(sources_ids)
+            if source in list_initial_sources:
+                external = True
+                db_identifier = source
+                sources_ids.add(source)
+                source = data.get(YARRRML_SOURCES).get(source)
+            if (external and len(sources_ids) > number_external_sources) or not external:
+                if YARRRML_QUERY in source and YARRRML_ACCESS in source:
+                    db_type = source.get(YARRRML_TYPE)
+                    if db_type == "mysql":
+                        driver = "com.mysql.jdbc.Driver"
+                    elif db_type == "postgresql":
+                        driver = "org.postgresql.Driver"
+                    elif db_type == "sqlserver":
+                        driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+                    else:
+                        driver = None
+                    access = source.get(YARRRML_ACCESS)
+                    username = source.get(YARRRML_CREDENTIALS).get(YARRRML_USERNAME)
+                    password = source.get(YARRRML_CREDENTIALS).get(YARRRML_PASSWORD)
+
+
                     if driver is None:
-                        database.append("<#DataSource_" + str(hash_datasource) + "> a " + D2RQ_DATABASE_CLASS + ";\n\t"
+                        database.append("<DataSource_" + str(db_identifier) + "> a " + D2RQ_DATABASE_CLASS + ";\n\t"
                                         + D2RQ_DSN + " \"" + access + "\";\n\t"
                                         + D2RQ_USER + " \"" + username + "\";\n\t"
                                         + D2RQ_PASS + " \"" + password + "\".\n\n")
                     else:
-                        database.append("<#DataSource_" + str(hash_datasource) + "> a " + D2RQ_DATABASE_CLASS + ";\n\t"
+                        database.append("<DataSource_" + str(db_identifier) + "> a " + D2RQ_DATABASE_CLASS + ";\n\t"
                                         + D2RQ_DSN + " \"" + access + "\";\n\t"
                                         + D2RQ_DRIVER + " \"" + driver + "\";\n\t"
                                         + D2RQ_USER + " \"" + username + "\";\n\t"

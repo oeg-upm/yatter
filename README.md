@@ -17,35 +17,62 @@ We are working on including the following features which are not yet implemented
 pip install yarrrml-translator
 ```
 
-## Execution
+## Execution from CLI
+
+### From YARRRML to \[R2\]RML
 To execute from command line run the following:
 ```bash
-python3 -m yarrrml_translator -i path_to_input_yarrrml.yml -o path_to_output.ttl [-f R2RML]
+python3 -m yarrrml_translator -i path_to_input_yarrrml.yml -o path_to_rdf_mapping.ttl [-f R2RML]
 ```
-
 `-f R2RML` is an optional parameter for translating input YARRRML into R2RML
 
+### From \[R2\]RML to YARRRML 
+To execute from command line run the following:
+```bash
+python3 -m yarrrml_translator -i path_to_input_rdf_mapping.ttl -o path_to_output_yarrrml.yml [-f R2RML]
+```
+`-f R2RML` is an optional parameter for translating input YARRRML into R2RML
+
+### Merging mappings based on TriplesMap id
+To execute from command line run the following (keys of each TriplesMap should be disjoint):
+```bash
+python3 -m yarrrml_translator -m yarrrml_mapping1.yaml yarrrml_mapping2.yaml [..] -o path_to_output_yarrrml.yml
+```
+
+## Execution as a library
+
 If you want to include the module in your implementation:
-- for translating **RML mappings**:
+- for translating **YARRRML mapping** to **RML mappings** (and inverse):
 ```python
 import yarrrml_translator
 import yaml
-
+# YARRRML to RML
 rml_content = yarrrml_translator.translate(yaml.safe_load(open("path-to-yarrrml")))
+# RML to YARRRML
+yarrrml_content = yarrrml_translator.inverse_translate("rdf_mapping_content")
 ```
-
-- for translating **R2RML mappings**:
+- for translating **YARRRML mappings** to **R2RML mappings** (and inverse):
 ```python
 import yarrrml_translator
 import yaml
 
 R2RML_URI = 'http://www.w3.org/ns/r2rml#'
+# YARRRML to R2RML
 rml_content = yarrrml_translator.translate(yaml.safe_load(open("path-to-yarrrml")), mapping_format=R2RML_URI)
+# R2RML to YARRRML
+yarrrml_content = yarrrml_translator.inverse_translate("rdf_mapping_content", mapping_format=R2RML_URI)
+```
+- for merging TriplesMap based on id:
+```python
+import yarrrml_translator
+list_yarrrml_mappings = ["content_mapping_yarrrml1", "content_mapping_yarrrml1"]
+yarrrml_content = yarrrml_translator.merge_mappings(list_yarrrml_mappings)
 ```
 
 ## Authors
-Ontology Engineering Group - Data Integration:
+Ontology Engineering Group:
 - [David Chaves-Fraga](mailto:david.chaves@upm.es)
+- Marino González García (Final bachelor thesis - Systematic Testing)
 - Luis López Piñero (Final bachelor thesis - v0.1)
 
 

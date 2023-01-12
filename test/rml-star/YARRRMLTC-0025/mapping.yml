@@ -1,0 +1,26 @@
+prefixes:
+ foaf: http://xmlns.com/foaf/0.1/
+ ex: http://example.com/
+ rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+ xsd: http://www.w3.org/2001/XMLSchema#
+
+mappings:
+ firstTM:
+  sources:
+   - ['data1.csv~csv']
+  s: http://example/$(c1-1)
+  po:
+   - [ex:p, http://example/$(c1-2)~iri]
+
+ secondTM:
+  sources:
+   - ['data2.csv~csv']
+  s:
+    quotedNonAsserted: firstTM
+    condition:
+     function: equal
+     parameters:
+       - [str1, $(c2-2)]
+       - [str2, $(c1-3)]
+  po:
+   - [ex:q, $(c2-1)]

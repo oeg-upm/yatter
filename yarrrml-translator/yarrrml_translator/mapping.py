@@ -2,7 +2,7 @@ from .import *
 
 
 def add_mapping(mapping, mappings, it):
-    map_template = "<#" + mapping + "_" + str(it) + "> a "
+    map_template = "<" + mapping + "_" + str(it) + "> a "
     if mappings[mapping]:
         if mappings[mapping] == "non_asserted":
             map_template += STAR_NON_ASSERTED_CLASS + ", "
@@ -71,15 +71,30 @@ def add_inverse_prefix(rdf_mapping):
     return prefixes
 
 
-def get_non_asserted_mappings(yarrrml_data, mappings):
+def get_non_asserted_mappings(yarrrml_data, mappings, mapping_format):
     for mapping in yarrrml_data.get(YARRRML_MAPPINGS):
         keys = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).keys()
         for key in keys:
-            if type(yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)) is list:
-                values_list = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)
-                for value in values_list:
-                    if YARRRML_NON_ASSERTED in value:
-                        mappings[value[YARRRML_NON_ASSERTED]] = "non_asserted"
-                    elif 'o' in value and YARRRML_NON_ASSERTED in value['o'][0]:
-                            mappings[value['o'][0][YARRRML_NON_ASSERTED]] = "non_asserted"
-    return mappings
+            if type(yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)) is dict:
+                values = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)
+                if YARRRML_NON_ASSERTED in values:
+                    mappings[values[YARRRML_NON_ASSERTED]] = "non_asserted"
+                    mapping_format = STAR_URI
+                elif YARRRML_QUOTED in values:
+                    mapping_format = STAR_URI
+            if type(yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)) is list and key==YARRRML_SHORTCUT_PREDICATEOBJECT:
+                for value in yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key):
+                    if type(value) is dict and YARRRML_SHORTCUT_OBJECT in value:
+                        if YARRRML_NON_ASSERTED in value[YARRRML_SHORTCUT_OBJECT]:
+                            mappings[value[YARRRML_SHORTCUT_OBJECT][YARRRML_NON_ASSERTED]] = "non_asserted"
+                            mapping_format = STAR_URI
+                        elif YARRRML_QUOTED in value[YARRRML_SHORTCUT_OBJECT]:
+                            mapping_format = STAR_URI
+
+    return mappings, mapping_format
+
+def merge_mapping_section_by_key(key,yarrrml_list):
+    output = {key:{}}
+    for yarrrml_mapping in yarrrml_list:
+        output[key] =  output[key] | yarrrml_mapping
+    return output

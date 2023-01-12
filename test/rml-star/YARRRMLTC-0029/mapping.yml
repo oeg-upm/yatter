@@ -1,0 +1,64 @@
+prefixes:
+ foaf: http://xmlns.com/foaf/0.1/
+ ex: http://example.com/
+ rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+ xsd: http://www.w3.org/2001/XMLSchema#
+  
+mappings:
+ elementaryTM1:
+  sources:
+   - ['data.csv~csv']
+  s: http://example/$(c1)
+  po:
+   - [ex:p1, http://example/$(c2)~iri]
+
+ firstJoinTM:
+  sources:
+   - ['data.csv~csv']
+  s:
+   quotedNonAsserted: elementaryTM1
+  po:
+   - p: ex:q1
+     o:
+      quotedNonAsserted: elementaryTM2
+
+ elementaryTM2:
+  sources:
+   - ['data.csv~csv']
+  s: http://example/$(c3)
+  po:
+   - [ex:p2, http://example/$(c4)~iri]
+
+ centralJoinTM:
+  sources:
+   - ['data.csv~csv']
+  s:
+   quotedNonAsserted: firstJoinTM
+  po:
+   - p: ex:q2
+     o:
+      quotedNonAsserted: secondJoinTM
+
+ elementaryTM3:
+  sources:
+   - ['data.csv~csv']
+  s: http://example/$(c5)
+  po:
+   - [ex:p3, http://example/$(c6)~iri]
+
+ secondJoinTM:
+  sources:
+   - ['data.csv~csv']
+  s:
+   quotedNonAsserted: elementaryTM3
+  po:
+   - p: ex:q3
+     o:
+      quotedNonAsserted: elementaryTM4
+
+ elementaryTM4:
+  sources:
+   - ['data.csv~csv']
+  s: http://example/$(c7)
+  po:
+   - [ex:p4, http://example/$(c8)~iri]

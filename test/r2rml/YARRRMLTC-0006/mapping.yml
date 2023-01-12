@@ -9,10 +9,10 @@ sources:
 mappings:
   FromToMaps:
     sources: source1
-    subjects: "http://www.example.com/note/$(@id)" #~iri (default, only option actually); if no subject is given, we are dealing with a blank node
+    subjects: "http://www.example.com/note/$(@id)"
     predicateobjects:
-     - [a, mail:note~iri]
-     - [mail:when,$(@year)-$(@month)-$(@day), xsd:date] #~iri or literal (default for object)
+     - [a, mail:Note]
+     - [mail:when,$(@year)-$(@month)-$(@day), xsd:date]
      - [mail:from,$(from)]
      - [mail:to, $(to)]
      - [mail:heading,$(heading)]
@@ -21,7 +21,7 @@ mappings:
     source: source1
     subject: "http://www.example.com/DateTime/$(@year)$(@month)$(@day)"
     predicateobjects:
-      - [a, ex:DateTime~iri]
+      - [a, ex:DateTime]
       - [ex:day,--$(@day),xsd:gDay]
       - [ex:month,--$(@month),xsd:gMonth]
       - [ex:year, $(@year), xsd:gYear]
