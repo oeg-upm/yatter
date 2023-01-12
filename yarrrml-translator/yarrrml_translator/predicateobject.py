@@ -134,7 +134,11 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
             if YARRRML_IRI in om[0]:
                 object_value = om[0].split(YARRRML_IRI)[0]
                 iri = True
-            template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,
+            if mapping_format == STAR_URI:
+                template += generate_rml_termmap(STAR_OBJECT, R2RML_OBJECT_CLASS,
+                                                 object_value, "\t\t\t", mapping_format)
+            else:
+                template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,
                                              object_value, "\t\t\t", mapping_format)
             if len(om) == 2:
                 types = check_type(om[1])
@@ -160,9 +164,12 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
             if YARRRML_MAPPING in om:
                 template += ref_mapping(data, mapping, om, YARRRML_MAPPING, R2RML_PARENT_TRIPLESMAP, mapping_format)
             elif YARRRML_NON_ASSERTED in om:
-                template += ref_mapping(data, mapping, om, YARRRML_NON_ASSERTED, STAR_QUOTED, mapping_format)
+                if YARRRML_CONDITION in om:
+                    template += ref_mapping(data, mapping, om, YARRRML_NON_ASSERTED, STAR_QUOTED, mapping_format)
+                else:
+                    template += generate_rml_termmap(STAR_OBJECT, STAR_CLASS,om, "\t\t\t", mapping_format)
             else:
-                template += ref_mapping(data, mapping, om, YARRRML_QUOTED, STAR_QUOTED, mapping_format)
+               template += ref_mapping(data, mapping, om, YARRRML_QUOTED, STAR_QUOTED, mapping_format)
         # This could be removed
         else:
             if YARRRML_VALUE in om:
@@ -172,22 +179,28 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                 if YARRRML_IRI in om:
                     object_value = om.split(YARRRML_IRI)[0]
                     iri = True
-            template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,
-                                             object_value, "\t\t\t", mapping_format)
+            if mapping_format == STAR_URI:
+                template += generate_rml_termmap(STAR_OBJECT, R2RML_OBJECT_CLASS,
+                                                 object_value, "\t\t\t", mapping_format)
+            else:
+                template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,
+                                                 object_value, "\t\t\t", mapping_format)
             if YARRRML_DATATYPE in om:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_DATATYPE + " " \
                            + om.get(YARRRML_DATATYPE) + "\n\t\t];\n"
-            if YARRRML_TYPE in om:
-                if om.get(YARRRML_TYPE) == "iri" or iri:
-                    template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
-                           + R2RML_IRI + "\n\t\t];\n"
-                elif om.get(YARRRML_TYPE) == "literal":
-                    template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
-                               + R2RML_LITERAL + "\n\t\t];\n"
             if YARRRML_LANGUAGE in om:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_LANGUAGE + " \"" \
                            + om.get(YARRRML_LANGUAGE) + "\"\n\t\t];\n"
 
+            if YARRRML_TYPE in om:
+                if om.get(YARRRML_TYPE) == "iri":
+                    iri = True
+                elif om.get(YARRRML_TYPE) == "literal":
+                    template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
+                               + R2RML_LITERAL + "\n\t\t];\n"
+            if iri:
+                template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
+                           + R2RML_IRI + "\n\t\t];\n"
     for graph in graph_list:
         template += generate_rml_termmap(R2RML_GRAPH, R2RML_GRAPH_CLASS, graph, "\t\t\t")
 

@@ -26,6 +26,16 @@ def add_subject(data, mapping, mapping_format):
 
     for individual_subject in subject:
         if YARRRML_QUOTED in individual_subject or YARRRML_NON_ASSERTED in individual_subject:
+            if YARRRML_CONDITION in individual_subject:
+                from .predicateobject import ref_mapping
+                if YARRRML_NON_ASSERTED in individual_subject:
+                    subject_termmap = ref_mapping(data, mapping, individual_subject, YARRRML_NON_ASSERTED, STAR_QUOTED, mapping_format)
+                else:
+                    subject_termmap = ref_mapping(data, mapping, individual_subject, YARRRML_QUOTED, STAR_QUOTED, mapping_format)
+                subject_termmap=subject_termmap.replace(R2RML_REFOBJECT_CLASS,STAR_CLASS).replace(R2RML_OBJECT,STAR_SUBJECT).replace("\t\t\t\t","\t\t\t\t\t").replace("\t\t","\t")
+            else:
+                subject_termmap = generate_rml_termmap(STAR_SUBJECT, STAR_CLASS, individual_subject, "\t\t")
+        elif mapping_format == STAR_URI:
             subject_termmap = generate_rml_termmap(STAR_SUBJECT, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")
         else:
             subject_termmap = generate_rml_termmap(R2RML_SUBJECT, R2RML_SUBJECT_CLASS, individual_subject, "\t\t", mapping_format)

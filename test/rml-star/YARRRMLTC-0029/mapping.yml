@@ -17,9 +17,10 @@ mappings:
    - ['data.csv~csv']
   s:
    quotedNonAsserted: elementaryTM1
-  p: ex:q1
-  o:
-   quotedNonAsserted: elementaryTM2
+  po:
+   - p: ex:q1
+     o:
+      quotedNonAsserted: elementaryTM2
 
  elementaryTM2:
   sources:
@@ -33,9 +34,10 @@ mappings:
    - ['data.csv~csv']
   s:
    quotedNonAsserted: firstJoinTM
-  p: ex:q2
-  o:
-   quotedNonAsserted: secondJoinTM
+  po:
+   - p: ex:q2
+     o:
+      quotedNonAsserted: secondJoinTM
 
  elementaryTM3:
   sources:
@@ -49,9 +51,10 @@ mappings:
    - ['data.csv~csv']
   s:
    quotedNonAsserted: elementaryTM3
-  p: ex:q3
-  o:
-   quotedNonAsserted: elementaryTM4
+  po:
+   - p: ex:q3
+     o:
+      quotedNonAsserted: elementaryTM4
 
  elementaryTM4:
   sources:

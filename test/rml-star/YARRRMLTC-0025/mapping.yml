@@ -10,7 +10,7 @@ mappings:
    - ['data1.csv~csv']
   s: http://example/$(c1-1)
   po:
-   - [ex:p, http://example/$(c1-2)]
+   - [ex:p, http://example/$(c1-2)~iri]
 
  secondTM:
   sources:

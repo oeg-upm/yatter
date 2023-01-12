@@ -72,6 +72,7 @@ def add_inverse_prefix(rdf_mapping):
 
 
 def get_non_asserted_mappings(yarrrml_data, mappings):
+    is_star = RML_URI
     for mapping in yarrrml_data.get(YARRRML_MAPPINGS):
         keys = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).keys()
         for key in keys:
@@ -79,10 +80,19 @@ def get_non_asserted_mappings(yarrrml_data, mappings):
                 values = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)
                 if YARRRML_NON_ASSERTED in values:
                     mappings[values[YARRRML_NON_ASSERTED]] = "non_asserted"
-                    #elif value['o']['quotedNonAssertedº']:
-                            #mappings[value['o'][0][YARRRML_NON_ASSERTED]] = "non_asserted"
-    return mappings
+                    is_star = STAR_URI
+                elif YARRRML_QUOTED in values:
+                    is_star = STAR_URI
+            if type(yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)) is list and key==YARRRML_SHORTCUT_PREDICATEOBJECT:
+                for value in yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key):
+                    if type(value) is dict and YARRRML_SHORTCUT_OBJECT in value:
+                        if YARRRML_NON_ASSERTED in value[YARRRML_SHORTCUT_OBJECT]:
+                            mappings[value[YARRRML_SHORTCUT_OBJECT][YARRRML_NON_ASSERTED]] = "non_asserted"
+                            is_star = STAR_URI
+                        elif YARRRML_QUOTED in value[YARRRML_SHORTCUT_OBJECT]:
+                            is_star = STAR_URI
 
+    return mappings, is_star
 
 def merge_mapping_section_by_key(key,yarrrml_list):
     output = {key:{}}

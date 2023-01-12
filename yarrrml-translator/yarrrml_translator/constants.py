@@ -35,6 +35,7 @@ STAR_NON_ASSERTED_CLASS = 'rml:NonAssertedTriplesMap'
 STAR_QUOTED = 'rml:quotedTriplesMap'
 STAR_SUBJECT = 'rml:subjectMap'
 STAR_OBJECT = 'rml:objectMap'
+STAR_URI = 'https://w3id.org/kg-construct/rml-star'
 
 
 R2RML_TEMPLATE = 'rr:template'

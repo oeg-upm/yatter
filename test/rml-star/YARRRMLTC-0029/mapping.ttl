@@ -6,10 +6,10 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix ql: <http://semweb.mmlab.be/ns/ql#>.
 @prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#>.
-@prefix ex: <http://example.org/> .
+@prefix ex: <http://example.com/> .
 @base <http://example.com/ns#>.
 
-<elementaryTM1_0> a rml:NonAssertedTriplesMap;
+<elementaryTM1_0> a rml:NonAssertedTriplesMap, rr:TriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
@@ -18,12 +18,12 @@
 	];
 	rml:subjectMap [
 		a rr:SubjectMap;
-		rr:template "http://example/{c1}"
+		rr:template "http://example/{c1}";
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant ex:p1
+			rr:constant ex:p1;
 		];
 		rml:objectMap [
 			a rr:ObjectMap;
@@ -32,7 +32,7 @@
 		];
 	].
 
-<firstJoinTM_0> a rml:NonAssertedTriplesMap;
+<firstJoinTM_0> a rml:NonAssertedTriplesMap, rr:TriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
@@ -41,7 +41,7 @@
 	];
 	rml:subjectMap [
 		a rml:StarMap;
-        rml:quotedTriplesMap <elementaryTM1_0>
+		rml:quotedTriplesMap <elementaryTM1_0>;
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
@@ -50,11 +50,11 @@
 		];
 		rml:objectMap [
 			a rml:StarMap;
-			rml:quotedTriplesMap <elementaryTM2_0>
+			rml:quotedTriplesMap <elementaryTM2_0>;
 		];
 	].
 
-<elementaryTM2_0> a rml:NonAssertedTriplesMap;
+<elementaryTM2_0> a rml:NonAssertedTriplesMap, rr:TriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
@@ -63,12 +63,12 @@
 	];
 	rml:subjectMap [
 		a rr:SubjectMap;
-		rr:template "http://example/{c3}"
+		rr:template "http://example/{c3}";
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant ex:p2
+			rr:constant ex:p2;
 		];
 		rml:objectMap [
 			a rr:ObjectMap;
@@ -99,7 +99,7 @@
 		];
 	].
 
-<elementaryTM3_0> a rml:NonAssertedTriplesMap;
+<elementaryTM3_0> a rml:NonAssertedTriplesMap, rr:TriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
@@ -122,7 +122,7 @@
 		];
 	].
 
-<secondJoinTM_0> a rml:NonAssertedTriplesMap;
+<secondJoinTM_0> a rml:NonAssertedTriplesMap,  rr:TriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
@@ -144,7 +144,7 @@
 		];
 	].
 
-<elementaryTM4_0> a rml:NonAssertedTriplesMap;
+<elementaryTM4_0> a rml:NonAssertedTriplesMap,  rr:TriplesMap;
 
 	rml:logicalSource [
 		a rml:LogicalSource;
@@ -162,6 +162,7 @@
 		];
 		rml:objectMap [
 			a rr:ObjectMap;
-			rr:template "http://example/{c8}"
+			rr:template "http://example/{c8}";
+			rr:termType rr:IRI
 		];
 	].
