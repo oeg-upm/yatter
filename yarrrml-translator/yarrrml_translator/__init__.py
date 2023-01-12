@@ -5,9 +5,7 @@ from .subject import add_subject, add_inverse_subject
 from .predicateobject import add_predicate_object_maps, add_inverse_pom
 import rdflib
 import ruamel.yaml as yaml
-from ruamel.yaml import YAML
-from ruamel.yaml.compat import StringIO
-import sys
+
 
 def translate(yarrrml_data, mapping_format=RML_URI):
     logger.info("Translating YARRRML mapping to [R2]RML")

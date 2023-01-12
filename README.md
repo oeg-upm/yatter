@@ -18,23 +18,21 @@ pip install yarrrml-translator
 ```
 
 ## Execution from CLI
-
-### From YARRRML to \[R2\]RML
 To execute from command line run the following:
+
+- From YARRRML to \[R2\]RML
 ```bash
 python3 -m yarrrml_translator -i path_to_input_yarrrml.yml -o path_to_rdf_mapping.ttl [-f R2RML]
 ```
 `-f R2RML` is an optional parameter for translating input YARRRML into R2RML
 
-### From \[R2\]RML to YARRRML 
-To execute from command line run the following:
+- From \[R2\]RML to YARRRML 
 ```bash
 python3 -m yarrrml_translator -i path_to_input_rdf_mapping.ttl -o path_to_output_yarrrml.yml [-f R2RML]
 ```
-`-f R2RML` is an optional parameter for translating input YARRRML into R2RML
+`-f R2RML` is an optional parameter for translating input R2RML into YARRRML
 
-### Merging mappings based on TriplesMap id
-To execute from command line run the following (keys of each TriplesMap should be disjoint):
+- Merging mappings based on TriplesMap id (keys of each TriplesMap should be disjoint):
 ```bash
 python3 -m yarrrml_translator -m yarrrml_mapping1.yaml yarrrml_mapping2.yaml [..] -o path_to_output_yarrrml.yml
 ```
@@ -45,20 +43,22 @@ If you want to include the module in your implementation:
 - for translating **YARRRML mapping** to **RML mappings** (and inverse):
 ```python
 import yarrrml_translator
-import yaml
+from ruamel.yaml import YAML
 # YARRRML to RML
-rml_content = yarrrml_translator.translate(yaml.safe_load(open("path-to-yarrrml")))
+yaml = YAML(typ='safe', pure=True)
+rml_content = yarrrml_translator.translate(yaml.load(open("path-to-yarrrml")))
 # RML to YARRRML
 yarrrml_content = yarrrml_translator.inverse_translate("rdf_mapping_content")
 ```
 - for translating **YARRRML mappings** to **R2RML mappings** (and inverse):
 ```python
 import yarrrml_translator
-import yaml
+from ruamel.yaml import YAML
 
 R2RML_URI = 'http://www.w3.org/ns/r2rml#'
 # YARRRML to R2RML
-rml_content = yarrrml_translator.translate(yaml.safe_load(open("path-to-yarrrml")), mapping_format=R2RML_URI)
+yaml = YAML(typ='safe', pure=True)
+rml_content = yarrrml_translator.translate(yaml.load(open("path-to-yarrrml")), mapping_format=R2RML_URI)
 # R2RML to YARRRML
 yarrrml_content = yarrrml_translator.inverse_translate("rdf_mapping_content", mapping_format=R2RML_URI)
 ```
