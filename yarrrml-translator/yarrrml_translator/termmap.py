@@ -47,7 +47,7 @@ def generate_rml_termmap(rml_property, rml_class, text, identation, mapping_form
 def check_type(om):
     if "~lang" in om:
         return "language"
-    elif ":" in om:
+    elif ":" in om or "$(":
         return "datatype"
     else:
         return "error"

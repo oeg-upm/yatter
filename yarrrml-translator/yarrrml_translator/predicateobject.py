@@ -146,14 +146,14 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                     if types == YARRRML_LANGUAGE:
                         if "$(" in om[1]:
                             template = template[0:len(template) - 5] + generate_rml_termmap(RML_LANGUAGE_MAP, RML_LANGUAGE_MAP_CLASS,
-                                             om[1].replace("~lang",""), "\t\t\t\t", mapping_format) + "\n\t\t];\n"
+                                             om[1].replace("~lang",""), "\t\t\t\t", mapping_format) + "\t\t];\n"
                         else:
                             template = template[0:len(template) - 5] + "\t\t\t" + R2RML_LANGUAGE + " \"" \
                                    + om[1].replace(YARRRML_LANG, "") + "\"\n\t\t];\n"
                     elif types == YARRRML_DATATYPE:
                         if "$(" in om[1]:
                             template = template[0:len(template) - 5] + generate_rml_termmap(RML_DATATYPE_MAP, RML_DATATYPE_MAP_CLASS,
-                                             om[1], "\t\t\t\t", mapping_format) + "\n\t\t];\n"
+                                             om[1], "\t\t\t\t", mapping_format) + "\t\t];\n"
                         else:
                             template = template[0:len(template) - 5] + "\t\t\t" + R2RML_DATATYPE + " " \
                                    + om[1] + "\n\t\t];\n"
