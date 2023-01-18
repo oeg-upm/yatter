@@ -14,11 +14,10 @@ def write_results(mapping):
 
 def parse_inputs():
     input_format = RML_URI
-
+    yaml = YAML(typ='safe', pure=True)
     if args.input_mapping_path and args.output_mapping_path:
         if args.input_mapping_path.endswith('.yml') or args.input_mapping_path.endswith('.yaml'):
             with open(args.input_mapping_path) as f:
-                yaml = YAML(typ='safe', pure=True)
                 input_data = yaml.load(f)
         elif args.input_mapping_path.endswith('.ttl') or args.input_mapping_path.endswith('.rml') or args.input_mapping_path.endswith('.r2rml'):
             input_data = Graph()
@@ -34,7 +33,7 @@ def parse_inputs():
         input_data = []
         for mapping in args.merge_mapping:
             with open(mapping) as f:
-                input_data.append(yaml.safe_load(f))
+                input_data.append(yaml.load(f))
     else:
         sys.tracebacklimit = 0
         logger.error("No correct arguments, run python3 -m yarrrml_translator -h to see the help)")

@@ -26,13 +26,14 @@ def get_predicate_access(predicate_object_map):
     return predicate_access
 
 
-def get_predicate_object_access(predicate_object_map):
+def get_predicate_object_access(mapping,predicate_object_map):
     if YARRRML_PREDICATEOBJECT in predicate_object_map:
         predicate_object_access = YARRRML_PREDICATEOBJECT
     elif YARRRML_SHORTCUT_PREDICATEOBJECT in predicate_object_map:
         predicate_object_access = YARRRML_SHORTCUT_PREDICATEOBJECT
     else:
-        raise Exception("There isn't a predicate_object_map key correctly specify in " + predicate_object_map)
+        predicate_object_access = None
+        logger.warning("The triples map "+mapping+" does not have predicate object maps defined")
     return predicate_object_access
 
 
@@ -50,16 +51,18 @@ def get_graph_access(predicate_object_map):
 
 def add_predicate_object_maps(data, mapping, mapping_format):
     po_template = ""
-    pom_text = "\t" + R2RML_PREDICATE_OBJECT_MAP + " [\n"
     mapping_data = data.get(YARRRML_MAPPINGS).get(mapping)
-    for predicate_object_map in mapping_data.get(get_predicate_object_access(mapping_data)):
-        if type(predicate_object_map) is list:
-            po_template += pom_text + add_predicate_object(data, mapping, predicate_object_map, mapping_format) + "\n"
-        else:
-            po_template += pom_text + add_predicate_object(data, mapping, predicate_object_map, mapping_format,
-                                                           get_predicate_access(predicate_object_map),
-                                                           get_object_access(predicate_object_map),
-                                                           get_graph_access(predicate_object_map)) + "\n"
+    key_access_pom = get_predicate_object_access(mapping, mapping_data)
+    if key_access_pom:
+        pom_text = "\t" + R2RML_PREDICATE_OBJECT_MAP + " [\n"
+        for predicate_object_map in mapping_data.get(key_access_pom):
+            if type(predicate_object_map) is list:
+                po_template += pom_text + add_predicate_object(data, mapping, predicate_object_map, mapping_format) + "\n"
+            else:
+                po_template += pom_text + add_predicate_object(data, mapping, predicate_object_map, mapping_format,
+                                                               get_predicate_access(predicate_object_map),
+                                                               get_object_access(predicate_object_map),
+                                                               get_graph_access(predicate_object_map)) + "\n"
     return po_template
 
 
@@ -83,9 +86,12 @@ def get_object_list(predicate_object, object_access):
                 elif YARRRML_TYPE in object:
                     object_list.append([object[YARRRML_VALUE]+"~"+object[YARRRML_TYPE]])
                 elif YARRRML_VALUE in object:
-                    object_list.append([object[YARRRML_VALUE]])
+                    if YARRRML_TARGETS in object:
+                        object_list.append([object[YARRRML_VALUE], object[YARRRML_TARGETS]])
+                    else:
+                        object_list.append([object[YARRRML_VALUE]])
                 else:
-                    object_list.append([object])
+                    object_list.append(object)
     else:
         if object_access is None and len(predicate_object) == 3:
             object_list.append([object_maps, predicate_object[2]])
@@ -125,8 +131,13 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
     graph_list = get_graph_list(predicate_object, graph_access)
 
     for pm in predicate_list:
-        template += generate_rml_termmap(R2RML_PREDICATE, R2RML_PREDICATE_CLASS, pm,
-                                         "\t\t\t")
+        pm_value = pm
+        if YARRRML_VALUE in pm:
+            pm_value = pm[YARRRML_VALUE]
+        template += generate_rml_termmap(R2RML_PREDICATE, R2RML_PREDICATE_CLASS, pm_value,"\t\t\t")
+        if YARRRML_TARGETS in pm:
+            template = template[0:-3] + "\t" + RML_LOGICAL_TARGET + " <" + pm[YARRRML_TARGETS] + ">\n\t\t];\n"
+
     for om in object_list:
         iri = False
         if type(om) == list:
@@ -146,17 +157,20 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                     if types == YARRRML_LANGUAGE:
                         if "$(" in om[1]:
                             template = template[0:len(template) - 5] + generate_rml_termmap(RML_LANGUAGE_MAP, RML_LANGUAGE_MAP_CLASS,
-                                             om[1].replace("~lang",""), "\t\t\t\t", mapping_format) + "\n\t\t];\n"
+                                             om[1].replace("~lang",""), "\t\t\t\t", mapping_format) + "\t\t];\n"
                         else:
                             template = template[0:len(template) - 5] + "\t\t\t" + R2RML_LANGUAGE + " \"" \
                                    + om[1].replace(YARRRML_LANG, "") + "\"\n\t\t];\n"
                     elif types == YARRRML_DATATYPE:
                         if "$(" in om[1]:
                             template = template[0:len(template) - 5] + generate_rml_termmap(RML_DATATYPE_MAP, RML_DATATYPE_MAP_CLASS,
-                                             om[1], "\t\t\t\t", mapping_format) + "\n\t\t];\n"
+                                             om[1], "\t\t\t\t", mapping_format) + "\t\t];\n"
                         else:
                             template = template[0:len(template) - 5] + "\t\t\t" + R2RML_DATATYPE + " " \
                                    + om[1] + "\n\t\t];\n"
+                    elif types == YARRRML_TARGETS:
+                        template = template[0:len(template) - 5] + "\t\t\t" + RML_LOGICAL_TARGET + " <" \
+                                   + om[1] + ">\n\t\t];\n"
             if iri:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
                            + R2RML_IRI + "\n\t\t];\n"
@@ -191,7 +205,6 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
             if YARRRML_LANGUAGE in om:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_LANGUAGE + " \"" \
                            + om.get(YARRRML_LANGUAGE) + "\"\n\t\t];\n"
-
             if YARRRML_TYPE in om:
                 if om.get(YARRRML_TYPE) == "iri":
                     iri = True
@@ -201,8 +214,19 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
             if iri:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
                            + R2RML_IRI + "\n\t\t];\n"
+
+            if YARRRML_TARGETS in om:
+                template = template[0:len(template) - 5] + "\t\t\t" + RML_LOGICAL_TARGET + " <"+ om.get(YARRRML_TARGETS) + ">\n\t\t];\n"
+
     for graph in graph_list:
-        template += generate_rml_termmap(R2RML_GRAPH, R2RML_GRAPH_CLASS, graph, "\t\t\t")
+        graph_value = graph
+        if YARRRML_VALUE in graph:
+            graph_value = graph[YARRRML_VALUE]
+        template += generate_rml_termmap(R2RML_GRAPH, R2RML_GRAPH_CLASS, graph_value, "\t\t\t")
+        if YARRRML_TARGETS in graph:
+            template = template[0:-3] + "\t" + RML_LOGICAL_TARGET + " <" + graph[
+                YARRRML_TARGETS] + ">\n\t\t];\n"
+
 
     return template + "\t];"
 
@@ -236,8 +260,8 @@ def ref_mapping(data, mapping, om, yarrrml_key, ref_type_property, mapping_forma
                     if YARRRML_PARAMETERS in condition:
                         list_parameters = condition.get(YARRRML_PARAMETERS)
                         if len(list_parameters) == 2:
-                            child = list_parameters[0][1].replace("$(", '"').replace(")", '"')
-                            parent = list_parameters[1][1].replace("$(", '"').replace(")", '"')
+                            child = list_parameters[0][1].replace('"',r'\"').replace("$(", '"').replace(")", '"')
+                            parent = list_parameters[1][1].replace('"',r'\"').replace("$(", '"').replace(")", '"')
 
                             template += "\t\t\t" + R2RML_JOIN_CONITION + \
                                         " [\n\t\t\t\t" + R2RML_CHILD + " " + child + \

@@ -1,0 +1,20 @@
+prefixes:
+  foaf: http://xmlns.com/foaf/0.1/
+
+targets:
+  person-target:
+    access: data/dump.ttl.gz
+    type: void
+    serialization: turtle
+    compression: gzip
+
+mappings:
+  student:
+    sources:
+      - ['student.csv~csv']
+    s: http://example.com/$(Name)
+    po:
+      - p: foaf:name
+        o:
+          - value: $(Name)
+            targets: person-target

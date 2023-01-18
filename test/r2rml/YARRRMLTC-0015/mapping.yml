@@ -13,5 +13,5 @@ mappings:
       o: [foaf:Person, ex:Student]
     - p: foaf:Name
       o: 
-        value: $(Name)
-        type: iri
+        - value: $(Name)
+          type: iri
