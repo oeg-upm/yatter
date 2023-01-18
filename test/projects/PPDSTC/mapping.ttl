@@ -1,0 +1,857 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+@prefix foaf: <http://ns.com/foaf/0.1/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix rml: <http://semweb.mmlab.be/ns/rml#>.
+@prefix ql: <http://semweb.mmlab.be/ns/ql#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix epo: <http://data.europa.eu/a4g/ontology#>.
+@prefix legal: <https://www.w3.org/ns/legal#>.
+@prefix org: <http://www.w3.org/ns/org#>.
+@prefix locn: <http://www.w3.org/ns/locn#>.
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix schema: <http://schema.org/>.
+@base <http://example.com/ns#>.
+
+
+<procedure_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus/cac:ProcurementProjectLot";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/epo/procedure/codice_{replace(../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/','')}";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant epo:Procedure;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:hasProcurementScopeDividedIntoLot;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <lot_0>;
+			rr:joinCondition [
+				rr:child "../../id";
+				rr:parent "../../id";
+			];
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:hasProcedureType;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <procedure_type_0>;
+			rr:joinCondition [
+				rr:child "../cac:ProcurementProject/cbc:TypeCode";
+				rr:parent "codice";
+			];
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:usesTechnique;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <framework_agreement_technique_usage_0>;
+			rr:joinCondition [
+				rr:child "../../id";
+				rr:parent "../../id";
+			];
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:usesTechnique;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <technique_usage_0>;
+			rr:joinCondition [
+				rr:child "../../id";
+				rr:parent "../../id";
+			];
+		];
+	].
+
+
+<procedure_no_lot_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus[not(cac:ProcurementProjectLot)]";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/epo/procedure/codice_{replace(../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/','')}";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant epo:Procedure;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:hasProcurementScopeDividedIntoLot;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "http://data.europa.eu/a4g/resource/epo/lot/codice_{replace(../id,\"https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/\",\"\")}_0";
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:hasProcedureType;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <procedure_type_0>;
+			rr:joinCondition [
+				rr:child "cac:ProcurementProject/cbc:TypeCode";
+				rr:parent "codice";
+			];
+		];
+	].
+
+
+<lot_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus/cac:ProcurementProjectLot";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/epo/lot/codice_{replace(../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/','')}_{cbc:ID[@schemeName=\"ID_LOTE\"]}";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant epo:Lot;
+		];
+	].
+
+
+<lot_adhoc_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus[not(cac:ProcurementProjectLot)]";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/epo/lot/codice_{replace(../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/','')}_0";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant epo:Lot;
+		];
+	].
+
+
+<procedure_framework_agreement_technique_usage_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus/cac:TenderingProcess/cbc:ContractingSystemCode[text()=3]";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/epo/procedure/codice_{replace(../../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/','')}";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:usesTechnique;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "http://data.europa.eu/a4g/resource/epo/frameworkAgreementTechniqueUsage/codice_{replace(../../../id,\"https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/\",\"\")}";
+			rr:termType rr:IRI
+		];
+	].
+
+
+<framework_agreement_technique_usage_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus/cac:TenderingProcess/cbc:ContractingSystemCode[text()=3]";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/epo/frameworkAgreementTechniqueUsage/codice_{replace(../../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/','')}";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant epo:FrameworkAgreementTechniqueUsage;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant epo:TechniqueUsage;
+		];
+	].
+
+
+<procedure_technique_usage_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus/cac:TenderingProcess/cbc:ContractingSystemCode[text()!=3]";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/epo/procedure/codice_{replace(../../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/','')}";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:usesTechnique;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "http://data.europa.eu/a4g/resource/epo/techniqueUsage/codice_{replace(../../../id,\"https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/\",\"\")}";
+			rr:termType rr:IRI
+		];
+	].
+
+
+<technique_usage_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus/cac:TenderingProcess/cbc:ContractingSystemCode[text()!=3]";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/epo/techniqueUsage/codice_{replace(../../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/','')}";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant epo:TechniqueUsage;
+		];
+	].
+
+
+<result_notice_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/epo/resultNotice/codice_{replace(../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/','')}";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant epo:ResultNotice;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:hasDispatchDate;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "cac:TenderingProcess/cac:TenderSubmissionDeadlinePeriod/cbc:EndDate";
+			rr:datatype xsd:date
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:refersToRole;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <buyer_role_0>;
+			rr:joinCondition [
+				rr:child "../id";
+				rr:parent "../id";
+			];
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:refersToProcedure;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <procedure_0>;
+			rr:joinCondition [
+				rr:child "../id";
+				rr:parent "../../id";
+			];
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:refersToProcedure;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <procedure_no_lot_0>;
+			rr:joinCondition [
+				rr:child "../id";
+				rr:parent "../id";
+			];
+		];
+	].
+
+
+<buyer_role_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/epo/buyer/codice_{replace(../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/','')}";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant epo:Buyer;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:playedBy;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <organization_0>;
+			rr:joinCondition [
+				rr:child "../id";
+				rr:parent "../../../id";
+			];
+		];
+	].
+
+
+<organization_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus/cac-place-ext:LocatedContractingParty/cac:Party";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/org/organization/{cac:PartyIdentification/cbc:ID[@schemeName=\"DIR3\"]}";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant org:Organization;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:hasID;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <organization_id_0>;
+			rr:joinCondition [
+				rr:child "cac:PartyIdentification/cbc:ID[@schemeName=\"DIR3\"]";
+				rr:parent "cac:PartyIdentification/cbc:ID[@schemeName=\"DIR3\"]";
+			];
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:hasBuyerType;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <buyer_legal_type_0>;
+			rr:joinCondition [
+				rr:child "cbc:ContractingPartyTypeCode";
+				rr:parent "codice";
+			];
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant legal:registeredAddress;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <locn_address_0>;
+			rr:joinCondition [
+				rr:child "cac:PartyIdentification/cbc:ID[@schemeName=\"DIR3\"]";
+				rr:parent "../cac:PartyIdentification/cbc:ID[@schemeName=\"DIR3\"]";
+			];
+		];
+	].
+
+
+<organization_id_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus/cac-place-ext:LocatedContractingParty/cac:Party";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/org/identifier/{cac:PartyIdentification/cbc:ID[@schemeName=\"DIR3\"]}";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant epo:Identifier;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:hasIdentifierValue;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "cac:PartyIdentification/cbc:ID[@schemeName=\"DIR3\"]";
+		];
+	].
+
+
+<locn_address_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus/cac-place-ext:LocatedContractingParty/cac:Party/cac:PostalAddress";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/locn/address/{../cac:PartyIdentification/cbc:ID[@schemeName=\"DIR3\"]}";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant locn:Address;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:hasCountryCode;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <country_code_0>;
+			rr:joinCondition [
+				rr:child "cac:Country/cbc:IdentificationCode";
+				rr:parent "codice";
+			];
+		];
+	].
+
+
+<submission_statistical_information_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus/cac:TenderResult";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/epo/submissionStatisticalInformation/codice_{replace(../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/','')}_{cac:AwardedTenderedProject/cbc:ProcurementProjectLotID}";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant epo:SubmissionStatisticalInformation;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:hasReceivedTenders;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "cbc:ReceivedTenderQuantity";
+			rr:datatype xsd:integer
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:concernsSubmissionsForLot;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <lot_0>;
+			rr:joinCondition [
+				rr:child "../../id";
+				rr:parent "../../id";
+			];
+			rr:joinCondition [
+				rr:child "cac:AwardedTenderedProject/cbc:ProcurementProjectLotID";
+				rr:parent "cbc:ID[@schemeName=\"ID_LOTE\"]";
+			];
+		];
+	].
+
+
+<not_lot_submission_statistical_information_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus[not(cac:ProcurementProjectLot)]";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/epo/submissionStatisticalInformation/codice_{replace(../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/','')}_0";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant epo:SubmissionStatisticalInformation;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:hasReceivedTenders;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "cac:TenderResult/cbc:ReceivedTenderQuantity";
+			rr:datatype xsd:integer
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:concernsSubmissionsForLot;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "http://data.europa.eu/a4g/resource/epo/lot/codice_{replace(../id,\"https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/\",\"\")}_0";
+			rr:termType rr:IRI
+		];
+	].
+
+
+<lot_award_outcome_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus/cac:TenderResult";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/epo/lotAwardOutcome/codice_{replace(../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/','')}_{cac:AwardedTenderedProject/cbc:ProcurementProjectLotID}";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant epo:LotAwardOutcome;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:hasAwardDecisionDate;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "cbc:AwardDate";
+			rr:datatype xsd:date
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:describesLot;
+		];
+		rr:objectMap [
+			a rr:RefObjectMap;
+			rr:parentTriplesMap <lot_0>;
+			rr:joinCondition [
+				rr:child "../../id";
+				rr:parent "../../id";
+			];
+			rr:joinCondition [
+				rr:child "cac:AwardedTenderedProject/cbc:ProcurementProjectLotID";
+				rr:parent "cbc:ID[@schemeName=\"ID_LOTE\"]";
+			];
+		];
+	].
+
+
+<not_lot_award_outcome_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "spanish_data.xml";
+		rml:referenceFormulation ql:XPath;
+		rml:iterator "/feed/entry/cac-place-ext:ContractFolderStatus[not(cac:ProcurementProjectLot)]";
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "http://data.europa.eu/a4g/resource/epo/lotAwardOutcome/codice_{replace(../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/','')}_0";
+		rr:graphMap [
+			a rr:GraphMap;
+			rr:constant <http://data.europa.eu/a4g/graph/ppds-poc/spain>;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant epo:LotAwardOutcome;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:hasAwardDecisionDate;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "cac:TenderResult/cbc:AwardDate";
+			rr:datatype xsd:date
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant epo:describesLot;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "http://data.europa.eu/a4g/resource/epo/lot/codice_{replace(../id,\"https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/\",\"\")}_0";
+			rr:termType rr:IRI
+		];
+	].
+
+
+<country_code_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "country_code.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rml:reference "eu_uri";
+	].
+
+
+<buyer_legal_type_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "buyer_legal_type.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rml:reference "eu_uri";
+	].
+
+
+<procedure_type_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "procedure_type.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rml:reference "eu_uri";
+	].
+
+

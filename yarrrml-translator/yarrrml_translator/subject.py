@@ -38,7 +38,14 @@ def add_subject(data, mapping, mapping_format):
         elif mapping_format == STAR_URI:
             subject_termmap = generate_rml_termmap(STAR_SUBJECT, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")
         else:
-            subject_termmap = generate_rml_termmap(R2RML_SUBJECT, R2RML_SUBJECT_CLASS, individual_subject, "\t\t", mapping_format)
+            subject_value = individual_subject
+            if YARRRML_VALUE in individual_subject:
+                subject_value = individual_subject.get(YARRRML_VALUE)
+            subject_termmap = generate_rml_termmap(R2RML_SUBJECT, R2RML_SUBJECT_CLASS, subject_value, "\t\t", mapping_format)
+
+            if YARRRML_TARGETS in individual_subject:
+                subject_termmap = subject_termmap[0:-3]+"\t"+RML_LOGICAL_TARGET+" <"+individual_subject[YARRRML_TARGETS]+">\n\t];\n"
+
         rml_subjects.append(subject_termmap)
 
     if YARRRML_GRAPHS in data.get(YARRRML_MAPPINGS).get(mapping):
@@ -54,8 +61,15 @@ def add_subject(data, mapping, mapping_format):
         graphs = [graphs]
 
     for graph in graphs:
-        graph_termmap = generate_rml_termmap(R2RML_GRAPH, R2RML_GRAPH_CLASS, graph, "\t\t\t")
+        graph_value = graph
+        if YARRRML_VALUE in graph:
+            graph_value = graph[YARRRML_VALUE]
+        graph_termmap = generate_rml_termmap(R2RML_GRAPH, R2RML_GRAPH_CLASS, graph_value, "\t\t\t")
+        if YARRRML_TARGETS in graph:
+            graph_termmap = graph_termmap[0:-3] + "\t" + RML_LOGICAL_TARGET + " <" + graph[YARRRML_TARGETS] + ">\n\t\t];\n"
         rml_subjects = list(map(lambda subject: subject[0:-4] + graph_termmap + "\t];\n", rml_subjects))
+
+
 
     return rml_subjects
 

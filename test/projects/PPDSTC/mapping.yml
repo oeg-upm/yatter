@@ -1,0 +1,303 @@
+prefixes:
+  rr: http://www.w3.org/ns/r2rml#
+  foaf: http://ns.com/foaf/0.1/
+  xsd: http://www.w3.org/2001/XMLSchema#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  dc: http://purl.org/dc/elements/1.1/
+  geo: http://www.w3.org/2003/01/geo/wgs84_pos#
+  dct: http://purl.org/dc/terms/
+  rml: http://semweb.mmlab.be/ns/rml#
+  ql: http://semweb.mmlab.be/ns/ql#
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  epo: http://data.europa.eu/a4g/ontology#
+  legal: https://www.w3.org/ns/legal#
+  org: http://www.w3.org/ns/org#
+  locn: http://www.w3.org/ns/locn#
+
+mappings:
+  procedure:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, /feed/entry/cac-place-ext:ContractFolderStatus/cac:ProcurementProjectLot]
+    s: http://data.europa.eu/a4g/resource/epo/procedure/codice_$(replace(../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/',''))
+    po:
+      - [a, epo:Procedure]
+      - p: epo:hasProcurementScopeDividedIntoLot
+        o:
+          - mapping: lot
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(../../id)]
+                - [str2, $(../../id)]
+      - p: epo:hasProcedureType
+        o:
+          - mapping: procedure_type
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(../cac:ProcurementProject/cbc:TypeCode)] # inner reference in the xml
+                - [str2, $(codice)] #column with references
+      - p: epo:usesTechnique
+        o:
+          - mapping: framework_agreement_technique_usage
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(../../id)]
+                - [str2, $(../../id)]
+      - p: epo:usesTechnique
+        o:
+          - mapping: technique_usage
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(../../id)]
+                - [str2, $(../../id)]
+
+  procedure_no_lot:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, "/feed/entry/cac-place-ext:ContractFolderStatus[not(cac:ProcurementProjectLot)]"]
+    s: http://data.europa.eu/a4g/resource/epo/procedure/codice_$(replace(../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/',''))
+    po:
+      - [a, epo:Procedure]
+      - [epo:hasProcurementScopeDividedIntoLot, 'http://data.europa.eu/a4g/resource/epo/lot/codice_$(replace(../id,"https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/",""))_0~iri']
+      - p: epo:hasProcedureType
+        o:
+          - mapping: procedure_type
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(cac:ProcurementProject/cbc:TypeCode)] # inner reference in the xml
+                - [str2, $(codice)] #column with references
+  lot:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, /feed/entry/cac-place-ext:ContractFolderStatus/cac:ProcurementProjectLot]
+    s: http://data.europa.eu/a4g/resource/epo/lot/codice_$(replace(../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/',''))_$(cbc:ID[@schemeName="ID_LOTE"])
+    po:
+      - [a, epo:Lot]
+
+  lot_adhoc:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, "/feed/entry/cac-place-ext:ContractFolderStatus[not(cac:ProcurementProjectLot)]"]
+    s: http://data.europa.eu/a4g/resource/epo/lot/codice_$(replace(../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/',''))_0
+    po:
+      - [a, epo:Lot]
+
+  procedure_framework_agreement_technique_usage:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, "/feed/entry/cac-place-ext:ContractFolderStatus/cac:TenderingProcess/cbc:ContractingSystemCode[text()=3]"]
+    s: http://data.europa.eu/a4g/resource/epo/procedure/codice_$(replace(../../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/',''))
+    po:
+      - [epo:usesTechnique, 'http://data.europa.eu/a4g/resource/epo/frameworkAgreementTechniqueUsage/codice_$(replace(../../../id,"https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/",""))~iri']
+
+  framework_agreement_technique_usage:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, "/feed/entry/cac-place-ext:ContractFolderStatus/cac:TenderingProcess/cbc:ContractingSystemCode[text()=3]"]
+    s: http://data.europa.eu/a4g/resource/epo/frameworkAgreementTechniqueUsage/codice_$(replace(../../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/',''))
+    po:
+      - [a, [epo:FrameworkAgreementTechniqueUsage, epo:TechniqueUsage]]
+
+  procedure_technique_usage:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, "/feed/entry/cac-place-ext:ContractFolderStatus/cac:TenderingProcess/cbc:ContractingSystemCode[text()!=3]"]
+    s: http://data.europa.eu/a4g/resource/epo/procedure/codice_$(replace(../../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/',''))
+    po:
+      - [epo:usesTechnique, 'http://data.europa.eu/a4g/resource/epo/techniqueUsage/codice_$(replace(../../../id,"https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/",""))~iri']
+
+  technique_usage:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, "/feed/entry/cac-place-ext:ContractFolderStatus/cac:TenderingProcess/cbc:ContractingSystemCode[text()!=3]"]
+    s: http://data.europa.eu/a4g/resource/epo/techniqueUsage/codice_$(replace(../../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/',''))
+    po:
+      - [a, epo:TechniqueUsage]
+
+  result_notice:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, /feed/entry/cac-place-ext:ContractFolderStatus]
+    s: http://data.europa.eu/a4g/resource/epo/resultNotice/codice_$(replace(../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/',''))
+    po:
+      - [a, epo:ResultNotice]
+      - [epo:hasDispatchDate, $(cac:TenderingProcess/cac:TenderSubmissionDeadlinePeriod/cbc:EndDate) ,xsd:date]
+      - p: epo:refersToRole
+        o:
+          - mapping: buyer_role
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(../id)]
+                - [str2, $(../id)]
+      - p: epo:refersToProcedure
+        o:
+          - mapping: procedure
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(../id)]
+                - [str2, $(../../id)]
+      - p: epo:refersToProcedure
+        o:
+          - mapping: procedure_no_lot
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(../id)]
+                - [str2, $(../id)]
+
+  buyer_role:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, /feed/entry/cac-place-ext:ContractFolderStatus]
+    s: http://data.europa.eu/a4g/resource/epo/buyer/codice_$(replace(../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/',''))
+    po:
+      - [a, epo:Buyer]
+      - p: epo:playedBy
+        o:
+          - mapping: organization
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(../id)]
+                - [str2, $(../../../id)]
+  organization:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, /feed/entry/cac-place-ext:ContractFolderStatus/cac-place-ext:LocatedContractingParty/cac:Party]
+    s: http://data.europa.eu/a4g/resource/org/organization/$(cac:PartyIdentification/cbc:ID[@schemeName="DIR3"])
+    po:
+      - [a, org:Organization]
+      - p: epo:hasID
+        o:
+          - mapping: organization_id
+            condition:
+              function: equal
+              parameters:
+                - [str1, "$(cac:PartyIdentification/cbc:ID[@schemeName=\"DIR3\"])"]
+                - [str2, "$(cac:PartyIdentification/cbc:ID[@schemeName=\"DIR3\"])"]
+
+      - p: epo:hasBuyerType
+        o:
+          - mapping: buyer_legal_type
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(cbc:ContractingPartyTypeCode)] # inner reference in the xml
+                - [str2, $(codice)] #column with references
+      - p: legal:registeredAddress
+        o:
+          - mapping: locn_address
+            condition:
+              function: equal
+              parameters:
+                - [str1, "$(cac:PartyIdentification/cbc:ID[@schemeName=\"DIR3\"])"]
+                - [str2, "$(../cac:PartyIdentification/cbc:ID[@schemeName=\"DIR3\"])"]
+
+  organization_id:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, /feed/entry/cac-place-ext:ContractFolderStatus/cac-place-ext:LocatedContractingParty/cac:Party]
+    s: http://data.europa.eu/a4g/resource/org/identifier/$(cac:PartyIdentification/cbc:ID[@schemeName="DIR3"])
+    po:
+      - [a, epo:Identifier]
+      - [epo:hasIdentifierValue, "$(cac:PartyIdentification/cbc:ID[@schemeName=\"DIR3\"])"]
+
+  locn_address:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, /feed/entry/cac-place-ext:ContractFolderStatus/cac-place-ext:LocatedContractingParty/cac:Party/cac:PostalAddress]
+    s: http://data.europa.eu/a4g/resource/locn/address/$(../cac:PartyIdentification/cbc:ID[@schemeName="DIR3"])
+    po:
+      - [a, locn:Address]
+      - p: epo:hasCountryCode
+        o:
+          - mapping: country_code
+            condition:
+              function: equal
+              parameters:
+                - [str1, $(cac:Country/cbc:IdentificationCode)] # inner reference in the xml
+                - [str2, $(codice)] #column with references
+
+  submission_statistical_information:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, /feed/entry/cac-place-ext:ContractFolderStatus/cac:TenderResult]
+    s: http://data.europa.eu/a4g/resource/epo/submissionStatisticalInformation/codice_$(replace(../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/',''))_$(cac:AwardedTenderedProject/cbc:ProcurementProjectLotID)
+    po:
+      - [a, epo:SubmissionStatisticalInformation]
+      - [epo:hasReceivedTenders, $(cbc:ReceivedTenderQuantity), xsd:integer]
+      - p: epo:concernsSubmissionsForLot
+        o:
+          - mapping: lot
+            condition:
+              - function: equal
+                parameters:
+                  - [str1, $(../../id)]
+                  - [str2, $(../../id)]
+              - function: equal
+                parameters:
+                  - [str1, "$(cac:AwardedTenderedProject/cbc:ProcurementProjectLotID)"]
+                  - [str2, "$(cbc:ID[@schemeName=\"ID_LOTE\"])"]
+
+  not_lot_submission_statistical_information:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, "/feed/entry/cac-place-ext:ContractFolderStatus[not(cac:ProcurementProjectLot)]"]
+    s: http://data.europa.eu/a4g/resource/epo/submissionStatisticalInformation/codice_$(replace(../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/',''))_0
+    po:
+      - [a, epo:SubmissionStatisticalInformation]
+      - [epo:hasReceivedTenders, $(cac:TenderResult/cbc:ReceivedTenderQuantity), xsd:integer]
+      - [epo:concernsSubmissionsForLot, 'http://data.europa.eu/a4g/resource/epo/lot/codice_$(replace(../id,"https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/",""))_0~iri']
+
+  lot_award_outcome:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, /feed/entry/cac-place-ext:ContractFolderStatus/cac:TenderResult]
+    s: http://data.europa.eu/a4g/resource/epo/lotAwardOutcome/codice_$(replace(../../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/',''))_$(cac:AwardedTenderedProject/cbc:ProcurementProjectLotID)
+    po:
+      - [a, epo:LotAwardOutcome]
+      - [epo:hasAwardDecisionDate, $(cbc:AwardDate), xsd:date]
+      - p: epo:describesLot
+        o:
+          - mapping: lot
+            condition:
+              - function: equal
+                parameters:
+                  - [str1, $(../../id)]
+                  - [str2, $(../../id)]
+              - function: equal
+                parameters:
+                  - [str1, "$(cac:AwardedTenderedProject/cbc:ProcurementProjectLotID)"]
+                  - [str2, "$(cbc:ID[@schemeName=\"ID_LOTE\"])"]
+  not_lot_award_outcome:
+    graph: http://data.europa.eu/a4g/graph/ppds-poc/spain
+    sources:
+      - [spanish_data.xml~xpath, "/feed/entry/cac-place-ext:ContractFolderStatus[not(cac:ProcurementProjectLot)]"]
+    s: http://data.europa.eu/a4g/resource/epo/lotAwardOutcome/codice_$(replace(../id,'https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/',''))_0
+    po:
+      - [a, epo:LotAwardOutcome]
+      - [epo:hasAwardDecisionDate, $(cac:TenderResult/cbc:AwardDate), xsd:date]
+      - [epo:describesLot, 'http://data.europa.eu/a4g/resource/epo/lot/codice_$(replace(../id,"https://contrataciondelestado.es/sindicacion/licitacionesPerfilContratante/",""))_0~iri']
+
+# CSV tables for joining skos lists (I think they do not generate triples, so not graph is needed)
+  country_code:
+    sources:
+      - [country_code.csv~csv]
+    s: $(eu_uri)
+
+  buyer_legal_type:
+    sources:
+      - [buyer_legal_type.csv~csv]
+    s: $(eu_uri)
+
+  procedure_type:
+    sources:
+      - [procedure_type.csv~csv]
+    s: $(eu_uri)

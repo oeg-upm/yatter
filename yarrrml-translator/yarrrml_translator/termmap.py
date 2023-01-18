@@ -22,9 +22,11 @@ def generate_rml_termmap(rml_property, rml_class, text, identation, mapping_form
     template = identation[0:-1] + rml_property + " [\n"+identation+"a " + rml_class + ";\n" + identation
     term_map = get_termmap_type(text, mapping_format)
     if term_map == R2RML_TEMPLATE:
-        text = text.replace("$(", "{").replace(")", "}")
+        text = generate_rml_template(text)
+        text = text.replace('"',r'\"')
     elif term_map == RML_REFERENCE or term_map == R2RML_COLUMN:
         text = text.replace("$(", "").replace(")", "")
+        text = text.replace('"', r'\"')
     elif term_map == R2RML_CONSTANT and text == "a":
         text = RDF_TYPE
 
@@ -46,8 +48,19 @@ def generate_rml_termmap(rml_property, rml_class, text, identation, mapping_form
 
 def check_type(om):
     if "~lang" in om:
-        return "language"
-    elif ":" in om or "$(":
-        return "datatype"
+        return YARRRML_LANGUAGE
+    elif ":" in om or "$(" in om:
+        return YARRRML_DATATYPE
     else:
-        return "error"
+        return YARRRML_TARGETS
+
+def generate_rml_template(yarrrml_template):
+    references = 0
+    for i in range(len(yarrrml_template)):
+        if yarrrml_template[i]=="$" and yarrrml_template[i+1]=="(":
+            references = references + 1
+    yarrrml_template = yarrrml_template.replace("$(", "{")
+    yarrrml_template = "}".join(yarrrml_template.rsplit(")", references))
+    return yarrrml_template
+
+
