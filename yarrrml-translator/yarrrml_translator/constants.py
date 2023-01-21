@@ -19,6 +19,8 @@ STAR_URI = 'https://w3id.org/kg-construct/rml-star'
 COMPRESSION_URI = 'http://semweb.mmlab.be/ns/rml-compression#'
 FORMATS_URI = 'http://www.w3.org/ns/formats/'
 VOID_URI = 'http://rdfs.org/ns/void#'
+FNML_URI = 'http://semweb.mmlab.be/ns/fnml#'
+GREL_URI = 'http://users.ugent.be/~bjdmeest/function/grel.ttl#'
 
 RML_PREFIX = '@prefix'
 RML_BASE = '@base'
@@ -33,11 +35,22 @@ RML_LANGUAGE_MAP_CLASS = 'rml:LanguageMap'
 RML_DATATYPE_MAP = 'rml:datatypeMap'
 RML_DATATYPE_MAP_CLASS = 'rml:DatatypeMap'
 RML_QUERY = 'rml:query'
+
 RML_LOGICAL_TARGET = 'rml:logicalTarget'
 RML_LOGICAL_TARGET_CLASS = 'rml:LogicalTarget'
 RML_TARGET = 'rml:target'
 RML_SERIALIZATION = 'rml:serialization'
 RML_COMPRESSION = 'rml:compression'
+
+RML_EXECUTION = 'fnml:execution'
+RML_EXECUTION_CLASS = 'fnml:Execution'
+RML_RETURN = 'fnml:return'
+RML_FUNCTION = 'fnml:function'
+RML_INPUT = 'fnml:input'
+RML_INPUT_CLASS = 'fnml:Input'
+RML_PARAMETER = 'fnml:parameter'
+RML_VALUE_MAP = 'fnml:valueMap'
+RML_VALUE_MAP_CLASS = 'fnml:ValueMap'
 
 STAR_CLASS = 'rml:StarMap'
 STAR_NON_ASSERTED_CLASS = 'rml:NonAssertedTriplesMap'
@@ -93,7 +106,6 @@ D2RQ_PASS = 'd2rq:password'
 ##############################################################################
 
 YARRRML_PREFIXES = 'prefixes'
-YARRRML_MAPPINGS = 'mappings'
 YARRRML_SOURCES = 'sources'
 YARRRML_SOURCE = 'source'
 YARRRML_TABLE = 'table'
@@ -107,34 +119,38 @@ YARRRML_TYPE = 'type'
 YARRRML_USERNAME = 'username'
 YARRRML_PASSWORD = 'password'
 
-YARRRML_SHORTCUT_SUBJECTS = 's'
+YARRRML_MAPPINGS = 'mappings' # used for mappings in conditions and mappings main key
+YARRRML_MAPPING = 'mapping'
+YARRRRL_MAPPINGS_SHORTCUT = 'm'
+
+YARRRML_SUBJECTS_SHORTCUT = 's'
 YARRRML_SUBJECT = 'subject'
 YARRRML_SUBJECTS = 'subjects'
 
 YARRRML_GRAPHS = 'graphs'
 YARRRML_GRAPH = 'graph'
-YARRRML_SHORTCUT_GRAPH = 'g'
+YARRRML_GRAPH_SHORTCUT = 'g'
 
 YARRRML_PREDICATEOBJECT = 'predicateobjects'
-YARRRML_SHORTCUT_PREDICATEOBJECT = 'po'
+YARRRML_PREDICATEOBJECT_SHORTCUT = 'po'
 
 YARRRML_PREDICATES = 'predicates'
 YARRRML_PREDICATE = 'predicate'
-YARRRML_SHORTCUT_PREDICATES = 'p'
+YARRRML_PREDICATES_SHORTCUT = 'p'
 YARRRML_OBJECTS = 'objects'
 YARRRML_OBJECT = 'objects'
-YARRRML_SHORTCUT_OBJECT = 'o'
+YARRRML_OBJECT_SHORTCUT = 'o'
 YARRRML_VALUE = 'value'
-YARRRML_MAPPING = 'mapping'
+YARRRML_VALUE_SHORTCUT = 'v'
 YARRRML_DATATYPE = 'datatype'
 YARRRML_LANGUAGE = 'language'
 
 YARRRML_CONDITION = 'condition'
-YARRRML_PARAMETERS = 'parameters'
+YARRRML_PARAMETERS = 'parameters' #used for conditions and functions
+YARRRML_PARAMETERS_SHORTCUT = 'pms'
 
 YARRRML_IRI = '~iri'
 YARRRML_LANG = '~lang'
-
 
 YARRRML_QUOTED = 'quoted'
 YARRRML_NON_ASSERTED = 'quotedNonAsserted'
@@ -143,10 +159,24 @@ YARRRML_TARGETS = 'targets'
 YARRRML_SERIALIZATION = 'serialization'
 YARRRML_COMPRESSION = 'compression'
 
+YARRRML_FUNCTION = 'function'
+YARRRML_FUNCTION_SHORTCUT_A = 'fn'
+YARRRML_FUNCTION_SHORTCUT_B = 'f'
 
-##############################################################################
-#######################   YARRRML SERIALIZATION FORMATS  #####################
-##############################################################################
+YARRRML_PARAMETER = 'parameter'
+YARRRML_PARAMETER_SHORTCUT = 'p'
+
+YARRRML_MAPPING_KEYS = [YARRRML_MAPPINGS, YARRRML_MAPPING, YARRRRL_MAPPINGS_SHORTCUT]
+YARRRML_SUBJECT_KEYS = [YARRRML_SUBJECTS, YARRRML_SUBJECT, YARRRML_SUBJECTS_SHORTCUT]
+YARRRML_POM_KEYS = [YARRRML_PREDICATEOBJECT, YARRRML_PREDICATEOBJECT_SHORTCUT]
+YARRRML_GRAPH_KEYS = [YARRRML_GRAPHS, YARRRML_GRAPH, YARRRML_GRAPH_SHORTCUT]
+YARRRML_PREDICATE_KEYS = [YARRRML_PREDICATES, YARRRML_PREDICATE, YARRRML_PREDICATES_SHORTCUT]
+YARRRML_OBJECT_KEYS = [YARRRML_OBJECTS, YARRRML_OBJECT, YARRRML_OBJECT_SHORTCUT]
+YARRRML_FUNCTION_KEYS = [YARRRML_FUNCTION, YARRRML_FUNCTION_SHORTCUT_A, YARRRML_FUNCTION_SHORTCUT_B]
+YARRRML_PARAMETERS_KEYS = [YARRRML_PARAMETERS, YARRRML_PARAMETERS_SHORTCUT]
+YARRRML_PARAMETER_KEYS = [YARRRML_PARAMETER, YARRRML_PARAMETER_SHORTCUT]
+YARRRML_VALUE_KEYS = [YARRRML_VALUE, YARRRML_VALUE_SHORTCUT]
+
 
 YARRRML_OUTPUT_FORMAT = {
     'jsonld':'JSON-LD',
@@ -172,6 +202,19 @@ YARRRML_OUTPUT_FORMAT = {
     'sparqltsv':'SPARQL_Results_TSV',
     'turtle':'Turtle',
     'trig':'TriG',
+}
+
+YARRRML_REFERENCE_FORMULATIONS = {
+    'csv': 'CSV',
+    'json': 'JSONPath',
+    'xpath': 'XPath',
+    'jsonpath': 'JSONPath'
+}
+
+YARRRML_DATABASES_DRIVER = {
+    'mysql': 'com.mysql.jdbc.Driver',
+    'postgresql': 'org.postgresql.Driver',
+    'sqlserver': 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
 }
 
 logger = logging.getLogger(__name__)

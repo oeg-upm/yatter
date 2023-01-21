@@ -1,9 +1,10 @@
-__author__ = "Marino Gonzalez Garcia"
-__credits__ = ["Marino Gonzalez Garcia"]
+__author__ = "David Chaves-Fraga"
+__credits__ = ["David Chaves-Fraga"]
 
 __license__ = "Apache-2.0"
-__maintainer__ = "Marino Gonzalez Garcia"
-__email__ = "marino.gonzalez.garcia@alumnos.upm.es"
+__maintainer__ = "David Chaves-Fraga"
+__email__ = "david.chaves@upm.es"
+
 
 
 import os
@@ -14,7 +15,7 @@ from rdflib import compare
 RML_URI = 'http://semweb.mmlab.be/ns/rml#'
 
 
-def test_yarrrmltc0019():
+def test_yarrrml_ppds():
     expected_mapping = Graph()
     expected_mapping.parse(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mapping.ttl'), format="ttl")
 
