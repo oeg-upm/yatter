@@ -8,8 +8,8 @@ def add_subject(data, mapping, mapping_format):
     rml_subjects = []
     only_one = False
 
-    if YARRRML_SHORTCUT_SUBJECTS in data.get(YARRRML_MAPPINGS).get(mapping):
-        subject = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_SHORTCUT_SUBJECTS)
+    if YARRRML_SUBJECTS_SHORTCUT in data.get(YARRRML_MAPPINGS).get(mapping):
+        subject = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_SUBJECTS_SHORTCUT)
     elif YARRRML_SUBJECTS in data.get(YARRRML_MAPPINGS).get(mapping):
         subject = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_SUBJECTS)
     elif YARRRML_SUBJECT in data.get(YARRRML_MAPPINGS).get(mapping):
@@ -52,8 +52,8 @@ def add_subject(data, mapping, mapping_format):
         graphs = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_GRAPHS)
     elif YARRRML_GRAPH in data.get(YARRRML_MAPPINGS).get(mapping):
         graphs = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_GRAPH)
-    elif YARRRML_SHORTCUT_GRAPH in data.get(YARRRML_MAPPINGS).get(mapping):
-        graphs = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_SHORTCUT_GRAPH)
+    elif YARRRML_GRAPH_SHORTCUT in data.get(YARRRML_MAPPINGS).get(mapping):
+        graphs = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_GRAPH_SHORTCUT)
     else:
         graphs = []
 

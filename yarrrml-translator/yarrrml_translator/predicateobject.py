@@ -1,7 +1,7 @@
 import rdflib
 
-from . import *
-from .source import get_initial_sources, add_source
+from .constants import *
+from .source import get_initial_sources, add_source, add_table
 from .subject import add_subject
 from .termmap import generate_rml_termmap, check_type
 
@@ -9,28 +9,34 @@ from .termmap import generate_rml_termmap, check_type
 def get_object_access(predicate_object_map):
     if YARRRML_OBJECT in predicate_object_map:
         object_access = YARRRML_OBJECT
-    elif YARRRML_SHORTCUT_OBJECT in predicate_object_map:
-        object_access = YARRRML_SHORTCUT_OBJECT
+    elif YARRRML_OBJECT_SHORTCUT in predicate_object_map:
+        object_access = YARRRML_OBJECT_SHORTCUT
+    elif YARRRML_OBJECTS in predicate_object_map:
+        object_access = YARRRML_OBJECTS
     else:
-        raise Exception("There isn't an object key correctly specify in " + predicate_object_map)
+        logger.error("There isn't a valid object key (object, objects, o) correctly specify in PON " + predicate_object_map)
+        raise Exception("Add or change the key of the object in the indicated POM")
     return object_access
 
 
 def get_predicate_access(predicate_object_map):
     if YARRRML_PREDICATES in predicate_object_map:
         predicate_access = YARRRML_PREDICATES
-    elif YARRRML_SHORTCUT_PREDICATES in predicate_object_map:
-        predicate_access = YARRRML_SHORTCUT_PREDICATES
+    elif YARRRML_PREDICATES_SHORTCUT in predicate_object_map:
+        predicate_access = YARRRML_PREDICATES_SHORTCUT
+    elif YARRRML_PREDICATE in predicate_object_map:
+        predicate_access = YARRRML_PREDICATE
     else:
-        raise Exception("There isn't a predicate key correctly specify in " + predicate_object_map)
+        logger.error("There isn't a valid predicate key (predicate, predicates, p) correctly specify in PON " + predicate_object_map)
+        raise Exception("Add or change the key of the predicate in the indicated POM")
     return predicate_access
 
 
-def get_predicate_object_access(mapping,predicate_object_map):
+def get_predicate_object_access(mapping, predicate_object_map):
     if YARRRML_PREDICATEOBJECT in predicate_object_map:
         predicate_object_access = YARRRML_PREDICATEOBJECT
-    elif YARRRML_SHORTCUT_PREDICATEOBJECT in predicate_object_map:
-        predicate_object_access = YARRRML_SHORTCUT_PREDICATEOBJECT
+    elif YARRRML_PREDICATEOBJECT_SHORTCUT in predicate_object_map:
+        predicate_object_access = YARRRML_PREDICATEOBJECT_SHORTCUT
     else:
         predicate_object_access = None
         logger.warning("The triples map "+mapping+" does not have predicate object maps defined")
@@ -42,8 +48,8 @@ def get_graph_access(predicate_object_map):
         graph_access = YARRRML_GRAPHS
     elif YARRRML_GRAPH in predicate_object_map:
         graph_access = YARRRML_GRAPH
-    elif YARRRML_SHORTCUT_GRAPH in predicate_object_map:
-        graph_access = YARRRML_SHORTCUT_GRAPH
+    elif YARRRML_GRAPH_SHORTCUT in predicate_object_map:
+        graph_access = YARRRML_GRAPH_SHORTCUT
     else:
         graph_access = None
     return graph_access
@@ -184,7 +190,6 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                     template += generate_rml_termmap(STAR_OBJECT, STAR_CLASS,om, "\t\t\t", mapping_format)
             else:
                template += ref_mapping(data, mapping, om, YARRRML_QUOTED, STAR_QUOTED, mapping_format)
-        # This could be removed
         else:
             if YARRRML_VALUE in om:
                 object_value = om.get(YARRRML_VALUE)
@@ -268,13 +273,15 @@ def ref_mapping(data, mapping, om, yarrrml_key, ref_type_property, mapping_forma
                                         ";\n\t\t\t\t" + R2RML_PARENT + " " + parent + ";\n\t\t\t]; \n"
 
                         else:
-                            raise Exception("Error: more than two parameters in join condition in mapping " + mapping)
+                            logger.error("Error in reference mapping another mapping in mapping " + mapping)
+                            raise Exception("Only two parameters can be indicated (child and parent)")
                 template += "\t\t];\n"
             else:
                 template += "\n\t\t]\n"
 
     else:
-        raise Exception("Error in reference mapping another mapping in mapping " + mapping)
+        logger.error("Error in reference mapping another mapping in mapping " + mapping)
+        raise Exception("Review how is defined the reference to other mappings")
 
     return template
 

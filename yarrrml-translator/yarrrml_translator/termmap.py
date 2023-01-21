@@ -1,4 +1,4 @@
-from .import *
+from .constants import *
 
 
 ## return the type of TermMap based on the input text

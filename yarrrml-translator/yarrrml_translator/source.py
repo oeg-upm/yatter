@@ -86,19 +86,19 @@ def add_source_simplified(mapping, source):
     file_path = re.sub("~.*", "", source[0])
     reference_formulation = source[0].split('~')[1]
     source_extension = file_path.split('.')[1]
-    ref_formulation_rml = reference_formulation.replace("jsonpath", "JSONPath").replace("csv", "CSV").replace("xpath",
-                                                                                                              "XPath")
+    ref_formulation_rml = YARRRML_REFERENCE_FORMULATIONS[reference_formulation]
+
     if switch_in_reference_formulation(reference_formulation) != source_extension:
         raise Exception(
             "ERROR: mismatch extension and referenceFormulation in source " + source + " in mapping " + mapping)
     else:
-        if len(source) == 1:  # si no tiene iterador
+        if len(source) == 1:  # do not have iterator
             if source_extension == "csv" or source_extension == "SQL2008":
                 source_rdf += '"' + file_path + '"' + ";\n" + "\t\t" + RML_REFERENCE_FORMULATION + " ql:" \
                               + ref_formulation_rml + "\n" + "\t];\n"
             else:
                 raise Exception("ERROR: source " + source + " in mapping " + mapping + " has no iterator")
-        else:  # source[1] es el iterador en json y xml
+        else:  # source[1] is the iterator for json and xml
             source_rdf += "\"" + file_path + "\";\n\t\t" + RML_REFERENCE_FORMULATION + " ql:" \
                           + ref_formulation_rml + ";\n\t\t" + RML_ITERATOR + " \"" \
                           + source[1] + "\";\n\t];\n"
@@ -114,8 +114,8 @@ def add_source_full(mapping, source):
     if YARRRML_REFERENCE_FORMULATION in source:
         reference_formulation = str(source.get(YARRRML_REFERENCE_FORMULATION))
         format_from_reference = switch_in_reference_formulation(reference_formulation.lower())
-        ref_formulation_rml = reference_formulation.replace("jsonpath", "JSONPath").replace("csv", "CSV").replace(
-            "xpath","XPath")
+        ref_formulation_rml = YARRRML_REFERENCE_FORMULATIONS[reference_formulation]
+
         if extension != format_from_reference or format_from_reference == "ERROR":
             raise Exception("ERROR: not referenceFormulation found or mismatch between the format and "
                             "referenceFormulation in source " + access + "in mapping " + mapping)
@@ -202,12 +202,8 @@ def generate_database_connections(data, list_initial_sources):
             if (external and len(sources_ids) > number_external_sources) or not external:
                 if YARRRML_QUERY in source and YARRRML_ACCESS in source:
                     db_type = source.get(YARRRML_TYPE)
-                    if db_type == "mysql":
-                        driver = "com.mysql.jdbc.Driver"
-                    elif db_type == "postgresql":
-                        driver = "org.postgresql.Driver"
-                    elif db_type == "sqlserver":
-                        driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+                    if db_type in YARRRML_DATABASES_DRIVER:
+                        driver = YARRRML_DATABASES_DRIVER[db_type]
                     else:
                         driver = None
                     access = source.get(YARRRML_ACCESS)
