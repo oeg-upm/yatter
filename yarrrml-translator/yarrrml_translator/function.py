@@ -17,12 +17,11 @@ def add_internal_function(mapping_id, mapping_data, functions):
         if type(mapping_data[key]) is list:
             for i in range(len(mapping_data[key])):
                 value = mapping_data[key][i]
-                if YARRRML_FUNCTION in value:
+                if YARRRML_FUNCTION in value and value[YARRRML_FUNCTION] != "equal":
                     function_id = "function_" + mapping_id
                     old_id = function_id + "_"+ str(local_id)
                     function = generate_function(value, function_id)
                     functions.append(function)
-                    print(function)
                     mapping_data[key][i][YARRRML_FUNCTION] = old_id
                     local_id += 1 #different functions in the same TM
                 else:
@@ -32,7 +31,13 @@ def add_internal_function(mapping_id, mapping_data, functions):
                                 add_internal_function(mapping_id, v, functions)
                     elif type(value) is dict:
                         add_internal_function(mapping_id, value, functions)
-
+        elif type(mapping_data[key]) is dict and YARRRML_FUNCTION in mapping_data[key]:
+            function_id = "function_" + mapping_id
+            old_id = function_id + "_" + str(local_id)
+            function = generate_function(mapping_data[key], function_id)
+            functions.append(function)
+            mapping_data[key][YARRRML_FUNCTION] = old_id
+            local_id += 1  # different functions in the same TM
 
 def generate_function(function_yarrrml_data, id_function):
     global local_id

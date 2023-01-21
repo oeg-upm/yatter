@@ -44,6 +44,10 @@ def add_prefix(data):
         template.append(RML_PREFIX + " comp: <" + COMPRESSION_URI + ">.\n")
     if "void" not in common_prefixes:
         template.append(RML_PREFIX + " void: <" + VOID_URI + ">.\n")
+    if "fnml" not in common_prefixes:
+        template.append(RML_PREFIX + " fnml: <" + FNML_URI + ">.\n")
+    if "grel" not in common_prefixes:
+        template.append(RML_PREFIX + " grel: <" + GREL_URI + ">.\n")
     if "base" not in common_prefixes:
         template.append(RML_BASE + " <" + EXAMPLE_URI + ">.\n")
 
@@ -78,6 +82,10 @@ def check_common_prefixes(prefix_uri, common_prefixes):
         common_prefixes.append("comp")
     elif prefix_uri == VOID_URI:
         common_prefixes.append("void")
+    elif prefix_uri == FNML_URI:
+        common_prefixes.append("fnml")
+    elif prefix_uri == GREL_URI:
+        common_prefixes.append("grel")
 
 
 def add_inverse_prefix(rdf_mapping):

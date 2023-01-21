@@ -41,7 +41,14 @@ def add_subject(data, mapping, mapping_format):
             subject_value = individual_subject
             if YARRRML_VALUE in individual_subject:
                 subject_value = individual_subject.get(YARRRML_VALUE)
+            elif YARRRML_FUNCTION in individual_subject:
+                subject_value = individual_subject.get(YARRRML_FUNCTION)
+
             subject_termmap = generate_rml_termmap(R2RML_SUBJECT, R2RML_SUBJECT_CLASS, subject_value, "\t\t", mapping_format)
+
+            if YARRRML_FUNCTION in individual_subject:
+                subject_termmap =  subject_termmap.replace(R2RML_CONSTANT+" "+subject_value, RML_EXECUTION + " <" + individual_subject.get(
+                    YARRRML_FUNCTION) + ">")
 
             if YARRRML_TARGETS in individual_subject:
                 subject_termmap = subject_termmap[0:-3]+"\t"+RML_LOGICAL_TARGET+" <"+individual_subject[YARRRML_TARGETS]+">\n\t];\n"
