@@ -4,8 +4,10 @@ from .termmap import generate_rml_termmap
 
 local_id = 0
 def add_functions(yarrrml_data):
+    global local_id
     functions = []
     for mapping in yarrrml_data.get(YARRRML_MAPPINGS):
+        local_id = 0
         mapping_data = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping)
         add_internal_function(mapping, mapping_data, functions)
     return functions

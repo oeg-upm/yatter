@@ -17,7 +17,7 @@
 
 
 <function_student2_0> a fnml:Execution;
-	fnml:function ex:toLowerCase ; 
+	fnml:function ex:toLowerCase ;
 	fnml:input
 		[
 			a fnml:Input;
@@ -49,5 +49,3 @@
 			rml:reference "name";
 		];
 	].
-
-
