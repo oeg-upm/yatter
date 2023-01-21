@@ -8,10 +8,6 @@
 The tool translates mapping rules from YARRRML in a turtle-based serialization of RML or R2RML. The translation is based 
 on the [RML](https://rml.io/specs/rml/) and [YARRRML](https://rml.io/yarrrml/spec/) specifications.
 
-## Limitations
-We are working on including the following features which are not yet implemented:
-- Functions using the [FnO](https://fno.io/) Ontology
-
 ## Installation:
 ```
 pip install yarrrml-translator
@@ -68,6 +64,17 @@ import yarrrml_translator
 list_yarrrml_mappings = ["content_mapping_yarrrml1", "content_mapping_yarrrml1"]
 yarrrml_content = yarrrml_translator.merge_mappings(list_yarrrml_mappings)
 ```
+
+
+## Specifications conformant:
+
+These are the following specifications used by the translation process:
+- YARRRML: https://github.com/kg-construct/yarrrml-spec (Proper website soon)
+- R2RML: https://www.w3.org/TR/r2rml/ 
+- RML: https://rml.io/spec 
+- RML-star: https://w3id.org/kg-construct/rml-star 
+- RML-Target: https://rml.io/specs/rml-target/ 
+- RML-FNML: https://kg-construct.github.io/fnml-spec/
 
 ## Authors
 Ontology Engineering Group:

@@ -2,9 +2,8 @@ __author__ = "Marino Gonzalez Garcia"
 __credits__ = ["Marino Gonzalez Garcia"]
 
 __license__ = "Apache-2.0"
-__maintainer__ = "Marino Gonzalez Garcia"
-__email__ = "marino.gonzalez.garcia@alumnos.upm.es"
-
+__maintainer__ = "David Chaves-Fraga"
+__email__ = "david.chaves@upm.es"
 
 import os
 from ruamel.yaml import YAML
