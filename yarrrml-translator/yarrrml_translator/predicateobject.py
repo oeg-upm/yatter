@@ -217,7 +217,7 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
             if YARRRML_LANGUAGE in om:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_LANGUAGE + " \"" \
                            + om.get(YARRRML_LANGUAGE) + "\"\n\t\t];\n"
-            if YARRRML_TYPE in om:
+            if YARRRML_TYPE in om and type(om) is dict:
                 if om.get(YARRRML_TYPE) == "iri":
                     iri = True
                 elif om.get(YARRRML_TYPE) == "literal":
