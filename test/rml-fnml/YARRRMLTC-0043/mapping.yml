@@ -12,9 +12,8 @@ mappings:
         o:
           - function: ex:toLowerCase
             parameters:
-              - [ ex:input, $(firstname) ]
-      - p: foaf:surname
-        o:
-          - function: ex:toLowerCase
-            parameters:
-              - [ ex:input, $(surname) ]
+              - parameter: ex:valueParameter
+                value:
+                  function: ex:toUpperCase
+                  parameters:
+                    - [ ex:valueParameter, $(name) ]

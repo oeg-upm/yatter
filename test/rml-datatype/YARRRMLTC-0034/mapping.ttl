@@ -30,7 +30,7 @@
 			rml:reference "Name";
             rml:datatypeMap [
                 a rml:DatatypeMap;
-                rml:reference "ref_datatype";
+                rr:template "{ref_datatype1}{ref_datatype2}";
             ];
 		];
 	].

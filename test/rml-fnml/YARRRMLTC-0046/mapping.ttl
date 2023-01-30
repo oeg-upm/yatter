@@ -17,69 +17,35 @@
 
 
 <function_student2_0> a fnml:Execution;
-	fnml:function ex:function0 ; 
+	fnml:function ex:function1 ; 
 	fnml:input
 		[
 			a fnml:Input;
-			fnml:parameter ex:input;
+			fnml:parameter ex:input1;
 			fnml:valueMap [
 				a fnml:ValueMap;
-				rml:reference "firstname";
+				rml:reference "firstname1";
 			];
 		],
 		[
 			a fnml:Input;
 			fnml:parameter ex:input2;
-			fnml:valueMap[
-				fnml:execution <function_student2_1>;
-			];
-		].
-
-<function_student2_1> a fnml:Execution;
-	fnml:function ex:lowerCase ; 
-	fnml:input
-		[
-			a fnml:Input;
-			fnml:parameter ex:input;
 			fnml:valueMap [
 				a fnml:ValueMap;
-				rml:reference "name";
-			];
-		].
-
-<function_student2_2> a fnml:Execution;
-	fnml:function ex:function1 ; 
-	fnml:input
-		[
-			a fnml:Input;
-			fnml:parameter ex:input;
-			fnml:valueMap [
-				a fnml:ValueMap;
-				rml:reference "name";
+				rml:reference "firstname2";
 			];
 		],
 		[
 			a fnml:Input;
-			fnml:parameter ex:valueParameter;
-			fnml:valueMap[
-				fnml:execution <function_student2_3>;
-			];
-		].
-
-<function_student2_3> a fnml:Execution;
-	fnml:function ex:toUpperCase ; 
-	fnml:input
-		[
-			a fnml:Input;
-			fnml:parameter ex:valueParameter;
+			fnml:parameter ex:input3;
 			fnml:valueMap [
 				a fnml:ValueMap;
-				rml:reference "firstname";
+				rml:reference "firstname3";
 			];
 		].
 
-<function_student2_4> a fnml:Execution;
-	fnml:function ex:function2 ; 
+<function_student2_1> a fnml:Execution;
+	fnml:function ex:toLowerCase ; 
 	fnml:input
 		[
 			a fnml:Input;
@@ -104,9 +70,9 @@
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant foaf:firstName;
+			rr:constant foaf:name;
 		];
-		rml:objectMap [
+		rr:objectMap [
 			a rr:ObjectMap;
 			fnml:execution <function_student2_0>;
 		];
@@ -114,21 +80,11 @@
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant foaf:name;
-		];
-		rml:objectMap [
-			a rr:ObjectMap;
-			fnml:execution <function_student2_2>;
-		];
-	];
-	rr:predicateObjectMap [
-		rr:predicateMap [
-			a rr:PredicateMap;
 			rr:constant foaf:surname;
 		];
-		rml:objectMap [
+		rr:objectMap [
 			a rr:ObjectMap;
-			fnml:execution <function_student2_4>;
+			fnml:execution <function_student2_1>;
 		];
 	].
 

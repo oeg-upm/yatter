@@ -7,4 +7,4 @@ mappings:
       - ['student.csv~csv']
     s: http://example.com/$(Name)
     po:
-      - [foaf:name, $(Name),$(language)~lang]
+      - [foaf:name, $(Name), en~lang]

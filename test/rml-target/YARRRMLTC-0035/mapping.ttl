@@ -5,20 +5,21 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix ql: <http://semweb.mmlab.be/ns/ql#>.
-@prefix formats: <http://www.w3.org/ns/formats/> .
-@prefix comp: <http://semweb.mmlab.be/ns/rml-compression#> .
-@prefix void: <http://rdfs.org/ns/void#> .
 @prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#>.
+@prefix schema: <http://schema.org/>.
+@prefix formats: <http://www.w3.org/ns/formats/>.
+@prefix comp: <http://semweb.mmlab.be/ns/rml-compression#>.
+@prefix void: <http://rdfs.org/ns/void#>.
 @base <http://example.com/ns#>.
 
 
-<logical_target_student_0>  a rml:LogicalTarget;
-	rml:target [
+<logical_target_student_0> a rml:LogicalTarget;
+	 rml:target [
 		a void:Dataset;
 		void:dataDump <data/dump.ttl.gz>
 	];
-	rml:serialization formats:Turtle;
-	rml:compression comp:gzip .
+	 rml:serialization formats:Turtle;
+	 rml:compression comp:gzip.
 
 <student_0> a rr:TriplesMap;
 
@@ -35,10 +36,12 @@
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant foaf:name
+			rr:constant foaf:name;
 		];
 		rr:objectMap [
 			a rr:ObjectMap;
 			rml:reference "Name";
 		];
 	].
+
+

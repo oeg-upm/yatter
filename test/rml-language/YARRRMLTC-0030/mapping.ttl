@@ -28,9 +28,6 @@
 		rr:objectMap [
 			a rr:ObjectMap;
 			rml:reference "Name";
-            rml:languageMap [
-                a rml:LanguageMap;
-                rml:reference "language";
-            ];
+            rr:language "en"
 		];
 	].

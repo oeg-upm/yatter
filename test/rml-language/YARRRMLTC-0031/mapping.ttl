@@ -30,7 +30,7 @@
 			rml:reference "Name";
             rml:languageMap [
                 a rml:LanguageMap;
-                rr:template "{language1}{language2}";
+                rml:reference "language";
             ];
 		];
 	].

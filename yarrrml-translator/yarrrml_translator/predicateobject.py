@@ -141,9 +141,15 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
 
     for pm in predicate_list:
         pm_value = pm
+        execution = False
         if YARRRML_VALUE in pm:
             pm_value = pm[YARRRML_VALUE]
+        elif YARRRML_FUNCTION in pm:
+            pm_value = pm[YARRRML_FUNCTION]
+            execution = True
         template += generate_rml_termmap(R2RML_PREDICATE, R2RML_PREDICATE_CLASS, pm_value,"\t\t\t")
+        if execution:
+            template = template.replace(R2RML_CONSTANT + " " + pm_value, RML_EXECUTION + " <" + pm_value + ">")
         if YARRRML_TARGETS in pm:
             template = template[0:-3] + "\t" + RML_LOGICAL_TARGET + " <" + pm[YARRRML_TARGETS] + ">\n\t\t];\n"
 
@@ -205,30 +211,32 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                 template += generate_rml_termmap(STAR_OBJECT, R2RML_OBJECT_CLASS,
                                                  object_value, "\t\t\t", mapping_format)
             elif YARRRML_FUNCTION in om:
-                template += generate_rml_termmap(STAR_OBJECT, R2RML_OBJECT_CLASS, om[YARRRML_FUNCTION], "\t\t\t", mapping_format)
+                template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS, om[YARRRML_FUNCTION], "\t\t\t", mapping_format)
                 template =  template.replace(R2RML_CONSTANT+" "+om[YARRRML_FUNCTION], RML_EXECUTION + " <" + om.get(
                     YARRRML_FUNCTION) + ">")
             else:
                 template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,
                                                  object_value, "\t\t\t", mapping_format)
-            if YARRRML_DATATYPE in om:
-                template = template[0:len(template) - 5] + "\t\t\t" + R2RML_DATATYPE + " " \
-                           + om.get(YARRRML_DATATYPE) + "\n\t\t];\n"
-            if YARRRML_LANGUAGE in om:
-                template = template[0:len(template) - 5] + "\t\t\t" + R2RML_LANGUAGE + " \"" \
-                           + om.get(YARRRML_LANGUAGE) + "\"\n\t\t];\n"
-            if YARRRML_TYPE in om and type(om) is dict:
-                if om.get(YARRRML_TYPE) == "iri":
-                    iri = True
-                elif om.get(YARRRML_TYPE) == "literal":
-                    template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
-                               + R2RML_LITERAL + "\n\t\t];\n"
+            if type(om) is dict:
+                if YARRRML_DATATYPE in om:
+                    template = template[0:len(template) - 5] + "\t\t\t" + R2RML_DATATYPE + " " \
+                               + om.get(YARRRML_DATATYPE) + "\n\t\t];\n"
+                if YARRRML_LANGUAGE in om:
+                    template = template[0:len(template) - 5] + "\t\t\t" + R2RML_LANGUAGE + " \"" \
+                               + om.get(YARRRML_LANGUAGE) + "\"\n\t\t];\n"
+                if YARRRML_TYPE in om:
+                    if om.get(YARRRML_TYPE) == "iri":
+                        iri = True
+                    elif om.get(YARRRML_TYPE) == "literal":
+                        template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
+                                   + R2RML_LITERAL + "\n\t\t];\n"
+                if YARRRML_TARGETS in om:
+                    template = template[0:len(template) - 5] + "\t\t\t" + RML_LOGICAL_TARGET + " <"+ om.get(YARRRML_TARGETS) + ">\n\t\t];\n"
+
             if iri:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
                            + R2RML_IRI + "\n\t\t];\n"
 
-            if YARRRML_TARGETS in om:
-                template = template[0:len(template) - 5] + "\t\t\t" + RML_LOGICAL_TARGET + " <"+ om.get(YARRRML_TARGETS) + ">\n\t\t];\n"
 
 
 
@@ -289,7 +297,7 @@ def ref_mapping(data, mapping, om, yarrrml_key, ref_type_property, mapping_forma
                 template += "\n\t\t]\n"
 
     else:
-        logger.error("Error in reference mapping another mapping in mapping " + mapping)
+        logger.error("Error in reference another mapping in mapping " + mapping)
         raise Exception("Review how is defined the reference to other mappings")
 
     return template
