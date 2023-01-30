@@ -68,7 +68,7 @@ yarrrml_content = yarrrml_translator.merge_mappings(list_yarrrml_mappings)
 ## Specifications conformant:
 
 These are the following specifications used by the translation process:
-- YARRRML: https://kg-construct.github.io/yarrrml-spec/ (Proper website soon)
+- YARRRML: https://kg-construct.github.io/yarrrml-spec/
 - R2RML: https://www.w3.org/TR/r2rml/ 
 - RML: https://rml.io/spec 
 - RML-star: https://w3id.org/kg-construct/rml-star 
