@@ -244,7 +244,7 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
         graph_value = graph
         if YARRRML_VALUE in graph:
             graph_value = graph[YARRRML_VALUE]
-        template += generate_rml_termmap(R2RML_GRAPH, R2RML_GRAPH_CLASS, graph_value, "\t\t\t")
+        template += generate_rml_termmap(R2RML_GRAPH_MAP, R2RML_GRAPH_CLASS, graph_value, "\t\t\t")
         if YARRRML_TARGETS in graph:
             template = template[0:-3] + "\t" + RML_LOGICAL_TARGET + " <" + graph[
                 YARRRML_TARGETS] + ">\n\t\t];\n"
@@ -307,7 +307,7 @@ def add_inverse_pom(tm, rdf_mapping, classes, prefixes):
     yarrrml_poms = []
 
     for c in classes:
-        yarrrml_poms.append(['rdf:type', c])
+        yarrrml_poms.append(['rdf:type', c.toPython()])
 
     query = f'SELECT ?predicate ?predicateValue ?object ?objectValue ?termtype ?datatype ?datatypeMapValue ' \
             f'?language ?languageMapValue ?parentTriplesMap ?child ?parent' \

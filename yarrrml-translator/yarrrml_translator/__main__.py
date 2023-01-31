@@ -7,9 +7,15 @@ from .constants import *
 
 
 def write_results(mapping):
-    output_file = open(args.output_mapping_path, "w")
-    output_file.write(mapping)
-    output_file.close()
+    #output_file = open(args.output_mapping_path, "w")
+    #output_file.write(mapping)
+    #output_file.close()
+    with open(args.output_mapping_path, "wb") as f:
+        yaml = YAML()
+        yaml.indent(mapping=4, sequence=4, offset=2)
+        yaml.default_flow_style = False
+        yaml.dump(mapping, stream=f)
+        yaml.dump(mapping, sys.stdout)
 
 
 def parse_inputs():

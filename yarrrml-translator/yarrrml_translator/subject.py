@@ -1,5 +1,6 @@
 from .constants import *
 from .termmap import generate_rml_termmap
+from .graph import add_inverse_graph
 import rdflib
 
 
@@ -71,7 +72,7 @@ def add_subject(data, mapping, mapping_format):
         graph_value = graph
         if YARRRML_VALUE in graph:
             graph_value = graph[YARRRML_VALUE]
-        graph_termmap = generate_rml_termmap(R2RML_GRAPH, R2RML_GRAPH_CLASS, graph_value, "\t\t\t")
+        graph_termmap = generate_rml_termmap(R2RML_GRAPH_MAP, R2RML_GRAPH_CLASS, graph_value, "\t\t\t")
         if YARRRML_TARGETS in graph:
             graph_termmap = graph_termmap[0:-3] + "\t" + RML_LOGICAL_TARGET + " <" + graph[YARRRML_TARGETS] + ">\n\t\t];\n"
         rml_subjects = list(map(lambda subject: subject[0:-4] + graph_termmap + "\t];\n", rml_subjects))
@@ -90,7 +91,6 @@ def add_inverse_subject(tm, rdf_mapping):
     if len(subject) > 1:
         logger.error("There are more than one subject in your mapping")
         raise Exception("A mapping defines one and only one subjectMap")
-
     else:
         subject = subject[0]
     # this means it's a column
@@ -100,8 +100,20 @@ def add_inverse_subject(tm, rdf_mapping):
         if '{' in subject:
             subject = subject.replace('{', "$(").replace('}', ')')
 
+    yarrrml_subject = {'s': subject}
+
     query = f'SELECT ?class_value  WHERE {{ <{tm}> {R2RML_SUBJECT} ?subject . ' \
             f'?subject {R2RML_CLASS} ?class_value }} '
     classes = [tm[rdflib.Variable('class_value')] for tm in rdf_mapping.query(query).bindings]
 
-    return subject, classes
+    query = f'SELECT ?graph_value  WHERE {{ <{tm}> {R2RML_SUBJECT} ?subject . ' \
+            f'{{ ?subject {R2RML_GRAPH} ?graph_value .  }}' \
+            f' UNION ' \
+            f' {{ ?subject {R2RML_GRAPH_MAP} ?graph_map .' \
+            f' ?graph_map {R2RML_TEMPLATE}|{R2RML_COLUMN}|{RML_REFERENCE}|{R2RML_CONSTANT} ?graph_value  }} }} '
+    graph_values = [tm[rdflib.Variable('graph_value')] for tm in rdf_mapping.query(query).bindings]
+
+    if graph_values:
+        yarrrml_subject.update(add_inverse_graph(graph_values))
+
+    return yarrrml_subject, classes
