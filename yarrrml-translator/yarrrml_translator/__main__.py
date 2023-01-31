@@ -5,12 +5,17 @@ from rdflib import Graph
 from . import translate, inverse_translation, merge_mappings
 from .constants import *
 
-
 def write_results(mapping):
-    output_file = open(args.output_mapping_path, "w")
-    output_file.write(mapping)
-    output_file.close()
 
+    if type(mapping) is str:
+        output_file = open(args.output_mapping_path, "w")
+        output_file.write(mapping)
+        output_file.close()
+    elif type(mapping) is dict:
+        with open(args.output_mapping_path, "wb") as f:
+            yaml = YAML()
+            yaml.default_flow_style = False
+            yaml.dump(mapping, f)
 
 def parse_inputs():
     input_format = RML_URI

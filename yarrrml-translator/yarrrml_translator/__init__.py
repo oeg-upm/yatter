@@ -7,7 +7,6 @@ from .target import add_logical_targets
 from .function import add_functions
 import rdflib
 import ruamel.yaml as yaml
-from ruamel.yaml.compat import StringIO
 
 
 def translate(yarrrml_data, mapping_format=RML_URI):
@@ -77,10 +76,8 @@ def inverse_translation(rdf_mapping, mapping_format=RML_URI):
         yarrrml_tm[YARRRML_PREDICATEOBJECT_SHORTCUT] = add_inverse_pom(tm, rdf_mapping, classes, yarrrml_mapping[YARRRML_PREFIXES])
         yarrrml_mapping[YARRRML_MAPPINGS][tm_name] = yarrrml_tm
 
-    mapping = yaml.YAML()
-    yaml_data = mapping.load(str(yarrrml_mapping))
     logger.info("Translation has finished successfully.")
-    return yaml_data
+    return yarrrml_mapping
 
 def merge_mappings(yarrrrml_list):
     combined_mapping = {YARRRML_MAPPINGS:{}}

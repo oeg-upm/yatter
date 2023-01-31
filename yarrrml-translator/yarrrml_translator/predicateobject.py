@@ -4,6 +4,7 @@ from .constants import *
 from .source import get_initial_sources, add_source, add_table
 from .subject import add_subject
 from .termmap import generate_rml_termmap, check_type
+from ruamel.yaml import YAML
 
 
 def get_object_access(predicate_object_map):
@@ -370,6 +371,10 @@ def add_inverse_pom(tm, rdf_mapping, classes, prefixes):
             elif tm['object'] and not tm['parentTriplesMap']: # we have object shortcut
                 yarrrml_pom.append(tm['object'].replace('{', "$(").replace('}', ')'))
 
+        if type(yarrrml_pom) is list:
+            yaml = YAML()
+            yarrrml_pom = yaml.seq(yarrrml_pom)
+            yarrrml_pom.fa.set_flow_style()
         yarrrml_poms.append(yarrrml_pom)
 
     return yarrrml_poms
