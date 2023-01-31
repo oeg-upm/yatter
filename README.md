@@ -4,6 +4,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7024501.svg)](https://doi.org/10.5281/zenodo.7024501)
 [![PyPI](https://img.shields.io/pypi/v/yarrrml-translator?style=flat)](https://pypi.org/project/yarrrml-translator)
 ![GitHub Release Date](https://img.shields.io/github/release-date/oeg-upm/yarrrml-translator)
+[![codecov](https://codecov.io/gh/oeg-upm/yarrrml-translator/branch/dev/graph/badge.svg?token=QUWCG214SG)](https://codecov.io/gh/oeg-upm/yarrrml-translator)
 
 The tool translates mapping rules from YARRRML in a turtle-based serialization of RML or R2RML.
 
