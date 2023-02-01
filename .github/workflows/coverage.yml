@@ -12,7 +12,7 @@ jobs:
       with:
         python-version: '3.9'
     - name: Install requirements
-      run: pip install -r requirements.txt pytest-cov coverage
+      run: pip install -r requirements.txt pytest-cov coverage DeepDiff
     - name: Build yarrrml-translator
       run: |
         cd yarrrml-translator

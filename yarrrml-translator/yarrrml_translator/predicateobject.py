@@ -304,7 +304,7 @@ def ref_mapping(data, mapping, om, yarrrml_key, ref_type_property, mapping_forma
     return template
 
 
-def add_inverse_pom(tm, rdf_mapping, classes, prefixes):
+def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
     yarrrml_poms = []
 
     for c in classes:
@@ -313,7 +313,7 @@ def add_inverse_pom(tm, rdf_mapping, classes, prefixes):
     query = f'SELECT ?predicate ?predicateValue ?object ?objectValue ?termtype ?datatype ?datatypeMapValue ' \
             f'?language ?languageMapValue ?parentTriplesMap ?child ?parent' \
             f' WHERE {{ ' \
-            f'<{tm}> {R2RML_PREDICATE_OBJECT_MAP} ?predicateObjectMap . ' \
+            f'<{mapping_id}> {R2RML_PREDICATE_OBJECT_MAP} ?predicateObjectMap . ' \
             f'?predicateObjectMap {R2RML_PREDICATE}|{R2RML_SHORTCUT_PREDICATE} ?predicate .' \
             f'OPTIONAL {{ ?predicate {R2RML_CONSTANT} ?predicateValue . }}' \
             f'?predicateObjectMap {R2RML_OBJECT}|{R2RML_SHORTCUT_OBJECT} ?object .' \
@@ -354,22 +354,30 @@ def add_inverse_pom(tm, rdf_mapping, classes, prefixes):
         else:
             yarrrml_pom.append(predicate)
             if tm['objectValue']: # we have extended objectMap version
-                object = tm['objectValue'].replace('{', '$(').replace('}', ')')
-                if tm['termtype']:
-                    if tm['termtype'] == rdflib.URIRef(R2RML_IRI):
-                        object = object + '~iri'
-                yarrrml_pom.append(object)
-                if tm['datatype']:
-                    yarrrml_pom.append(tm['datatype'])
-                elif tm['datatypeMapValue']:
-                    yarrrml_pom.append(tm['datatypeMapValue'].replace('{', '$(').replace('}', ')'))
-                if tm['language']:
-                    yarrrml_pom.append(tm['language']+"~lang")
-                elif tm['languageMapValue']:
-                    yarrrml_pom.append(tm['languageMapValue'].replace('{', '$(').replace('}', ')')+"~lang")
+                object = tm['objectValue']
+            elif tm['object']:
+                object = tm['object']
+            else:
+                logger.error("There is not object for a given predicate ")
+                raise Exception("Review your mapping "+str(mapping_id))
 
-            elif tm['object'] and not tm['parentTriplesMap']: # we have object shortcut
-                yarrrml_pom.append(tm['object'].replace('{', "$(").replace('}', ')'))
+            if not object.startswith("http"):
+                object = '$(' + object + ')'
+            else:
+                object.replace('{', '$(').replace('}', ')')
+
+            if tm['termtype']:
+                if tm['termtype'] == rdflib.URIRef(R2RML_IRI):
+                    object = object + '~iri'
+            yarrrml_pom.append(object)
+            if tm['datatype']:
+                yarrrml_pom.append(tm['datatype'])
+            elif tm['datatypeMapValue']:
+                yarrrml_pom.append(tm['datatypeMapValue'].replace('{', '$(').replace('}', ')'))
+            if tm['language']:
+                yarrrml_pom.append(tm['language']+"~lang")
+            elif tm['languageMapValue']:
+                yarrrml_pom.append(tm['languageMapValue'].replace('{', '$(').replace('}', ')')+"~lang")
 
         if type(yarrrml_pom) is list:
             yaml = YAML()

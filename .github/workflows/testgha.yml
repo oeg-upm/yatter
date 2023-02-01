@@ -20,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install setuptools wheel twine pytest
+        pip install setuptools wheel twine pytest DeepDiff
         pip install -r requirements.txt
     - name: Build yarrrml-translator
       run: |

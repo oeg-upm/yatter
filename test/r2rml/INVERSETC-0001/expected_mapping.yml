@@ -1,0 +1,11 @@
+prefixes:
+  foaf: http://xmlns.com/foaf/0.1/
+  
+mappings:
+  student:
+    sources:
+      - table: Student
+        queryFormulation: sql2008
+    s: http://example.com/$(Name)
+    po:
+      - [foaf:name, $(Name)]

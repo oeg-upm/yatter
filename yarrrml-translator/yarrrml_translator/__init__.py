@@ -70,7 +70,7 @@ def inverse_translation(rdf_mapping, mapping_format=RML_URI):
 
     for tm in triples_map:
         tm_name = tm.split("/")[-1]
-        yarrrml_tm = {YARRRML_SOURCE: add_inverse_source(tm, rdf_mapping, mapping_format)}
+        yarrrml_tm = {YARRRML_SOURCES: [add_inverse_source(tm, rdf_mapping, mapping_format)]}
         subject, classes = add_inverse_subject(tm, rdf_mapping)
         yarrrml_tm.update(subject)
         yarrrml_tm[YARRRML_PREDICATEOBJECT_SHORTCUT] = add_inverse_pom(tm, rdf_mapping, classes, yarrrml_mapping[YARRRML_PREFIXES])
