@@ -4,7 +4,7 @@ __credits__ = ["David Chaves-Fraga"]
 __license__ = "Apache-2.0"
 __maintainer__ = "David Chaves-Fraga"
 __email__ = "david.chaves@upm.es"
-__name__ = "INVERSETC-0001 based on YARRRMLTC-0001"
+__name__ = "INVERSETC-0003 based on YARRRMLTC-0005"
 
 
 import os
@@ -15,7 +15,7 @@ from deepdiff import DeepDiff
 R2RML_URI = 'http://www.w3.org/ns/r2rml#'
 
 
-def test_inversetc0001():
+def test_inversetc0003():
     yaml = YAML(typ='safe', pure=True)
     with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mapping.yml')) as file:
         expected_mapping = yaml.load(file)

@@ -306,7 +306,7 @@ def ref_mapping(data, mapping, om, yarrrml_key, ref_type_property, mapping_forma
 
 def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
     yarrrml_poms = []
-
+    yaml = YAML()
     for c in classes:
         yarrrml_poms.append(['rdf:type', c.toPython()])
 
@@ -348,8 +348,12 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
             yarrrml_pom = {'p': predicate, 'o': {'mapping': None, 'condition':
                 {'function': 'equal', 'parameters': []}}}
             yarrrml_pom['o']['mapping'] = tm['parentTriplesMap'].split("/")[-1]
-            yarrrml_pom['o']['condition']['parameters'].append(['str1', tm['child'].replace('{', "$(").replace('}', ')')])
-            yarrrml_pom['o']['condition']['parameters'].append(['str2', tm['parent'].replace('{', "$(").replace('}', ')')])
+            child = yaml.seq(['str1', '$(' + tm['child'] + ')'])
+            child.fa.set_flow_style()
+            parent = yaml.seq(['str2', '$(' + tm['parent'] + ')'])
+            parent.fa.set_flow_style()
+            yarrrml_pom['o']['condition']['parameters'].append(child)
+            yarrrml_pom['o']['condition']['parameters'].append(parent)
 
         else:
             yarrrml_pom.append(predicate)
@@ -380,7 +384,6 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
                 yarrrml_pom.append(tm['languageMapValue'].replace('{', '$(').replace('}', ')')+"~lang")
 
         if type(yarrrml_pom) is list:
-            yaml = YAML()
             yarrrml_pom = yaml.seq(yarrrml_pom)
             yarrrml_pom.fa.set_flow_style()
         yarrrml_poms.append(yarrrml_pom)
