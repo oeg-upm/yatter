@@ -147,6 +147,8 @@ YARRRML_DATATYPE = 'datatype'
 YARRRML_LANGUAGE = 'language'
 
 YARRRML_CONDITION = 'condition'
+YARRRML_EQUAL = 'equal'
+YARRRML_JOIN = 'join'
 YARRRML_PARAMETERS = 'parameters' #used for conditions and functions
 YARRRML_PARAMETERS_SHORTCUT = 'pms'
 
