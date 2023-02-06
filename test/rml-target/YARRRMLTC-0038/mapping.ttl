@@ -31,11 +31,7 @@
 	rr:subjectMap [
 		a rr:SubjectMap;
 		rr:template "http://example.com/{Name}";
-		rr:graphMap [
-			a rr:GraphMap;
-			rr:constant <http://example.com/graph1>;
-			rml:logicalTarget <person-target>
-		];
+		rml:logicalTarget <person-target>
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [

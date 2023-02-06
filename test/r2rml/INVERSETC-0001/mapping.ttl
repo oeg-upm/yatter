@@ -6,32 +6,19 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix ql: <http://semweb.mmlab.be/ns/ql#>.
 @prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#>.
-@prefix schema: <http://schema.org/>.
-@prefix formats: <http://www.w3.org/ns/formats/>.
-@prefix comp: <http://semweb.mmlab.be/ns/rml-compression#>.
-@prefix void: <http://rdfs.org/ns/void#>.
 @base <http://example.com/ns#>.
 
 
-<logical_target_student_0> a rml:LogicalTarget;
-	 rml:target [
-		a void:Dataset;
-		void:dataDump <data/dump.ttl.gz>
-	];
-	 rml:serialization formats:Turtle;
-	 rml:compression comp:gzip.
+<student> a rr:TriplesMap;
 
-<student_0> a rr:TriplesMap;
-
-	rml:logicalSource [
-		a rml:LogicalSource;
-		rml:source "student.csv";
-		rml:referenceFormulation ql:CSV
+	rr:logicalTable [
+		a rr:LogicalTable;
+		rr:tableName "Student";
+		rr:sqlVersion rr:SQL2008
 	];
 	rr:subjectMap [
 		a rr:SubjectMap;
 		rr:template "http://example.com/{Name}";
-		rml:logicalTarget <logical_target_student_0>
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
@@ -40,8 +27,6 @@
 		];
 		rr:objectMap [
 			a rr:ObjectMap;
-			rml:reference "Name";
+			rr:column "Name";
 		];
 	].
-
-

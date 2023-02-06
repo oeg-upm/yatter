@@ -12,9 +12,8 @@ mappings:
   student:
     sources:
       - ['student.csv~csv']
-    s: http://example.com/$(Name)
-    graph:
-      - value: http://example.com/graph1
-        targets: person-target
+    s:
+     - value: http://example.com/$(Name)
+       targets: person-target
     po:
-      - [foaf:name, $(Name)]
+     - [foaf:name, $(Name)]

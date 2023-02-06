@@ -2,11 +2,7 @@ prefixes:
   foaf: http://xmlns.com/foaf/0.1/
 
 targets:
-  person-target:
-    access: data/dump.ttl.gz
-    type: void
-    serialization: turtle
-    compression: gzip
+  person-target: [data/dump.ttl.gz~void, turtle, gzip]
 
 mappings:
   student:
@@ -16,4 +12,4 @@ mappings:
      - value: http://example.com/$(Name)
        targets: person-target
     po:
-     - [foaf:name, $(Name)]
+      - [foaf:name, $(Name)]

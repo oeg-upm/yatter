@@ -4,6 +4,7 @@ from .constants import *
 from .source import get_initial_sources, add_source, add_table
 from .subject import add_subject
 from .termmap import generate_rml_termmap, check_type
+from ruamel.yaml import YAML
 
 
 def get_object_access(predicate_object_map):
@@ -141,9 +142,15 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
 
     for pm in predicate_list:
         pm_value = pm
+        execution = False
         if YARRRML_VALUE in pm:
             pm_value = pm[YARRRML_VALUE]
+        elif YARRRML_FUNCTION in pm:
+            pm_value = pm[YARRRML_FUNCTION]
+            execution = True
         template += generate_rml_termmap(R2RML_PREDICATE, R2RML_PREDICATE_CLASS, pm_value,"\t\t\t")
+        if execution:
+            template = template.replace(R2RML_CONSTANT + " " + pm_value, RML_EXECUTION + " <" + pm_value + ">")
         if YARRRML_TARGETS in pm:
             template = template[0:-3] + "\t" + RML_LOGICAL_TARGET + " <" + pm[YARRRML_TARGETS] + ">\n\t\t];\n"
 
@@ -205,30 +212,32 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                 template += generate_rml_termmap(STAR_OBJECT, R2RML_OBJECT_CLASS,
                                                  object_value, "\t\t\t", mapping_format)
             elif YARRRML_FUNCTION in om:
-                template += generate_rml_termmap(STAR_OBJECT, R2RML_OBJECT_CLASS, om[YARRRML_FUNCTION], "\t\t\t", mapping_format)
+                template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS, om[YARRRML_FUNCTION], "\t\t\t", mapping_format)
                 template =  template.replace(R2RML_CONSTANT+" "+om[YARRRML_FUNCTION], RML_EXECUTION + " <" + om.get(
                     YARRRML_FUNCTION) + ">")
             else:
                 template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,
                                                  object_value, "\t\t\t", mapping_format)
-            if YARRRML_DATATYPE in om:
-                template = template[0:len(template) - 5] + "\t\t\t" + R2RML_DATATYPE + " " \
-                           + om.get(YARRRML_DATATYPE) + "\n\t\t];\n"
-            if YARRRML_LANGUAGE in om:
-                template = template[0:len(template) - 5] + "\t\t\t" + R2RML_LANGUAGE + " \"" \
-                           + om.get(YARRRML_LANGUAGE) + "\"\n\t\t];\n"
-            if YARRRML_TYPE in om:
-                if om.get(YARRRML_TYPE) == "iri":
-                    iri = True
-                elif om.get(YARRRML_TYPE) == "literal":
-                    template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
-                               + R2RML_LITERAL + "\n\t\t];\n"
+            if type(om) is dict:
+                if YARRRML_DATATYPE in om:
+                    template = template[0:len(template) - 5] + "\t\t\t" + R2RML_DATATYPE + " " \
+                               + om.get(YARRRML_DATATYPE) + "\n\t\t];\n"
+                if YARRRML_LANGUAGE in om:
+                    template = template[0:len(template) - 5] + "\t\t\t" + R2RML_LANGUAGE + " \"" \
+                               + om.get(YARRRML_LANGUAGE) + "\"\n\t\t];\n"
+                if YARRRML_TYPE in om:
+                    if om.get(YARRRML_TYPE) == "iri":
+                        iri = True
+                    elif om.get(YARRRML_TYPE) == "literal":
+                        template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
+                                   + R2RML_LITERAL + "\n\t\t];\n"
+                if YARRRML_TARGETS in om:
+                    template = template[0:len(template) - 5] + "\t\t\t" + RML_LOGICAL_TARGET + " <"+ om.get(YARRRML_TARGETS) + ">\n\t\t];\n"
+
             if iri:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
                            + R2RML_IRI + "\n\t\t];\n"
 
-            if YARRRML_TARGETS in om:
-                template = template[0:len(template) - 5] + "\t\t\t" + RML_LOGICAL_TARGET + " <"+ om.get(YARRRML_TARGETS) + ">\n\t\t];\n"
 
 
 
@@ -236,7 +245,7 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
         graph_value = graph
         if YARRRML_VALUE in graph:
             graph_value = graph[YARRRML_VALUE]
-        template += generate_rml_termmap(R2RML_GRAPH, R2RML_GRAPH_CLASS, graph_value, "\t\t\t")
+        template += generate_rml_termmap(R2RML_GRAPH_MAP, R2RML_GRAPH_CLASS, graph_value, "\t\t\t")
         if YARRRML_TARGETS in graph:
             template = template[0:-3] + "\t" + RML_LOGICAL_TARGET + " <" + graph[
                 YARRRML_TARGETS] + ">\n\t\t];\n"
@@ -289,22 +298,22 @@ def ref_mapping(data, mapping, om, yarrrml_key, ref_type_property, mapping_forma
                 template += "\n\t\t]\n"
 
     else:
-        logger.error("Error in reference mapping another mapping in mapping " + mapping)
+        logger.error("Error in reference another mapping in mapping " + mapping)
         raise Exception("Review how is defined the reference to other mappings")
 
     return template
 
 
-def add_inverse_pom(tm, rdf_mapping, classes, prefixes):
+def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
     yarrrml_poms = []
-
+    yaml = YAML()
     for c in classes:
-        yarrrml_poms.append(['rdf:type', c])
+        yarrrml_poms.append(['rdf:type', c.toPython()])
 
     query = f'SELECT ?predicate ?predicateValue ?object ?objectValue ?termtype ?datatype ?datatypeMapValue ' \
             f'?language ?languageMapValue ?parentTriplesMap ?child ?parent' \
             f' WHERE {{ ' \
-            f'<{tm}> {R2RML_PREDICATE_OBJECT_MAP} ?predicateObjectMap . ' \
+            f'<{mapping_id}> {R2RML_PREDICATE_OBJECT_MAP} ?predicateObjectMap . ' \
             f'?predicateObjectMap {R2RML_PREDICATE}|{R2RML_SHORTCUT_PREDICATE} ?predicate .' \
             f'OPTIONAL {{ ?predicate {R2RML_CONSTANT} ?predicateValue . }}' \
             f'?predicateObjectMap {R2RML_OBJECT}|{R2RML_SHORTCUT_OBJECT} ?object .' \
@@ -339,29 +348,44 @@ def add_inverse_pom(tm, rdf_mapping, classes, prefixes):
             yarrrml_pom = {'p': predicate, 'o': {'mapping': None, 'condition':
                 {'function': 'equal', 'parameters': []}}}
             yarrrml_pom['o']['mapping'] = tm['parentTriplesMap'].split("/")[-1]
-            yarrrml_pom['o']['condition']['parameters'].append(['str1', tm['child'].replace('{', "$(").replace('}', ')')])
-            yarrrml_pom['o']['condition']['parameters'].append(['str2', tm['parent'].replace('{', "$(").replace('}', ')')])
+            child = yaml.seq(['str1', '$(' + tm['child'] + ')'])
+            child.fa.set_flow_style()
+            parent = yaml.seq(['str2', '$(' + tm['parent'] + ')'])
+            parent.fa.set_flow_style()
+            yarrrml_pom['o']['condition']['parameters'].append(child)
+            yarrrml_pom['o']['condition']['parameters'].append(parent)
 
         else:
             yarrrml_pom.append(predicate)
             if tm['objectValue']: # we have extended objectMap version
-                object = tm['objectValue'].replace('{', '$(').replace('}', ')')
-                if tm['termtype']:
-                    if tm['termtype'] == rdflib.URIRef(R2RML_IRI):
-                        object = object + '~iri'
-                yarrrml_pom.append(object)
-                if tm['datatype']:
-                    yarrrml_pom.append(tm['datatype'])
-                elif tm['datatypeMapValue']:
-                    yarrrml_pom.append(tm['datatypeMapValue'].replace('{', '$(').replace('}', ')'))
-                if tm['language']:
-                    yarrrml_pom.append(tm['language']+"~lang")
-                elif tm['languageMapValue']:
-                    yarrrml_pom.append(tm['languageMapValue'].replace('{', '$(').replace('}', ')')+"~lang")
+                object = tm['objectValue']
+            elif tm['object']:
+                object = tm['object']
+            else:
+                logger.error("There is not object for a given predicate ")
+                raise Exception("Review your mapping "+str(mapping_id))
 
-            elif tm['object'] and not tm['parentTriplesMap']: # we have object shortcut
-                yarrrml_pom.append(tm['object'].replace('{', "$(").replace('}', ')'))
+            if not object.startswith("http"):
+                object = '$(' + object + ')'
+            else:
+                object.replace('{', '$(').replace('}', ')')
 
+            if tm['termtype']:
+                if tm['termtype'] == rdflib.URIRef(R2RML_IRI):
+                    object = object + '~iri'
+            yarrrml_pom.append(object)
+            if tm['datatype']:
+                yarrrml_pom.append(tm['datatype'])
+            elif tm['datatypeMapValue']:
+                yarrrml_pom.append(tm['datatypeMapValue'].replace('{', '$(').replace('}', ')'))
+            if tm['language']:
+                yarrrml_pom.append(tm['language']+"~lang")
+            elif tm['languageMapValue']:
+                yarrrml_pom.append(tm['languageMapValue'].replace('{', '$(').replace('}', ')')+"~lang")
+
+        if type(yarrrml_pom) is list:
+            yarrrml_pom = yaml.seq(yarrrml_pom)
+            yarrrml_pom.fa.set_flow_style()
         yarrrml_poms.append(yarrrml_pom)
 
     return yarrrml_poms

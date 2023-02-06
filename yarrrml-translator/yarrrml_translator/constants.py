@@ -74,7 +74,8 @@ R2RML_PREDICATE_CLASS = 'rr:PredicateMap'
 R2RML_SHORTCUT_OBJECT = 'rr:object'
 R2RML_OBJECT = 'rr:objectMap'
 R2RML_OBJECT_CLASS = 'rr:ObjectMap'
-R2RML_GRAPH = 'rr:graphMap'
+R2RML_GRAPH = 'rr:graph'
+R2RML_GRAPH_MAP = 'rr:graphMap'
 R2RML_GRAPH_CLASS = 'rr:GraphMap'
 R2RML_DATATYPE = 'rr:datatype'
 R2RML_TERMTYPE = 'rr:termType'
@@ -146,6 +147,8 @@ YARRRML_DATATYPE = 'datatype'
 YARRRML_LANGUAGE = 'language'
 
 YARRRML_CONDITION = 'condition'
+YARRRML_EQUAL = 'equal'
+YARRRML_JOIN = 'join'
 YARRRML_PARAMETERS = 'parameters' #used for conditions and functions
 YARRRML_PARAMETERS_SHORTCUT = 'pms'
 

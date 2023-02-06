@@ -13,7 +13,7 @@ from rdflib.graph import Graph
 from rdflib import compare
 
 
-def test_yarrrmltc0032():
+def test_yarrrmltc0034():
     expected_mapping = Graph()
     expected_mapping.parse(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mapping.ttl'), format="ttl")
 

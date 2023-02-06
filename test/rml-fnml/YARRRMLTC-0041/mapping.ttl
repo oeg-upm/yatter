@@ -37,15 +37,17 @@
 	];
 	rr:subjectMap [
 		a rr:SubjectMap;
-		fnml:execution <function_student2_0>;
+		rr:template "http://example.com/{Name}";
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant foaf:firstName;
+			rr:constant foaf:name;
 		];
 		rr:objectMap [
 			a rr:ObjectMap;
-			rml:reference "name";
+			fnml:execution <function_student2_0>;
 		];
 	].
+
+

@@ -17,15 +17,14 @@ def add_internal_function(mapping_id, mapping_data, functions):
     keys = mapping_data.keys()
     for key in keys:
         if type(mapping_data[key]) is list:
-            for i in range(len(mapping_data[key])):
+            for i in range(len(mapping_data[key])):  # when the function is defined in POMs
                 value = mapping_data[key][i]
-                if YARRRML_FUNCTION in value and value[YARRRML_FUNCTION] != "equal":
-                    function_id = "function_" + mapping_id
-                    old_id = function_id + "_"+ str(local_id)
-                    function = generate_function(value, function_id)
-                    functions.append(function)
-                    mapping_data[key][i][YARRRML_FUNCTION] = old_id
-                    local_id += 1 #different functions in the same TM
+                if YARRRML_FUNCTION in value:
+                    function_return = transform_function(mapping_id, value, functions)
+                    if type(function_return) is dict:
+                        mapping_data[key][i] = function_return
+                    elif type(function_return) is str:
+                        mapping_data[key][i][YARRRML_FUNCTION] = function_return
                 else:
                     if type(value) is list:
                         for v in value:
@@ -33,14 +32,26 @@ def add_internal_function(mapping_id, mapping_data, functions):
                                 add_internal_function(mapping_id, v, functions)
                     elif type(value) is dict:
                         add_internal_function(mapping_id, value, functions)
-        elif type(mapping_data[key]) is dict:
-            if YARRRML_FUNCTION in mapping_data[key] and mapping_data[key][YARRRML_FUNCTION] != "equal":
-                function_id = "function_" + mapping_id
-                old_id = function_id + "_" + str(local_id)
-                function = generate_function(mapping_data[key], function_id)
-                functions.append(function)
-                mapping_data[key][YARRRML_FUNCTION] = old_id
-                local_id += 1  # different functions in the same TM
+        elif type(mapping_data[key]) is dict: # when the function is defined in the subject
+            if YARRRML_FUNCTION in mapping_data[key]:
+                function_return = transform_function(mapping_id,mapping_data[key], functions)
+                if type(function_return) is dict:
+                    mapping_data[key] = function_return
+                elif type(function_return) is str:
+                    mapping_data[key][YARRRML_FUNCTION] = function_return
+
+def transform_function(mapping_id, function_value, functions):
+    global local_id
+    function_return = None
+    if YARRRML_JOIN in function_value[YARRRML_FUNCTION]:
+        function_return= generate_extended_join(function_value[YARRRML_FUNCTION])
+    elif function_value[YARRRML_FUNCTION] != YARRRML_EQUAL:
+        function_id = "function_" + mapping_id
+        function_return = function_id + "_" + str(local_id)
+        functions.append(generate_function(function_value, function_id))
+        local_id += 1  # different functions in the same TM
+
+    return function_return
 
 def generate_function(function_yarrrml_data, id_function):
     global local_id
@@ -106,3 +117,26 @@ def split_in_line_function(function_in_line):
 
 
     return parameters,function_name
+
+
+def generate_extended_join(yarrrml_data):
+    extended_join = {}
+    data=yarrrml_data.replace(yarrrml_data.split("(")[0], "").replace("(","",1).rsplit(")",1)[0].split(",",1)
+    extended_join[YARRRML_MAPPING] = data[0]
+    equals = data[1].split(YARRRML_EQUAL)
+    equals = list(filter(lambda val: val != ' ', equals))
+
+    if equals:
+        extended_join[YARRRML_CONDITION] = []
+
+    for value in equals:
+        parameters = []
+        conditions = value.replace("(","",1).rsplit(")",1)[0].split(",")
+        parameters.append(['str1',conditions[0]])
+        parameters.append(['str2', conditions[1]])
+        extended_join[YARRRML_CONDITION].append({YARRRML_FUNCTION: YARRRML_EQUAL, YARRRML_PARAMETERS: parameters})
+
+    return extended_join
+
+
+

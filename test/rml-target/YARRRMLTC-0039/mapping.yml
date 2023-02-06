@@ -13,8 +13,8 @@ mappings:
     sources:
       - ['student.csv~csv']
     s: http://example.com/$(Name)
+    graph:
+      - value: http://example.com/graph1
+        targets: person-target
     po:
-      - p: foaf:name
-        o:
-          - value: $(Name)
-            targets: person-target
+      - [foaf:name, $(Name)]
