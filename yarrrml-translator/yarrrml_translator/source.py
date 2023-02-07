@@ -1,7 +1,7 @@
 import re
 import rdflib
 from .constants import *
-
+from ruamel.yaml import YAML
 
 def get_initial_sources(data):
     list_initial_sources = []
@@ -263,6 +263,7 @@ def get_logical_table(logical_table_id, rdf_mapping):
 
 
 def get_logical_source(logical_source_id, rdf_mapping):
+    yaml = YAML()
     source = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(RML_URI).source)
     iterator = rdf_mapping.value(subject=logical_source_id, predicate=rdflib.Namespace(RML_URI).iterator)
     reference_formulation = rdf_mapping.value(subject=logical_source_id,
@@ -273,11 +274,9 @@ def get_logical_source(logical_source_id, rdf_mapping):
     if source is None:
         logger.error("Mapping does not define source access")
         raise Exception()
-    yarrrml_source = []
-    if source and reference_formulation and iterator:
 
-        yarrrml_source.append(
-            [source.value + '~' + reference_formulation.toPython().replace(QL_URI, '').lower(), iterator.value])
+    if source and reference_formulation and iterator:
+        yarrrml_source =  [source.value + '~' + reference_formulation.toPython().replace(QL_URI, '').lower(), iterator.value]
     elif source and sql_query:
         # this means a database source
         source_dict = {"query": sql_query.value, "source": source.value}
@@ -285,13 +284,17 @@ def get_logical_source(logical_source_id, rdf_mapping):
             source_dict["referenceFormulation"] = reference_formulation.toPython().replace(QL_URI, '').lower()
         if sql_version:
             source_dict["queryFormulation"] = sql_version.toPython().replace(R2RML_URI, '').lower()
-        yarrrml_source.append(source_dict)
+        yarrrml_source = source_dict
     elif source and reference_formulation:
-        yarrrml_source.append([source.value + '~' + reference_formulation.toPython().replace(QL_URI, '').lower()])
+        yarrrml_source = [source.value + '~' + reference_formulation.toPython().replace(QL_URI, '').lower()]
     else:
         if source.endsWith(".csv"):
-            yarrrml_source.append([source.value + '~csv'])
+            yarrrml_source = [source.value + '~csv']
         else:
-            yarrrml_source.append([source.value])
+            yarrrml_source = [source.value]
+
+    if type(yarrrml_source) is list:
+        yarrrml_source = yaml.seq(yarrrml_source)
+        yarrrml_source.fa.set_flow_style()
 
     return yarrrml_source

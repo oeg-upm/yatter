@@ -101,21 +101,18 @@ def get_non_asserted_mappings(yarrrml_data, mapping_format):
     for mapping in yarrrml_data.get(YARRRML_MAPPINGS):
         keys = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).keys()
         for key in keys:
-            if type(yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)) is dict:
-                values = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)
-                if YARRRML_NON_ASSERTED in values:
-                    mappings[values[YARRRML_NON_ASSERTED]] = "non_asserted"
-                    mapping_format = STAR_URI
-                elif YARRRML_QUOTED in values:
-                    mapping_format = STAR_URI
-            if type(yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)) is list and key==YARRRML_PREDICATEOBJECT_SHORTCUT:
+            if type(yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key)) is list:
                 for value in yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).get(key):
-                    if type(value) is dict and YARRRML_OBJECT_SHORTCUT in value:
-                        if YARRRML_NON_ASSERTED in value[YARRRML_OBJECT_SHORTCUT]:
-                            mappings[value[YARRRML_OBJECT_SHORTCUT][YARRRML_NON_ASSERTED]] = "non_asserted"
-                            mapping_format = STAR_URI
-                        elif YARRRML_QUOTED in value[YARRRML_OBJECT_SHORTCUT]:
-                            mapping_format = STAR_URI
+                    if type(value) is dict:
+                        star_data = [value]
+                        if YARRRML_OBJECT_SHORTCUT in value:
+                            star_data = value[YARRRML_OBJECT_SHORTCUT]
+                        for val in star_data:
+                            if YARRRML_NON_ASSERTED in val:
+                                mappings[val[YARRRML_NON_ASSERTED]] = "non_asserted"
+                                mapping_format = STAR_URI
+                            elif YARRRML_QUOTED in val:
+                                mapping_format = STAR_URI
 
     return mappings, mapping_format
 

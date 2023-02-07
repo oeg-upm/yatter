@@ -44,7 +44,7 @@ def transform_function(mapping_id, function_value, functions):
     global local_id
     function_return = None
     if YARRRML_JOIN in function_value[YARRRML_FUNCTION]:
-        function_return= generate_extended_join(function_value[YARRRML_FUNCTION])
+        function_return = generate_extended_join(function_value[YARRRML_FUNCTION])
     elif function_value[YARRRML_FUNCTION] != YARRRML_EQUAL:
         function_id = "function_" + mapping_id
         function_return = function_id + "_" + str(local_id)
@@ -122,7 +122,15 @@ def split_in_line_function(function_in_line):
 def generate_extended_join(yarrrml_data):
     extended_join = {}
     data=yarrrml_data.replace(yarrrml_data.split("(")[0], "").replace("(","",1).rsplit(")",1)[0].split(",",1)
-    extended_join[YARRRML_MAPPING] = data[0]
+    if YARRRML_NON_ASSERTED in data[0]:
+        extended_join[YARRRML_NON_ASSERTED] = data[0].split("=")[1]
+    elif YARRRML_QUOTED in data[0]:
+        extended_join[YARRRML_QUOTED] = data[0].split("=")[1]
+    elif YARRRML_MAPPING in data[0] and "=" in data[0]:
+        extended_join[YARRRML_MAPPING] = data[0].split("=")[1]
+    else:
+        extended_join[YARRRML_MAPPING] = data[0]
+
     equals = data[1].split(YARRRML_EQUAL)
     equals = list(filter(lambda val: val != ' ', equals))
 

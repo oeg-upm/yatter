@@ -33,7 +33,7 @@ def add_subject(data, mapping, mapping_format):
                     subject_termmap = ref_mapping(data, mapping, individual_subject, YARRRML_NON_ASSERTED, STAR_QUOTED, mapping_format)
                 else:
                     subject_termmap = ref_mapping(data, mapping, individual_subject, YARRRML_QUOTED, STAR_QUOTED, mapping_format)
-                subject_termmap=subject_termmap.replace(R2RML_REFOBJECT_CLASS,STAR_CLASS).replace(R2RML_OBJECT,STAR_SUBJECT).replace("\t\t\t\t","\t\t\t\t\t").replace("\t\t","\t")
+                subject_termmap=subject_termmap.replace(R2RML_REFOBJECT_CLASS,STAR_CLASS).replace(STAR_OBJECT,STAR_SUBJECT).replace("\t\t\t\t","\t\t\t\t\t").replace("\t\t","\t")
             else:
                 subject_termmap = generate_rml_termmap(STAR_SUBJECT, STAR_CLASS, individual_subject, "\t\t")
         elif mapping_format == STAR_URI:

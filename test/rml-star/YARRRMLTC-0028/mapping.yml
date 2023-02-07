@@ -19,4 +19,4 @@ mappings:
   po:
   - p: ex:q
     o:
-     quotedNonAsserted: firstTM
+     - quotedNonAsserted: firstTM

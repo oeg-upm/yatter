@@ -16,11 +16,11 @@ mappings:
   sources:
    - ['data2.csv~csv']
   s:
-    quotedNonAsserted: firstTM
-    condition:
-     function: equal
-     parameters:
-       - [str1, $(c2-2)]
-       - [str2, $(c1-3)]
+    - quotedNonAsserted: firstTM
+      condition:
+       function: equal
+       parameters:
+         - [str1, $(c2-2)]
+         - [str2, $(c1-3)]
   po:
    - [ex:q, $(c2-1)]
