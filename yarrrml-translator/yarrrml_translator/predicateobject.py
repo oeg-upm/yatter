@@ -393,13 +393,21 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
                 yarrrml_pom.append(object)
 
             if tm['datatype']:
-                datatype = tm['datatype']
+                datatype = tm['datatype'].toPython()
             elif tm['datatypeMapValue']:
-                datatype = tm['datatypeMapValue'].replace('{', '$(').replace('}', ')')
+                datatype = tm['datatypeMapValue']
+                if not datatype.startswith("http"):
+                    datatype = '$(' + datatype + ')'
+                else:
+                    datatype.replace('{', '$(').replace('}', ')')
             if tm['language']:
-                language = tm['language']+"~lang"
+                language = tm['language'].toPython()+"~lang"
             elif tm['languageMapValue']:
-                language = tm['languageMapValue'].replace('{', '$(').replace('}', ')')+"~lang"
+                language = tm['languageMapValue']
+                if not language.startswith("http"):
+                    language = '$(' + language + ')'
+                else:
+                    language.replace('{', '$(').replace('}', ')')
 
             if type(yarrrml_pom) is list:
                 if datatype:
