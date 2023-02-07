@@ -1,0 +1,49 @@
+prefixes:
+  owl: http://www.w3.org/2002/07/owl#
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  xml: http://www.w3.org/XML/1998/namespace
+  foaf: http://xmlns.com/foaf/0.1/
+  rr: http://www.w3.org/ns/r2rml#
+  rml: http://semweb.mmlab.be/ns/rml#
+  ql: http://semweb.mmlab.be/ns/ql#
+  d2rq: http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#
+mappings:
+  student:
+    sources:
+    - table: Student
+      queryFormulation: sql2008
+    s: http://example.com/resource/student_$(ID)
+    graph: http://example.com/graph/students
+    po:
+    - [rdf:type, http://example.com/ontology/Student]
+    - [foaf:Name, $(Name)]
+    - p: foaf:Name
+      o: $(Name)
+      graph: http://example.com/graph/students
+    - p: http://example.com/ontology/practises
+      o:
+        mapping: sport
+        condition:
+          function: equal
+          parameters:
+          - [str1, $(Sport)]
+          - [str2, $(Name)]
+    - p: http://example.com/ontology/practises
+      o:
+        mapping: sport
+        condition:
+          function: equal
+          parameters:
+          - [str1, $(Sport)]
+          - [str2, $(Name)]
+  sport:
+    sources:
+    - table: Sport
+      queryFormulation: sql2008
+    s: http://example.com/resource/sport_$(ID)
+    graph: http://example.com/graph/sports
+    po:
+    - [rdf:type, http://example.com/ontology/Sport]
+    - [rdfs:label, $(Name)]

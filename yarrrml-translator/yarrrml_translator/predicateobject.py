@@ -1,6 +1,6 @@
 import rdflib
-
 from .constants import *
+from .graph import add_inverse_graph
 from .source import get_initial_sources, add_source, add_table
 from .subject import add_subject
 from .termmap import generate_rml_termmap, check_type
@@ -314,12 +314,17 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
         yarrrml_poms.append(['rdf:type', c.toPython()])
 
     query = f'SELECT ?predicate ?predicateValue ?object ?objectValue ?termtype ?datatype ?datatypeMapValue ' \
-            f'?language ?languageMapValue ?parentTriplesMap ?child ?parent' \
+            f'?language ?languageMapValue ?parentTriplesMap ?child ?parent ?graphValue' \
             f' WHERE {{ ' \
             f'<{mapping_id}> {R2RML_PREDICATE_OBJECT_MAP} ?predicateObjectMap . ' \
             f'?predicateObjectMap {R2RML_PREDICATE}|{R2RML_SHORTCUT_PREDICATE} ?predicate .' \
             f'OPTIONAL {{ ?predicate {R2RML_CONSTANT} ?predicateValue . }}' \
             f'?predicateObjectMap {R2RML_OBJECT}|{R2RML_SHORTCUT_OBJECT} ?object .' \
+            f' {{ OPTIONAL {{ ?predicateObjectMap {R2RML_GRAPH} ?graphValue .}}' \
+            f' }} UNION {{' \
+            f' OPTIONAL {{ ' \
+            f' ?predicateObjectMap {R2RML_GRAPH_MAP} ?graphMap . ' \
+            f' ?graphMap {R2RML_TEMPLATE}|{R2RML_CONSTANT}|{RML_REFERENCE} ?graphValue .}} }}' \
             f'OPTIONAL {{ ' \
             f'?object {R2RML_TEMPLATE}|{R2RML_COLUMN}|{R2RML_CONSTANT}|{RML_REFERENCE} ?objectValue .' \
             f'OPTIONAL {{ ?object {R2RML_TERMTYPE} ?termtype . }}' \
@@ -359,11 +364,13 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
             yarrrml_pom['o']['condition']['parameters'].append(parent)
 
         else:
-            yarrrml_pom.append(predicate)
+            datatype = None
+            language = None
+
             if tm['objectValue']: # we have extended objectMap version
-                object = tm['objectValue']
+                object = tm['objectValue'].toPython()
             elif tm['object']:
-                object = tm['object']
+                object = tm['object'].toPython()
             else:
                 logger.error("There is not object for a given predicate ")
                 raise Exception("Review your mapping "+str(mapping_id))
@@ -376,15 +383,34 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
             if tm['termtype']:
                 if tm['termtype'] == rdflib.URIRef(R2RML_IRI):
                     object = object + '~iri'
-            yarrrml_pom.append(object)
+
+            if tm['graphValue']:
+                graph_value = add_inverse_graph([tm['graphValue']])
+                yarrrml_pom = {'p': predicate,'o': object}
+                yarrrml_pom.update(graph_value)
+            else:
+                yarrrml_pom.append(predicate)
+                yarrrml_pom.append(object)
+
             if tm['datatype']:
-                yarrrml_pom.append(tm['datatype'])
+                datatype = tm['datatype']
             elif tm['datatypeMapValue']:
-                yarrrml_pom.append(tm['datatypeMapValue'].replace('{', '$(').replace('}', ')'))
+                datatype = tm['datatypeMapValue'].replace('{', '$(').replace('}', ')')
             if tm['language']:
-                yarrrml_pom.append(tm['language']+"~lang")
+                language = tm['language']+"~lang"
             elif tm['languageMapValue']:
-                yarrrml_pom.append(tm['languageMapValue'].replace('{', '$(').replace('}', ')')+"~lang")
+                language = tm['languageMapValue'].replace('{', '$(').replace('}', ')')+"~lang"
+
+            if type(yarrrml_pom) is list:
+                if datatype:
+                    yarrrml_pom.append(datatype)
+                if language:
+                    yarrrml_pom.append(language)
+            elif type(yarrrml_pom) is dict:
+                if datatype:
+                    yarrrml_pom[YARRRML_DATATYPE] = datatype
+                if language:
+                    yarrrml_pom[YARRRML_LANGUAGE] = language
 
         if type(yarrrml_pom) is list:
             yarrrml_pom = yaml.seq(yarrrml_pom)
