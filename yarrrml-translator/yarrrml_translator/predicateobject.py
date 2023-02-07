@@ -257,6 +257,7 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
 def ref_mapping(data, mapping, om, yarrrml_key, ref_type_property, mapping_format):
     list_mappings = []
     template = ""
+    object = R2RML_OBJECT
     for mappings in data.get(YARRRML_MAPPINGS):
         list_mappings.append(mappings)
 
@@ -268,11 +269,13 @@ def ref_mapping(data, mapping, om, yarrrml_key, ref_type_property, mapping_forma
         if mapping_format == R2RML_URI:
             source_list = add_table(data, mapping_join, list_initial_sources)
         else:
+            if mapping_format == STAR_URI:
+                object = STAR_OBJECT
             source_list = add_source(data, mapping_join, list_initial_sources)
 
         number_joins_rml = len(subject_list) * len(source_list)
         for i in range(number_joins_rml):
-            template += "\t\t" + R2RML_OBJECT + \
+            template += "\t\t" + object + \
                         " [ \n\t\t\ta " + R2RML_REFOBJECT_CLASS + \
                         ";\n\t\t\t" + ref_type_property + " <" + mapping_join + "_" + str(i) + ">;\n"
             if YARRRML_CONDITION in om:

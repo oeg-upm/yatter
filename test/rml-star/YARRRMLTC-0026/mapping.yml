@@ -16,7 +16,7 @@ mappings:
   sources:
    - ['data.csv~csv']
   s:
-   quoted: firstTM
+   - quoted: firstTM
   po:
    - [ex:r, http://example/$(c3)~iri]
 
@@ -24,6 +24,6 @@ mappings:
   sources:
    - ['data.csv~csv']
   s:
-   quoted: secondTM
+   - quoted: secondTM
   po:
    - [ex:q, $(c4), xsd:integer]

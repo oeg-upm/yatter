@@ -16,6 +16,6 @@ mappings:
   sources:
    - ['data.csv~csv']
   s:
-   quotedNonAsserted: firstTM
+   - quotedNonAsserted: firstTM
   po:
    - [ex:q, http://example/$(c3)~iri]
