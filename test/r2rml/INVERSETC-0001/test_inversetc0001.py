@@ -9,7 +9,7 @@ __name__ = "INVERSETC-0001 based on YARRRMLTC-0001"
 
 import os
 from ruamel.yaml import YAML
-import yarrrml_translator
+import yatter
 from rdflib.graph import Graph
 from deepdiff import DeepDiff
 R2RML_URI = 'http://www.w3.org/ns/r2rml#'
@@ -22,7 +22,7 @@ def test_inversetc0001():
 
     input_mapping = Graph()
     mapping_path = input_mapping.parse(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mapping.ttl'), format="ttl")
-    translated_mapping = yaml.load(str(yarrrml_translator.inverse_translation(mapping_path, mapping_format=R2RML_URI)))
+    translated_mapping = yaml.load(str(yatter.inverse_translation(mapping_path, mapping_format=R2RML_URI)))
 
     ddiff = DeepDiff(expected_mapping['mappings'], translated_mapping['mappings'], ignore_order=True)
 

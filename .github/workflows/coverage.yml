@@ -13,11 +13,11 @@ jobs:
         python-version: '3.9'
     - name: Install requirements
       run: pip install -r requirements.txt pytest-cov coverage DeepDiff
-    - name: Build yarrrml-translator
+    - name: Build yatter
       run: |
-        cd yarrrml-translator
+        cd src
         pip install .
     - name: Run tests and collect coverage
-      run: coverage run --source yarrrml_translator -m pytest
+      run: coverage run --source yatter -m pytest
     - name: Upload coverage reports to Codecov with GitHub Action
       uses: codecov/codecov-action@v3
