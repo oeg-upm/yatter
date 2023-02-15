@@ -41,7 +41,7 @@ def parse_inputs():
                 input_data.append(yaml.load(f))
     else:
         sys.tracebacklimit = 0
-        logger.error("No correct arguments, run python3 -m yarrrml_translator -h to see the help)")
+        logger.error("No correct arguments, run python3 -m yatter -h to see the help)")
         raise Exception("")
 
     return input_format, input_data

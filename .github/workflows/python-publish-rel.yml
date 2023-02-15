@@ -27,6 +27,6 @@ jobs:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        cd yarrrml-translator
+        cd src
         python setup.py -k rel sdist bdist_wheel
         twine upload dist/*

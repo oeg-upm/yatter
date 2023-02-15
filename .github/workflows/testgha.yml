@@ -22,9 +22,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install setuptools wheel twine pytest DeepDiff
         pip install -r requirements.txt
-    - name: Build yarrrml-translator
+    - name: Build yatter
       run: |
-        cd yarrrml-translator
+        cd src
         pip install .
     - name: Test with pytest
       run: |
