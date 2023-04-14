@@ -121,5 +121,5 @@ def get_non_asserted_mappings(yarrrml_data, mapping_format):
 def merge_mapping_section_by_key(key,yarrrml_list):
     output = {key:{}}
     for yarrrml_mapping in yarrrml_list:
-        output[key] =  output[key] | yarrrml_mapping
+        output[key] = output[key] | yarrrml_mapping
     return output

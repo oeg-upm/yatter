@@ -201,7 +201,7 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
             else:
                template += ref_mapping(data, mapping, om, YARRRML_QUOTED, STAR_QUOTED, mapping_format)
         else:
-            if YARRRML_VALUE in om:
+            if YARRRML_VALUE in om and type(om) is dict:
                 object_value = om.get(YARRRML_VALUE)
             else:
                 object_value = om
@@ -311,7 +311,9 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
     yarrrml_poms = []
     yaml = YAML()
     for c in classes:
-        yarrrml_poms.append(['rdf:type', c.toPython()])
+        yarrrml_pom = yaml.seq(['rdf:type', c.toPython()])
+        yarrrml_pom.fa.set_flow_style()
+        yarrrml_poms.append(yarrrml_pom)
 
     query = f'SELECT ?predicate ?predicateValue ?object ?objectValue ?termtype ?datatype ?datatypeMapValue ' \
             f'?language ?languageMapValue ?parentTriplesMap ?child ?parent ?graphValue' \

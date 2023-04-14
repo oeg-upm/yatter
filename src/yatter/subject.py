@@ -40,7 +40,7 @@ def add_subject(data, mapping, mapping_format):
             subject_termmap = generate_rml_termmap(STAR_SUBJECT, R2RML_SUBJECT_CLASS, individual_subject, "\t\t")
         else:
             subject_value = individual_subject
-            if YARRRML_VALUE in individual_subject:
+            if YARRRML_VALUE in individual_subject and type(individual_subject) is dict:
                 subject_value = individual_subject.get(YARRRML_VALUE)
             elif YARRRML_FUNCTION in individual_subject:
                 subject_value = individual_subject.get(YARRRML_FUNCTION)
