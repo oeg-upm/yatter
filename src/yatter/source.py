@@ -170,9 +170,7 @@ def database_source(mapping, source, db_identifier):
 
 def switch_in_reference_formulation(value):
     value = value.lower()
-    if value == "csv":
-        switcher = value
-    elif "json" in value:
+    if "json" in value:
         if "path" in value:
             switcher = "json"
         else:
@@ -182,6 +180,8 @@ def switch_in_reference_formulation(value):
             switcher = "xml"
         else:
             switcher = "xpath"
+    else:
+        switcher = value
     return switcher
 
 
