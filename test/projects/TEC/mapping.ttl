@@ -1,0 +1,653 @@
+@prefix ecfo: <https://w3id.org/ecfo#>.
+@prefix qudt: <http://qudt.org/schema/qudt/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix time: <http://www.w3.org/2006/time#>.
+@prefix schema: <https://schema.org/>.
+@prefix ecfo_instance: <https://w3id.org/ecfkg/i/UK/BEIS/2016/>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+@prefix rml: <http://semweb.mmlab.be/ns/rml#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix ql: <http://semweb.mmlab.be/ns/ql#>.
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix schema: <http://schema.org/>.
+@prefix formats: <http://www.w3.org/ns/formats/>.
+@prefix comp: <http://semweb.mmlab.be/ns/rml-compression#>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix fnml: <http://semweb.mmlab.be/ns/fnml#>.
+@prefix grel: <http://users.ugent.be/~bjdmeest/function/grel.ttl#>.
+@base <http://example.com/ns#>.
+
+
+<CF_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "./data/conversion_factors_2016_modified_v2.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "ecfo_instance:CF_{id}";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant ecfo:EmissionConversionFactor;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ecfo:hasAdditionalContext;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "Column Text";
+			rr:language "en"
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ecfo:hasScope;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "https://w3id.org/ecfo#{Scope}";
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:value;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "GHG Conversion Factor 2016";
+			rr:datatype xsd:float
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ecfo:hasTag;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "https://w3id.org/ecfkg/i/{Level 1}";
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ecfo:hasTag;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "https://w3id.org/ecfkg/i/{Level 2}";
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ecfo:hasTag;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "https://w3id.org/ecfkg/i/{Level 3}";
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ecfo:hasTag;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "https://w3id.org/ecfkg/i/{Level 4}";
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ecfo:hasSourceUnit;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "uom_wd";
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ecfo:hasEmissionSource;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "https://w3id.org/ecfkg/i/{emission_source}";
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ecfo:hasTargetUnit;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "ghg_wd";
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ecfo:hasEmissionTarget;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "emission_target_wd";
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ecfo:hasApplicablePeriod;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "ecfo_instance:applicablePeriod/{valid_from}/{valid_to}";
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant ecfo:hasApplicableLocation;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "region_wd";
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant dc:publisher;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant <https://w3id.org/ecfkg/i/Organization/BEIS>;
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant prov:wasDerivedFrom;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant <https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/558103/2016_Flat_format_file_v01-01.xlsx>;
+			rr:datatype xsd:anyURI
+		];
+	].
+
+
+<Agent_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "./data/conversion_factors_2016_modified_v2.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:constant <https://w3id.org/ecfkg/i/Organization/BEIS>;
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant prov:Organization;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdfs:label;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant "BEIS";
+			rr:language "en"
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdfs:seeAlso;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant <https://www.gov.uk/government/organisations/department-for-business-energy-and-industrial-strategy/about>;
+			rr:datatype xsd:anyURI
+		];
+	].
+
+
+<TimeStart_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "./data/conversion_factors_2016_modified_v2.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "ecfo_instance:applicablePeriod/{valid_from}/{valid_to}/start";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant time:Instant;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant time:inXSDDate;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "valid_from";
+			rr:datatype xsd:dateTime
+		];
+	].
+
+
+<TimeEnd_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "./data/conversion_factors_2016_modified_v2.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "ecfo_instance:applicablePeriod/{valid_from}/{valid_to}/end";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant time:Instant;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant time:inXSDDate;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "valid_to";
+			rr:datatype xsd:dateTime
+		];
+	].
+
+
+<TemporalEntity_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "./data/conversion_factors_2016_modified_v2.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "ecfo_instance:applicablePeriod/{valid_from}/{valid_to}";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant time:TemporalEntity;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant time:hasBeginning;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "ecfo_instance:applicablePeriod/{valid_from}/{valid_to}/start";
+			rr:termType rr:IRI
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant time:hasEnd;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:template "ecfo_instance:applicablePeriod/{valid_from}/{valid_to}/end";
+			rr:termType rr:IRI
+		];
+	].
+
+
+<EmisisonSource_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "./data/conversion_factors_2016_modified_v2.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "https://w3id.org/ecfkg/i/{emission_source}";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant skos:Concept;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdfs:label;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "emission_source";
+		];
+	].
+
+
+<EmisisonTarget_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "./data/conversion_factors_2016_modified_v2.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rml:reference "emission_target_wd";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant ecfo:ChemicalCompound;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdfs:label;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "emission_target";
+			rr:language "en"
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant schema:molecularFormula;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "emission_target_formula";
+			rr:language "en"
+		];
+	].
+
+
+<L1_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "./data/conversion_factors_2016_modified_v2.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "https://w3id.org/ecfkg/i/{Level 1}";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant skos:Concept;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdfs:label;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "Level 1";
+			rr:language "en"
+		];
+	].
+
+
+<L2_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "./data/conversion_factors_2016_modified_v2.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "https://w3id.org/ecfkg/i/{Level 2}";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant skos:Concept;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdfs:label;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "Level 2";
+			rr:language "en"
+		];
+	].
+
+
+<L3_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "./data/conversion_factors_2016_modified_v2.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "https://w3id.org/ecfkg/i/{Level 3}";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant skos:Concept;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdfs:label;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "Level 3";
+			rr:language "en"
+		];
+	].
+
+
+<L4_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "./data/conversion_factors_2016_modified_v2.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rr:template "https://w3id.org/ecfkg/i/{Level 4}";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant skos:Concept;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdfs:label;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "Level 4";
+			rr:language "en"
+		];
+	].
+
+
+<sourceUnit_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "./data/conversion_factors_2016_modified_v2.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rml:reference "uom_wd";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant qudt:Unit;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdfs:label;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "UOM simple";
+			rr:language "en"
+		];
+	].
+
+
+<targetUnit_0> a rr:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source "./data/conversion_factors_2016_modified_v2.csv";
+		rml:referenceFormulation ql:CSV
+	];
+	rr:subjectMap [
+		a rr:SubjectMap;
+		rml:reference "ghg_wd";
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdf:type;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rr:constant qudt:Unit;
+		];
+	];
+	rr:predicateObjectMap [
+		rr:predicateMap [
+			a rr:PredicateMap;
+			rr:constant rdfs:label;
+		];
+		rr:objectMap [
+			a rr:ObjectMap;
+			rml:reference "GHG";
+			rr:language "en"
+		];
+	].
+
+
