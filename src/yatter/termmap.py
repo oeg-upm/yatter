@@ -23,7 +23,7 @@ def generate_rml_termmap(rml_property, rml_class, text, identation, mapping_form
     term_map = get_termmap_type(text, mapping_format)
     if term_map == R2RML_TEMPLATE:
         text = generate_rml_template(text)
-        text = text.replace('"',r'\"')
+        text = text.replace('"', r'\"')
     elif term_map == RML_REFERENCE or term_map == R2RML_COLUMN:
         text = text.replace("$(", "").replace(")", "")
         text = text.replace('"', r'\"')

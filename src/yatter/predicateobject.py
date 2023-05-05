@@ -4,8 +4,8 @@ from .graph import add_inverse_graph
 from .source import get_initial_sources, add_source, add_table
 from .subject import add_subject
 from .termmap import generate_rml_termmap, check_type
+from .mapping import prefixes
 from ruamel.yaml import YAML
-
 
 def get_object_access(predicate_object_map):
     if YARRRML_OBJECT in predicate_object_map:
@@ -143,7 +143,7 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
     for pm in predicate_list:
         pm_value = pm
         execution = False
-        if YARRRML_VALUE in pm:
+        if YARRRML_VALUE in pm and type(pm) is dict:
             pm_value = pm[YARRRML_VALUE]
         elif YARRRML_FUNCTION in pm:
             pm_value = pm[YARRRML_FUNCTION]
@@ -165,8 +165,13 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                 template += generate_rml_termmap(STAR_OBJECT, R2RML_OBJECT_CLASS,
                                                  object_value, "\t\t\t", mapping_format)
             else:
-                template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,
+                object_map = generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,
                                              object_value, "\t\t\t", mapping_format)
+
+                if object_value not in prefixes and ":" not in object_value and R2RML_CONSTANT in object_map:
+                    object_map = object_map.replace(object_value, f"\"{object_value}\"")
+
+                template += object_map
             if len(om) == 2:
                 types = check_type(om[1])
                 if types != "error":
@@ -201,7 +206,7 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
             else:
                template += ref_mapping(data, mapping, om, YARRRML_QUOTED, STAR_QUOTED, mapping_format)
         else:
-            if YARRRML_VALUE in om:
+            if YARRRML_VALUE in om and type(om) is dict:
                 object_value = om.get(YARRRML_VALUE)
             else:
                 object_value = om
@@ -311,7 +316,9 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
     yarrrml_poms = []
     yaml = YAML()
     for c in classes:
-        yarrrml_poms.append(['rdf:type', c.toPython()])
+        yarrrml_pom = yaml.seq(['rdf:type', c.toPython()])
+        yarrrml_pom.fa.set_flow_style()
+        yarrrml_poms.append(yarrrml_pom)
 
     query = f'SELECT ?predicate ?predicateValue ?object ?objectValue ?termtype ?datatype ?datatypeMapValue ' \
             f'?language ?languageMapValue ?parentTriplesMap ?child ?parent ?graphValue' \
