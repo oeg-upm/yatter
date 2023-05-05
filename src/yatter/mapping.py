@@ -1,4 +1,5 @@
 from .import *
+prefixes = {}
 
 
 def add_mapping(mapping, mappings, it):
@@ -11,6 +12,7 @@ def add_mapping(mapping, mappings, it):
 
 
 def add_prefix(data):
+    global prefixes
     template = []
     common_prefixes = []
     if YARRRML_PREFIXES in data:

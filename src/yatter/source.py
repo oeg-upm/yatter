@@ -1,3 +1,4 @@
+import os
 import re
 import rdflib
 from .constants import *
@@ -85,7 +86,7 @@ def add_source_simplified(mapping, source):
     source_rdf = ""
     file_path = re.sub("~.*", "", source[0])
     reference_formulation = source[0].split('~')[1]
-    source_extension = file_path.split('.')[1]
+    source_extension = os.path.splitext(file_path)[1].replace(".","")
     ref_formulation_rml = YARRRML_REFERENCE_FORMULATIONS[reference_formulation]
 
     if switch_in_reference_formulation(reference_formulation) != source_extension:
