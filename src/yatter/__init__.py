@@ -65,7 +65,7 @@ def inverse_translation(rdf_mapping, mapping_format=RML_URI):
     rdf_mapping.bind('rr', rdflib.term.URIRef(R2RML_URI))
     rdf_mapping.bind('ql', rdflib.term.URIRef(QL_URI))
     yarrrml_mapping[YARRRML_PREFIXES] = add_inverse_prefix(rdf_mapping)
-    query = f'SELECT ?triplesMap WHERE {{ ?triplesMap {RDF_TYPE} {R2RML_TRIPLES_MAP} . }} '
+    query = f'SELECT ?triplesMap WHERE {{ ?triplesMap {RML_LOGICAL_SOURCE}|{R2RML_LOGICAL_TABLE} ?source . }} '
     triples_map = [tm[rdflib.Variable('triplesMap')] for tm in rdf_mapping.query(query).bindings]
 
     for tm in triples_map:
