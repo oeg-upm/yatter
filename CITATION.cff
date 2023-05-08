@@ -1,0 +1,21 @@
+title: "Yatter: Translating YARRRML into easy-to-read [R2]RML mappings"
+license: Apache-2.0
+authors:
+  - family-names: Chaves-Fraga
+    given-names: David
+    orcid: "http://orcid.org/0000-0003-3236-2789"
+cff-version: 1.0.0
+preferred-citation:
+  authors:
+    - family-names: Iglesias-Molina
+      given-names: Ana
+    - family-names: Chaves-Fraga
+      given-names: David
+    - family-names: Dasoulas
+      given-names: Ioannnis
+    - family-names: Dimou
+      given-names: Anastasia
+  title: "Human-Friendly RDF Graph Construction: Which one do you chose?"
+  type: inproceedings
+  booktitle: ICWE
+  year: 2023
