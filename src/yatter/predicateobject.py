@@ -281,7 +281,7 @@ def ref_mapping(data, mapping, om, yarrrml_key, ref_type_property, mapping_forma
         number_joins_rml = len(subject_list) * len(source_list)
         for i in range(number_joins_rml):
             template += "\t\t" + object + \
-                        " [ \n\t\t\ta " + R2RML_REFOBJECT_CLASS + \
+                        " [\n\t\t\ta " + R2RML_REFOBJECT_CLASS + \
                         ";\n\t\t\t" + ref_type_property + " <" + mapping_join + "_" + str(i) + ">;\n"
             if YARRRML_CONDITION in om:
                 conditions = om.get(YARRRML_CONDITION)
@@ -296,7 +296,7 @@ def ref_mapping(data, mapping, om, yarrrml_key, ref_type_property, mapping_forma
 
                             template += "\t\t\t" + R2RML_JOIN_CONITION + \
                                         " [\n\t\t\t\t" + R2RML_CHILD + " " + child + \
-                                        ";\n\t\t\t\t" + R2RML_PARENT + " " + parent + ";\n\t\t\t]; \n"
+                                        ";\n\t\t\t\t" + R2RML_PARENT + " " + parent + ";\n\t\t\t];\n"
 
                         else:
                             logger.error("Error in reference mapping another mapping in mapping " + mapping)
