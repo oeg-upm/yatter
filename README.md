@@ -72,9 +72,25 @@ These are the following specifications used by the translation process:
 - YARRRML: https://w3id.org/kg-construct/yarrrml
 - R2RML: https://www.w3.org/TR/r2rml/ 
 - RML: https://rml.io/spec 
-- RML-star: https://w3id.org/kg-construct/rml-star 
-- RML-Target: https://rml.io/specs/rml-target/ 
-- RML-FNML: https://w3id.org/kg-construct/rml-fnml
+- RML-star: https://w3id.org/rml/star/spec
+- RML-IO: https://w3id.org/rml/io/spec
+- RML-FNML: https://w3id.org/rml/fnml/spec
+
+To be implemented soon:
+- RML-core: https://w3id.org/rml/core/spec 
+- RML-CC: https://w3id.org/rml/cc/spec
+
+## Cite this work:
+If you used Yatter in your work, please cite the [ICWE2023](https://icwe2023.webengineering.org/program/) [paper](http://davidchavesfraga.com/outcomes/papers/2023/iglesias2023yatter.pdf):
+
+```bib
+@inproceedings{iglesias2023,
+  author    = {Igelsias{-}Molina, Ana and Chaves{-}Fraga, David and Dasoulas, Ioannis and Dimou, Anastasia},
+  title     = {{Human-Friendly RDF Graph Construction: Which one do you chose?}},
+  booktitle={Proceedings of the 23rd International Conference on Web Engineering},
+  year={2023}
+}
+```
 
 ## Authors
 Ontology Engineering Group:
