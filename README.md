@@ -65,7 +65,6 @@ list_yarrrml_mappings = ["content_mapping_yarrrml1", "content_mapping_yarrrml1"]
 yarrrml_content = yatter.merge_mappings(list_yarrrml_mappings)
 ```
 
-
 ## Specifications conformant:
 
 These are the following specifications used by the translation process:
@@ -84,11 +83,11 @@ To be implemented soon:
 If you used Yatter in your work, please cite the [ICWE2023](https://icwe2023.webengineering.org/program/) [paper](http://davidchavesfraga.com/outcomes/papers/2023/iglesias2023yatter.pdf):
 
 ```bib
-@inproceedings{iglesias2023,
-  author    = {Igelsias{-}Molina, Ana and Chaves{-}Fraga, David and Dasoulas, Ioannis and Dimou, Anastasia},
+@inproceedings{iglesias2023human,
+  author    = {Iglesias{-}Molina, Ana and Chaves{-}Fraga, David and Dasoulas, Ioannis and Dimou, Anastasia},
   title     = {{Human-Friendly RDF Graph Construction: Which one do you chose?}},
-  booktitle={Proceedings of the 23rd International Conference on Web Engineering},
-  year={2023}
+  booktitle = {Proceedings of the 23rd International Conference on Web Engineering},
+  year      = {2023}
 }
 ```
 
