@@ -20,18 +20,13 @@ To execute from command line run the following:
 ```bash
 python3 -m yatter -i path_to_input_yarrrml.yml -o path_to_rdf_mapping.ttl [-f R2RML]
 ```
-`-f R2RML` is an optional parameter for translating input YARRRML into R2RML
 
 - From \[R2\]RML to YARRRML 
 ```bash
 python3 -m yatter -i path_to_input_rdf_mapping.ttl -o path_to_output_yarrrml.yml [-f R2RML]
 ```
-`-f R2RML` is an optional parameter for translating input R2RML into YARRRML
 
-- Merging mappings based on TriplesMap id (keys of each TriplesMap should be disjoint):
-```bash
-python3 -m yatter -m yarrrml_mapping1.yaml yarrrml_mapping2.yaml [..] -o path_to_output_yarrrml.yml
-```
+`-f R2RML` is an optional parameter for translating input YARRRML to R2RML (and inverse)
 
 ## Execution as a library
 
