@@ -79,10 +79,13 @@ If you used Yatter in your work, please cite the [ICWE2023](https://icwe2023.web
 
 ```bib
 @inproceedings{iglesias2023human,
-  author    = {Iglesias{-}Molina, Ana and Chaves{-}Fraga, David and Dasoulas, Ioannis and Dimou, Anastasia},
-  title     = {{Human-Friendly RDF Graph Construction: Which one do you chose?}},
-  booktitle = {Proceedings of the 23rd International Conference on Web Engineering},
-  year      = {2023}
+  title={Human-Friendly RDF Graph Construction: Which One Do You Chose?},
+  author={Iglesias-Molina, Ana and Chaves-Fraga, David and Dasoulas, Ioannis and Dimou, Anastasia},
+  booktitle={International Conference on Web Engineering},
+  pages={262--277},
+  year={2023},
+  doi={10.1007/978-3-031-34444-2_19},
+  organization={Springer}
 }
 ```
 
