@@ -12,8 +12,8 @@ mappings:
     po:
       - [rdf:type, foaf:Person]
       - [ex:id, $(ID), xsd:integer]
-      - [ex:firstName, $(FirstName), xsd:string]
-      - [ex:lastName, $(LastName), xsd:string]
+      - [$(first_name), $(FirstName), xsd:string]
+      - ["http://example.org/$(last_name)", $(LastName), xsd:string]
       - [ex:gender, $(Sex), xsd:string]
       - [ex:weight, $(Weight), xsd:float]
       - [ex:height, $(Height), xsd:float]

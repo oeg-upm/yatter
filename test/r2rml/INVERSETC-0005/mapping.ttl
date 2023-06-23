@@ -40,29 +40,7 @@
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant ex:id;
-		];
-		rr:objectMap [
-			a rr:ObjectMap;
-			rr:column "ID";
-			rr:datatype xsd:integer
-		];
-	];
-	rr:predicateObjectMap [
-		rr:predicateMap [
-			a rr:PredicateMap;
-			rml:reference "first_name";
-		];
-		rr:objectMap [
-			a rr:ObjectMap;
-			rr:column "FirstName";
-			rr:datatype xsd:string
-		];
-	];
-	rr:predicateObjectMap [
-		rr:predicateMap [
-			a rr:PredicateMap;
-			rr:template "http://example.org/{last_name}";
+			rr:template "http://example.com/{last_name}";
 		];
 		rr:objectMap [
 			a rr:ObjectMap;
@@ -73,34 +51,11 @@
 	rr:predicateObjectMap [
 		rr:predicateMap [
 			a rr:PredicateMap;
-			rr:constant ex:gender;
-		];
-		rr:objectMap [
-			a rr:ObjectMap;
-			rr:column "Sex";
-			rr:datatype xsd:string
-		];
-	];
-	rr:predicateObjectMap [
-		rr:predicateMap [
-			a rr:PredicateMap;
-			rr:constant ex:weight;
-		];
-		rr:objectMap [
-			a rr:ObjectMap;
-			rr:column "Weight";
-			rr:datatype xsd:float
-		];
-	];
-	rr:predicateObjectMap [
-		rr:predicateMap [
-			a rr:PredicateMap;
 			rr:constant ex:height;
 		];
 		rr:objectMap [
 			a rr:ObjectMap;
-			rr:column "Height";
-			rr:datatype xsd:float
+			rr:template "http://example.com/{Height}"
 		];
 	].
 
