@@ -20,18 +20,13 @@ To execute from command line run the following:
 ```bash
 python3 -m yatter -i path_to_input_yarrrml.yml -o path_to_rdf_mapping.ttl [-f R2RML]
 ```
-`-f R2RML` is an optional parameter for translating input YARRRML into R2RML
 
 - From \[R2\]RML to YARRRML 
 ```bash
 python3 -m yatter -i path_to_input_rdf_mapping.ttl -o path_to_output_yarrrml.yml [-f R2RML]
 ```
-`-f R2RML` is an optional parameter for translating input R2RML into YARRRML
 
-- Merging mappings based on TriplesMap id (keys of each TriplesMap should be disjoint):
-```bash
-python3 -m yatter -m yarrrml_mapping1.yaml yarrrml_mapping2.yaml [..] -o path_to_output_yarrrml.yml
-```
+`-f R2RML` is an optional parameter for translating input YARRRML to R2RML (and inverse)
 
 ## Execution as a library
 
@@ -65,16 +60,34 @@ list_yarrrml_mappings = ["content_mapping_yarrrml1", "content_mapping_yarrrml1"]
 yarrrml_content = yatter.merge_mappings(list_yarrrml_mappings)
 ```
 
-
 ## Specifications conformant:
 
 These are the following specifications used by the translation process:
 - YARRRML: https://w3id.org/kg-construct/yarrrml
 - R2RML: https://www.w3.org/TR/r2rml/ 
 - RML: https://rml.io/spec 
-- RML-star: https://w3id.org/kg-construct/rml-star 
-- RML-Target: https://rml.io/specs/rml-target/ 
-- RML-FNML: https://w3id.org/kg-construct/rml-fnml
+- RML-star: https://w3id.org/rml/star/spec
+- RML-IO: https://w3id.org/rml/io/spec
+- RML-FNML: https://w3id.org/rml/fnml/spec
+
+To be implemented soon:
+- RML-core: https://w3id.org/rml/core/spec 
+- RML-CC: https://w3id.org/rml/cc/spec
+
+## Cite this work:
+If you used Yatter in your work, please cite the [ICWE2023](https://icwe2023.webengineering.org/program/) [paper](http://davidchavesfraga.com/outcomes/papers/2023/iglesias2023yatter.pdf):
+
+```bib
+@inproceedings{iglesias2023human,
+  title={Human-Friendly RDF Graph Construction: Which One Do You Chose?},
+  author={Iglesias-Molina, Ana and Chaves-Fraga, David and Dasoulas, Ioannis and Dimou, Anastasia},
+  booktitle={International Conference on Web Engineering},
+  pages={262--277},
+  year={2023},
+  doi={10.1007/978-3-031-34444-2_19},
+  organization={Springer}
+}
+```
 
 ## Authors
 Ontology Engineering Group:
