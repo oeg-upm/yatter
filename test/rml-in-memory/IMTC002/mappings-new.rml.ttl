@@ -1,0 +1,36 @@
+@prefix insta: <http://instagram.com/data/>.
+@prefix rml: <http://w3id.org/rml/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix sd: <https://w3id.org/okn/o/sd/>.
+@prefix kg4di: <https://w3id.org/kg4di/definedBy>.
+
+
+<df_map> a rml:TriplesMap;
+
+	rml:logicalSource [
+		a rml:LogicalSource;
+		rml:source [
+			a sd:DatasetSpecification;
+			sd:name "output_dataframe";
+		];
+		rml:referenceFormulation ql:DataFrame;
+	];
+	rml:subjectMap [
+		a rml:SubjectMap;
+		rml:template "http://instagram.com/data/user{Id}";
+	];
+	rml:predicateObjectMap [
+		rml:predicateMap [
+			a rml:PredicateMap;
+			rml:constant rdf:type;
+		];
+		rml:objectMap [
+			a rml:ObjectMap;
+			rml:constant insta:User;
+		];
+	].
+
+ql:DataFrame a rml:ReferenceFormulation;
+	kg4di:definedBy "Pandas".
