@@ -54,6 +54,10 @@ def add_subject(data, mapping, mapping_format):
             if YARRRML_TARGETS in individual_subject:
                 subject_termmap = subject_termmap[0:-3]+"\t"+RML_LOGICAL_TARGET+" <"+individual_subject[YARRRML_TARGETS]+">\n\t];\n"
 
+            if YARRRML_TYPE in individual_subject:
+                if individual_subject.get(YARRRML_TYPE) == YARRRML_BLANK:
+                    subject_termmap = subject_termmap[0:-3] + "\t" + R2RML_TERMTYPE + " " + R2RML_BLANK_NODE +"\n\t];\n"
+
         rml_subjects.append(subject_termmap)
 
     if YARRRML_GRAPHS in data.get(YARRRML_MAPPINGS).get(mapping):
