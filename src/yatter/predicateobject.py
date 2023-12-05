@@ -156,11 +156,15 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
 
     for om in object_list:
         iri = False
+        blank = False
         if type(om) == list:
             object_value = om[0]
             if YARRRML_IRI in om[0]:
-                object_value = om[0].split(YARRRML_IRI)[0]
+                object_value = om[0].split("~")[0]
                 iri = True
+            if YARRRML_BLANK in om[0]:
+                object_value = om[0].split("~")[0]
+                blank = True
             if mapping_format == STAR_URI:
                 template += generate_rml_termmap(STAR_OBJECT, R2RML_OBJECT_CLASS,
                                                  object_value, "\t\t\t", mapping_format)
@@ -195,6 +199,9 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
             if iri:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
                            + R2RML_IRI + "\n\t\t];\n"
+            if blank:
+                template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
+                           + R2RML_BLANK_NODE + "\n\t\t];\n"
         elif YARRRML_MAPPING in om or YARRRML_NON_ASSERTED in om or YARRRML_QUOTED in om:
             if YARRRML_MAPPING in om:
                 template += ref_mapping(data, mapping, om, YARRRML_MAPPING, R2RML_PARENT_TRIPLESMAP, mapping_format)
@@ -236,6 +243,9 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                     elif om.get(YARRRML_TYPE) == "literal":
                         template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
                                    + R2RML_LITERAL + "\n\t\t];\n"
+                    elif om.get(YARRRML_TYPE) == YARRRML_BLANK:
+                        template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
+                                   + R2RML_BLANK_NODE + "\n\t\t];\n"
                 if YARRRML_TARGETS in om:
                     template = template[0:len(template) - 5] + "\t\t\t" + RML_LOGICAL_TARGET + " <"+ om.get(YARRRML_TARGETS) + ">\n\t\t];\n"
 
