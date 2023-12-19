@@ -1,7 +1,6 @@
 from .import *
 prefixes = {}
 
-
 def add_mapping(mapping, mappings, it):
     map_template = "<" + mapping + "_" + str(it) + "> a "
     if mappings[mapping]:
@@ -99,7 +98,7 @@ def add_inverse_prefix(rdf_mapping):
 
 
 def get_non_asserted_mappings(yarrrml_data, mapping_format):
-    mappings =  dict.fromkeys(list(yarrrml_data.get(YARRRML_MAPPINGS).keys()))
+    mappings = dict.fromkeys(list(yarrrml_data.get(YARRRML_MAPPINGS).keys()))
     for mapping in yarrrml_data.get(YARRRML_MAPPINGS):
         keys = yarrrml_data.get(YARRRML_MAPPINGS).get(mapping).keys()
         for key in keys:

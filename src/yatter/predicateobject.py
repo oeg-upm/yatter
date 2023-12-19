@@ -150,7 +150,7 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
             execution = True
         template += generate_rml_termmap(R2RML_PREDICATE, R2RML_PREDICATE_CLASS, pm_value,"\t\t\t")
         if execution:
-            template = template.replace(R2RML_CONSTANT + " " + pm_value, RML_EXECUTION + " <" + pm_value + ">")
+            template = template.replace(R2RML_CONSTANT + " \"" + pm_value + "\"", RML_EXECUTION + " <" + pm_value + ">")
         if YARRRML_TARGETS in pm:
             template = template[0:-3] + "\t" + RML_LOGICAL_TARGET + " <" + pm[YARRRML_TARGETS] + ">\n\t\t];\n"
 
@@ -225,7 +225,7 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                                                  object_value, "\t\t\t", mapping_format)
             elif YARRRML_FUNCTION in om:
                 template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS, om[YARRRML_FUNCTION], "\t\t\t", mapping_format)
-                template =  template.replace(R2RML_CONSTANT+" "+om[YARRRML_FUNCTION], RML_EXECUTION + " <" + om.get(
+                template = template.replace(R2RML_CONSTANT+" \""+om[YARRRML_FUNCTION]+ "\"", RML_EXECUTION + " <" + om.get(
                     YARRRML_FUNCTION) + ">")
             else:
                 template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,

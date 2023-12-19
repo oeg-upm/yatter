@@ -19,11 +19,16 @@ def get_termmap_type(text, mapping_format):
 
 ## Generates a TermMap (subject, predicate, object) based on the property, class and the text
 def generate_rml_termmap(rml_property, rml_class, text, indentation, mapping_format=RML_URI):
-    template = indentation[0:-1] + rml_property + " [\n"+indentation+"a " + rml_class + ";\n" + indentation
+    from .mapping import prefixes
+    template = indentation[0:-1] + rml_property + " [\n" + indentation + "a " + rml_class + ";\n" + indentation
     term_map = get_termmap_type(text, mapping_format)
     if term_map == R2RML_TEMPLATE:
         text = generate_rml_template(text)
         text = text.replace('"', r'\"')
+        if ":" in text:
+            text_prefix_split = text.split(":")
+            if text_prefix_split[0] in prefixes:
+                text = prefixes[text_prefix_split[0]] + text_prefix_split[1]
     elif term_map == RML_REFERENCE or term_map == R2RML_COLUMN:
         text = text.replace("$(", "").replace(")", "")
         text = text.replace('"', r'\"')
@@ -41,7 +46,10 @@ def generate_rml_termmap(rml_property, rml_class, text, indentation, mapping_for
         if text.startswith("http"):
             template += term_map + " <" + text + ">;\n" + indentation[0:-1] + "];\n"
         else:
-            template += term_map + " " + text + ";\n"+indentation[0:-1]+"];\n"
+            if ":" in text or "<" in text:
+                template += term_map + " " + text + ";\n"+indentation[0:-1]+"];\n"
+            else:
+                template += term_map + " \"" + text + "\";\n" + indentation[0:-1] + "];\n"
 
     return template
 
