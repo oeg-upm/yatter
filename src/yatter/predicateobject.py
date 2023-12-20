@@ -172,9 +172,6 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                 object_map = generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,
                                              object_value, "\t\t\t", mapping_format)
 
-                if object_value not in prefixes and ":" not in object_value and R2RML_CONSTANT in object_map:
-                    object_map = object_map.replace(object_value, f"\"{object_value}\"")
-
                 template += object_map
             if len(om) == 2:
                 types = check_type(om[1])
