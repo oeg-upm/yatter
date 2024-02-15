@@ -43,7 +43,7 @@ def add_internal_function(mapping_id, mapping_data, functions):
 def transform_function(mapping_id, function_value, functions):
     global local_id
     function_return = None
-    if YARRRML_JOIN in function_value[YARRRML_FUNCTION]:
+    if function_value[YARRRML_FUNCTION].replace(" ","").startswith(YARRRML_JOIN+"("):
         function_return = generate_extended_join(function_value[YARRRML_FUNCTION])
     elif function_value[YARRRML_FUNCTION] != YARRRML_EQUAL:
         function_id = "function_" + mapping_id
