@@ -215,7 +215,8 @@ YARRRML_REFERENCE_FORMULATIONS = {
     'json': 'JSONPath',
     'xpath': 'XPath',
     'jsonpath': 'JSONPath',
-    "shp": "SHP"
+    "shp": "SHP",
+    "xlsx": "CSV"
 }
 
 YARRRML_DATABASES_DRIVER = {

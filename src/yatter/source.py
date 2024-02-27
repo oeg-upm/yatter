@@ -89,12 +89,12 @@ def add_source_simplified(mapping, source):
     source_extension = os.path.splitext(file_path)[1].replace(".","")
     ref_formulation_rml = YARRRML_REFERENCE_FORMULATIONS[reference_formulation]
 
-    if switch_in_reference_formulation(reference_formulation) != source_extension:
+    if switch_in_reference_formulation(reference_formulation, source_extension) != source_extension:
         raise Exception(
             "ERROR: mismatch extension and referenceFormulation in source " + source + " in mapping " + mapping)
     else:
         if len(source) == 1:  # do not have iterator
-            if source_extension == "csv" or source_extension == "SQL2008":
+            if source_extension == "csv" or source_extension == "SQL2008" or source_extension == "xlsx":
                 source_rdf += '"' + file_path + '"' + ";\n" + "\t\t" + RML_REFERENCE_FORMULATION + " ql:" \
                               + ref_formulation_rml + "\n" + "\t];\n"
             else:
@@ -169,7 +169,7 @@ def database_source(mapping, source, db_identifier):
     return source_rdf
 
 
-def switch_in_reference_formulation(value):
+def switch_in_reference_formulation(value, source_extension=None):
     value = value.lower()
     if "json" in value:
         if "path" in value:
@@ -181,6 +181,11 @@ def switch_in_reference_formulation(value):
             switcher = "xml"
         else:
             switcher = "xpath"
+    elif source_extension:
+        if source_extension == "xlsx":
+            switcher = "xlsx"
+        else:
+            switcher = value
     else:
         switcher = value
     return switcher
