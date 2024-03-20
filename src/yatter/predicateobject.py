@@ -323,7 +323,7 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
     yarrrml_poms = []
     yaml = YAML()
     for c in classes:
-        yarrrml_pom = yaml.seq(['rdf:type', c.toPython()])
+        yarrrml_pom = yaml.seq(['rdf:type', find_prefixes(c.toPython(),prefixes)])
         yarrrml_pom.fa.set_flow_style()
         yarrrml_poms.append(yarrrml_pom)
 
@@ -360,13 +360,11 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
     for tm in rdf_mapping.query(query):
         yarrrml_pom = []
         if tm['predicateValue']:
-            prefix = list({i for i in prefixes if tm['predicateValue'].toPython().startswith(prefixes[i])})
-            if len(prefix) > 0:
-                predicate = tm['predicateValue'].toPython().replace(prefixes[prefix[0]], prefix[0] + ":")
-            else:
-                predicate = tm['predicateValue'].toPython()
+            predicate = tm['predicateValue'].toPython()
         else:
             predicate = tm['predicate'].toPython()
+
+        predicate = find_prefixes(predicate,prefixes)
 
         if tm['parentTriplesMap']:
             if tm['child']:
@@ -397,6 +395,8 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
 
             if not object.startswith("http"):
                 object = '$(' + object + ')'
+            elif object.startswith("http") and "{" not in object:
+               object = find_prefixes(object,prefixes)
             else:
                 object.replace('{', '$(').replace('}', ')')
 
@@ -431,11 +431,13 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
 
             if type(yarrrml_pom) is list:
                 if datatype:
+                    datatype = find_prefixes(datatype,prefixes)
                     yarrrml_pom.append(datatype)
                 if language:
                     yarrrml_pom.append(language)
             elif type(yarrrml_pom) is dict:
                 if datatype:
+                    datatype = find_prefixes(datatype, prefixes)
                     yarrrml_pom[YARRRML_DATATYPE] = datatype
                 if language:
                     yarrrml_pom[YARRRML_LANGUAGE] = language
@@ -446,3 +448,10 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
         yarrrml_poms.append(yarrrml_pom)
 
     return yarrrml_poms
+
+
+def find_prefixes(text, prefixes):
+    prefix = list({i for i in prefixes if text.startswith(prefixes[i])})
+    if len(prefix) > 0:
+        text = text.replace(prefixes[prefix[0]], prefix[0] + ":")
+    return text
