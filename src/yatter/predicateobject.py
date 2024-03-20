@@ -351,9 +351,11 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
                 f' ?object {RML_LANGUAGE_MAP} ?languageMap .' \
                 f' ?languageMap {R2RML_TEMPLATE}|{R2RML_CONSTANT}|{RML_REFERENCE} ?languageMapValue .}} }} ' \
             f'OPTIONAL {{ ?object {R2RML_PARENT_TRIPLESMAP} ?parentTriplesMap .' \
-            f'?object {R2RML_JOIN_CONITION} ?join_condition .' \
-            f'?join_condition {R2RML_CHILD} ?child .' \
-            f'?join_condition {R2RML_PARENT} ?parent }} }}'
+            f'OPTIONAL {{ '\
+                f'?object {R2RML_JOIN_CONITION} ?join_condition .' \
+                f'?join_condition {R2RML_CHILD} ?child .' \
+                f'?join_condition {R2RML_PARENT} ?parent }} }}'\
+            f'}}'
 
     for tm in rdf_mapping.query(query):
         yarrrml_pom = []
@@ -367,15 +369,19 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
             predicate = tm['predicate'].toPython()
 
         if tm['parentTriplesMap']:
-            yarrrml_pom = {'p': predicate, 'o': {'mapping': None, 'condition':
-                {'function': 'equal', 'parameters': []}}}
-            yarrrml_pom['o']['mapping'] = tm['parentTriplesMap'].split("/")[-1]
-            child = yaml.seq(['str1', '$(' + tm['child'] + ')'])
-            child.fa.set_flow_style()
-            parent = yaml.seq(['str2', '$(' + tm['parent'] + ')'])
-            parent.fa.set_flow_style()
-            yarrrml_pom['o']['condition']['parameters'].append(child)
-            yarrrml_pom['o']['condition']['parameters'].append(parent)
+            if tm['child']:
+                yarrrml_pom = {'p': predicate, 'o': {'mapping': None, 'condition':
+                    {'function': 'equal', 'parameters': []}}}
+                yarrrml_pom['o']['mapping'] = tm['parentTriplesMap'].split("/")[-1]
+                child = yaml.seq(['str1', '$(' + tm['child'] + ')'])
+                child.fa.set_flow_style()
+                parent = yaml.seq(['str2', '$(' + tm['parent'] + ')'])
+                parent.fa.set_flow_style()
+                yarrrml_pom['o']['condition']['parameters'].append(child)
+                yarrrml_pom['o']['condition']['parameters'].append(parent)
+            else:
+                yarrrml_pom = {'p': predicate, 'o': {'mapping': tm['parentTriplesMap'].split("/")[-1]}}
+
 
         else:
             datatype = None
