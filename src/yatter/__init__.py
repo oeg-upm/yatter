@@ -69,7 +69,7 @@ def inverse_translation(rdf_mapping, mapping_format=RML_URI):
     triples_map = [tm[rdflib.Variable('triplesMap')] for tm in rdf_mapping.query(query).bindings]
 
     for tm in triples_map:
-        tm_name = tm.split("/")[-1]
+        tm_name = tm.split("/")[-1].split("#")[-1]
         yarrrml_tm = {YARRRML_SOURCES: [add_inverse_source(tm, rdf_mapping, mapping_format)]}
         subject, classes = add_inverse_subject(tm, rdf_mapping)
         yarrrml_tm.update(subject)
