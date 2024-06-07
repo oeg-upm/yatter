@@ -26,8 +26,6 @@ def test_inversetc0005():
     translated_mapping = yaml.load(str(yatter.inverse_translation(mapping_path, mapping_format=R2RML_URI)))
 
     ddiff = DeepDiff(expected_mapping['mappings'], translated_mapping['mappings'], ignore_order=True)
-    print(expected_mapping['mappings'])
-    print(translated_mapping['mappings'])
     if ddiff:
         assert False
     else:
