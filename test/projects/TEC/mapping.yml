@@ -1,0 +1,134 @@
+prefixes:
+  ecfo: "https://w3id.org/ecfo#"
+  qudt: "http://qudt.org/schema/qudt/"
+  skos: "http://www.w3.org/2004/02/skos/core#"
+  prov: "http://www.w3.org/ns/prov#"
+  time: "http://www.w3.org/2006/time#"
+  schema: "https://schema.org/"
+  ecfo_instance: "https://w3id.org/ecfkg/i/UK/BEIS/2016/"
+  dc: "http://purl.org/dc/elements/1.1/"
+
+sources:
+  main-source: ['./data/conversion_factors_2016_modified_v2.csv~csv']
+mappings:
+  CF:
+    sources:
+      - main-source
+    s: ecfo_instance:CF_$(id)
+    po:
+      - [a, ecfo:EmissionConversionFactor]
+      - [ecfo:hasAdditionalContext, $(Column Text), en~lang]
+      - [ecfo:hasScope, https://w3id.org/ecfo#$(Scope)~iri]
+      - [rdf:value, $(GHG Conversion Factor 2016),xsd:float]
+      - [ecfo:hasTag, https://w3id.org/ecfkg/i/$(Level 1)~iri]
+      - [ecfo:hasTag, https://w3id.org/ecfkg/i/$(Level 2)~iri]
+      - [ecfo:hasTag, https://w3id.org/ecfkg/i/$(Level 3)~iri]
+      - [ecfo:hasTag, https://w3id.org/ecfkg/i/$(Level 4)~iri]
+      - [ecfo:hasSourceUnit, $(uom_wd)~iri]
+      - [ecfo:hasEmissionSource, https://w3id.org/ecfkg/i/$(emission_source)~iri]
+      - [ecfo:hasTargetUnit, $(ghg_wd)~iri]
+      - [ecfo:hasEmissionTarget, $(emission_target_wd)~iri]
+      - [ecfo:hasApplicablePeriod, ecfo_instance:applicablePeriod/$(valid_from)/$(valid_to)~iri]
+      - [ecfo:hasApplicableLocation, $(region_wd)~iri]
+      - [dc:publisher, https://w3id.org/ecfkg/i/Organization/BEIS~iri]
+      - [prov:wasDerivedFrom, https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/558103/2016_Flat_format_file_v01-01.xlsx, xsd:anyURI]
+
+  Agent:
+    sources:
+       - main-source
+    s: "https://w3id.org/ecfkg/i/Organization/BEIS"
+    po:
+      - [a, prov:Organization]
+      - [rdfs:label, 'BEIS', en~lang]
+      - [rdfs:seeAlso, 'https://www.gov.uk/government/organisations/department-for-business-energy-and-industrial-strategy/about',xsd:anyURI]
+
+  TimeStart:
+    sources:
+        - main-source
+    s: ecfo_instance:applicablePeriod/$(valid_from)/$(valid_to)/start
+    po:
+      - [a, time:Instant]
+      - [time:inXSDDate, $(valid_from),xsd:dateTime]
+
+  TimeEnd:
+      sources:
+          - main-source
+      s: ecfo_instance:applicablePeriod/$(valid_from)/$(valid_to)/end
+      po:
+       - [a, time:Instant]
+       - [time:inXSDDate, $(valid_to),xsd:dateTime ]
+
+  TemporalEntity:
+    sources:
+        - main-source
+
+    s: ecfo_instance:applicablePeriod/$(valid_from)/$(valid_to)
+    po:
+     - [a, time:TemporalEntity]
+     - [time:hasBeginning, ecfo_instance:applicablePeriod/$(valid_from)/$(valid_to)/start~iri]
+     - [time:hasEnd, ecfo_instance:applicablePeriod/$(valid_from)/$(valid_to)/end~iri]
+
+  EmisisonSource:
+    sources:
+        - main-source
+    s: https://w3id.org/ecfkg/i/$(emission_source)
+    po:
+        - [a , skos:Concept]
+        - [rdfs:label, $(emission_source)]
+
+  EmisisonTarget:
+    sources:
+        - main-source
+    s: $(emission_target_wd)
+    po:
+        - [a , ecfo:ChemicalCompound]
+        - [rdfs:label, $(emission_target), en~lang]
+        - [schema:molecularFormula, $(emission_target_formula), en~lang]
+
+  L1:
+    sources:
+        - main-source
+    s: https://w3id.org/ecfkg/i/$(Level 1)
+    po:
+        - [a , skos:Concept]
+        - [rdfs:label, $(Level 1), en~lang]
+
+  L2:
+    sources:
+        - main-source
+    s: https://w3id.org/ecfkg/i/$(Level 2)
+    po:
+        - [a , skos:Concept]
+        - [rdfs:label, $(Level 2), en~lang]
+
+  L3:
+    sources:
+        - main-source
+    s: https://w3id.org/ecfkg/i/$(Level 3)
+    po:
+        - [a , skos:Concept]
+        - [rdfs:label, $(Level 3), en~lang]
+
+  L4:
+    sources:
+        - main-source
+    s: https://w3id.org/ecfkg/i/$(Level 4)
+    po:
+        - [a , skos:Concept]
+        - [rdfs:label, $(Level 4), en~lang]
+
+  sourceUnit:
+    sources:
+        - main-source
+    s: $(uom_wd)
+    po:
+        - [a , qudt:Unit]
+        - [rdfs:label, $(UOM simple), en~lang]
+
+  targetUnit:
+    sources:
+        - main-source
+    s: $(ghg_wd)
+    po:
+        - [a , qudt:Unit]
+        - [rdfs:label, $(GHG), en~lang]
