@@ -14,6 +14,7 @@ def write_results(mapping):
     elif type(mapping) is dict:
         with open(args.output_mapping_path, "wb") as f:
             yaml = YAML()
+            yaml.width = 3000
             yaml.default_flow_style = False
             yaml.dump(mapping, f)
 

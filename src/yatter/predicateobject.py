@@ -154,26 +154,27 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
             execution = True
         template += generate_rml_termmap(R2RML_PREDICATE, R2RML_PREDICATE_CLASS, pm_value, "\t\t\t")
         if execution:
-            template = template.replace(R2RML_CONSTANT + " " + pm_value, RML_EXECUTION + " <" + pm_value + ">")
+            template = template.replace(R2RML_CONSTANT + " \"" + pm_value + "\"", RML_EXECUTION + " <" + pm_value + ">")
         if YARRRML_TARGETS in pm:
             template = template[0:-3] + "\t" + RML_LOGICAL_TARGET + " <" + pm[YARRRML_TARGETS] + ">\n\t\t];\n"
 
     for om in object_list:
         iri = False
+        blank = False
         if type(om) == list:
             object_value = om[0]
             if YARRRML_IRI in om[0]:
-                object_value = om[0].split(YARRRML_IRI)[0]
+                object_value = om[0].split("~")[0]
                 iri = True
+            if YARRRML_BLANK in om[0]:
+                object_value = om[0].split("~")[0]
+                blank = True
             if mapping_format == STAR_URI:
                 template += generate_rml_termmap(STAR_OBJECT, R2RML_OBJECT_CLASS,
                                                  object_value, "\t\t\t", mapping_format)
             else:
                 object_map = generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,
                                                   object_value, "\t\t\t", mapping_format)
-
-                if object_value not in prefixes and ":" not in object_value and R2RML_CONSTANT in object_map:
-                    object_map = object_map.replace(object_value, f"\"{object_value}\"")
 
                 template += object_map
             if len(om) == 2:
@@ -204,6 +205,9 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
             if iri:
                 template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
                            + R2RML_IRI + "\n\t\t];\n"
+            if blank:
+                template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
+                           + R2RML_BLANK_NODE + "\n\t\t];\n"
         elif YARRRML_MAPPING in om or YARRRML_NON_ASSERTED in om or YARRRML_QUOTED in om:
             if YARRRML_MAPPING in om:
                 template += ref_mapping(data, mapping, om, YARRRML_MAPPING, R2RML_PARENT_TRIPLESMAP, mapping_format)
@@ -226,10 +230,8 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                 template += generate_rml_termmap(STAR_OBJECT, R2RML_OBJECT_CLASS,
                                                  object_value, "\t\t\t", mapping_format)
             elif YARRRML_FUNCTION in om:
-                template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS, om[YARRRML_FUNCTION], "\t\t\t",
-                                                 mapping_format)
-                template = template.replace(R2RML_CONSTANT + " " + om[YARRRML_FUNCTION], RML_EXECUTION + " <" + om.get(
-                    YARRRML_FUNCTION) + ">")
+                template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS, om[YARRRML_FUNCTION], "\t\t\t", mapping_format)
+                template = template.replace(R2RML_CONSTANT+" \""+om[YARRRML_FUNCTION]+ "\"", RML_EXECUTION + " <" + om.get(YARRRML_FUNCTION) + ">")
             else:
                 template += generate_rml_termmap(R2RML_OBJECT, R2RML_OBJECT_CLASS,
                                                  object_value, "\t\t\t", mapping_format)
@@ -246,6 +248,9 @@ def add_predicate_object(data, mapping, predicate_object, mapping_format=RML_URI
                     elif om.get(YARRRML_TYPE) == "literal":
                         template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
                                    + R2RML_LITERAL + "\n\t\t];\n"
+                    elif om.get(YARRRML_TYPE) == YARRRML_BLANK:
+                        template = template[0:len(template) - 5] + "\t\t\t" + R2RML_TERMTYPE + " " \
+                                   + R2RML_BLANK_NODE + "\n\t\t];\n"
                 if YARRRML_TARGETS in om:
                     template = template[0:len(template) - 5] + "\t\t\t" + RML_LOGICAL_TARGET + " <" + om.get(
                         YARRRML_TARGETS) + ">\n\t\t];\n"
@@ -323,7 +328,7 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
     yarrrml_poms = []
     yaml = YAML()
     for c in classes:
-        yarrrml_pom = yaml.seq(['rdf:type', c.toPython()])
+        yarrrml_pom = yaml.seq(['rdf:type', find_prefixes(c.toPython(),prefixes)])
         yarrrml_pom.fa.set_flow_style()
         yarrrml_poms.append(yarrrml_pom)
 
@@ -351,9 +356,11 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
             f' ?object {RML_LANGUAGE_MAP} ?languageMap .' \
             f' ?languageMap {R2RML_TEMPLATE}|{R2RML_CONSTANT}|{RML_REFERENCE} ?languageMapValue .}} }} ' \
             f'OPTIONAL {{ ?object {R2RML_PARENT_TRIPLESMAP} ?parentTriplesMap .' \
-            f'?object {R2RML_JOIN_CONITION} ?join_condition .' \
-            f'?join_condition {R2RML_CHILD} ?child .' \
-            f'?join_condition {R2RML_PARENT} ?parent }} }}'
+            f'OPTIONAL {{ '\
+                f'?object {R2RML_JOIN_CONITION} ?join_condition .' \
+                f'?join_condition {R2RML_CHILD} ?child .' \
+                f'?join_condition {R2RML_PARENT} ?parent }} }}'\
+            f'}}'
 
     for tm in rdf_mapping.query(query):
         yarrrml_pom = []
@@ -373,16 +380,22 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
         elif prefix:
             predicate = tm['predicateValue'].toPython().replace(prefixes[prefix[0]], prefix[0] + ":")
 
+        predicate = find_prefixes(predicate,prefixes)
+
         if tm['parentTriplesMap']:
-            yarrrml_pom = {'p': predicate, 'o': {'mapping': None, 'condition':
-                {'function': 'equal', 'parameters': []}}}
-            yarrrml_pom['o']['mapping'] = tm['parentTriplesMap'].split("/")[-1]
-            child = yaml.seq(['str1', '$(' + tm['child'] + ')'])
-            child.fa.set_flow_style()
-            parent = yaml.seq(['str2', '$(' + tm['parent'] + ')'])
-            parent.fa.set_flow_style()
-            yarrrml_pom['o']['condition']['parameters'].append(child)
-            yarrrml_pom['o']['condition']['parameters'].append(parent)
+            if tm['child']:
+                yarrrml_pom = {'p': predicate, 'o': {'mapping': None, 'condition':
+                    {'function': 'equal', 'parameters': []}}}
+                yarrrml_pom['o']['mapping'] = tm['parentTriplesMap'].split("/")[-1]
+                child = yaml.seq(['str1', '$(' + tm['child'] + ')'])
+                child.fa.set_flow_style()
+                parent = yaml.seq(['str2', '$(' + tm['parent'] + ')'])
+                parent.fa.set_flow_style()
+                yarrrml_pom['o']['condition']['parameters'].append(child)
+                yarrrml_pom['o']['condition']['parameters'].append(parent)
+            else:
+                yarrrml_pom = {'p': predicate, 'o': {'mapping': tm['parentTriplesMap'].split("/")[-1]}}
+
 
         else:
             datatype = None
@@ -401,9 +414,7 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
             if not object.startswith("http"):
                 object = '$(' + object + ')'
             elif object.startswith("http") and "{" not in object:
-                prefix = list({i for i in prefixes if object.startswith(prefixes[i])})
-                if prefix:
-                    object = object.replace(prefixes[prefix[0]], prefix[0] + ":")
+               object = find_prefixes(object,prefixes)
             else:
                 object = object.replace('{', '$(').replace('}', ')')
 
@@ -441,11 +452,13 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
 
             if type(yarrrml_pom) is list:
                 if datatype:
+                    datatype = find_prefixes(datatype,prefixes)
                     yarrrml_pom.append(datatype)
                 if language:
                     yarrrml_pom.append(language)
             elif type(yarrrml_pom) is dict:
                 if datatype:
+                    datatype = find_prefixes(datatype, prefixes)
                     yarrrml_pom[YARRRML_DATATYPE] = datatype
                 if language:
                     yarrrml_pom[YARRRML_LANGUAGE] = language
@@ -456,3 +469,9 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
         yarrrml_poms.append(yarrrml_pom)
 
     return yarrrml_poms
+
+def find_prefixes(text, prefixes):
+    prefix = list({i for i in prefixes if text.startswith(prefixes[i])})
+    if len(prefix) > 0:
+        text = text.replace(prefixes[prefix[0]], prefix[0] + ":")
+    return text

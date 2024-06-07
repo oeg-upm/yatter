@@ -81,6 +81,7 @@ R2RML_DATATYPE = 'rr:datatype'
 R2RML_TERMTYPE = 'rr:termType'
 R2RML_LANGUAGE = 'rr:language'
 R2RML_IRI = 'rr:IRI'
+R2RML_BLANK_NODE = 'rr:BlankNode'
 R2RML_LITERAL = 'rr:Literal'
 R2RML_REFOBJECT_CLASS = 'rr:RefObjectMap'
 R2RML_PARENT_TRIPLESMAP = 'rr:parentTriplesMap'
@@ -91,6 +92,7 @@ R2RML_LOGICAL_TABLE_CLASS = 'rr:LogicalTable'
 R2RML_LOGICAL_TABLE = 'rr:logicalTable'
 R2RML_TABLE_NAME = 'rr:tableName'
 R2RML_COLUMN = 'rr:column'
+
 
 ##############################################################################
 #############################   D2RQ CONSTANTS  ###########################
@@ -154,6 +156,7 @@ YARRRML_PARAMETERS_SHORTCUT = 'pms'
 
 YARRRML_IRI = '~iri'
 YARRRML_LANG = '~lang'
+YARRRML_BLANK = 'blank'
 
 YARRRML_QUOTED = 'quoted'
 YARRRML_NON_ASSERTED = 'quotedNonAsserted'
@@ -212,7 +215,8 @@ YARRRML_REFERENCE_FORMULATIONS = {
     'json': 'JSONPath',
     'xpath': 'XPath',
     'jsonpath': 'JSONPath',
-    "shp": "SHP"
+    "shp": "SHP",
+    "xlsx": "CSV"
 }
 
 YARRRML_DATABASES_DRIVER = {
