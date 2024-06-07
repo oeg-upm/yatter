@@ -32,7 +32,7 @@
 	];
 	rr:subjectMap [
 		a rr:SubjectMap;
-		rr:template "ecfo_instance:CF_{id}";
+		rr:template "https://w3id.org/ecfkg/i/UK/BEIS/2016/CF_{id}";
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
@@ -172,7 +172,7 @@
 		];
 		rr:objectMap [
 			a rr:ObjectMap;
-			rr:template "ecfo_instance:applicablePeriod/{valid_from}/{valid_to}";
+			rr:template "https://w3id.org/ecfkg/i/UK/BEIS/2016/applicablePeriod/{valid_from}/{valid_to}";
 			rr:termType rr:IRI
 		];
 	];
@@ -265,7 +265,7 @@
 	];
 	rr:subjectMap [
 		a rr:SubjectMap;
-		rr:template "ecfo_instance:applicablePeriod/{valid_from}/{valid_to}/start";
+		rr:template "https://w3id.org/ecfkg/i/UK/BEIS/2016/applicablePeriod/{valid_from}/{valid_to}/start";
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
@@ -299,7 +299,7 @@
 	];
 	rr:subjectMap [
 		a rr:SubjectMap;
-		rr:template "ecfo_instance:applicablePeriod/{valid_from}/{valid_to}/end";
+		rr:template "https://w3id.org/ecfkg/i/UK/BEIS/2016/applicablePeriod/{valid_from}/{valid_to}/end";
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
@@ -333,7 +333,7 @@
 	];
 	rr:subjectMap [
 		a rr:SubjectMap;
-		rr:template "ecfo_instance:applicablePeriod/{valid_from}/{valid_to}";
+		rr:template "https://w3id.org/ecfkg/i/UK/BEIS/2016/applicablePeriod/{valid_from}/{valid_to}";
 	];
 	rr:predicateObjectMap [
 		rr:predicateMap [
@@ -352,7 +352,7 @@
 		];
 		rr:objectMap [
 			a rr:ObjectMap;
-			rr:template "ecfo_instance:applicablePeriod/{valid_from}/{valid_to}/start";
+			rr:template "https://w3id.org/ecfkg/i/UK/BEIS/2016/applicablePeriod/{valid_from}/{valid_to}/start";
 			rr:termType rr:IRI
 		];
 	];
@@ -363,7 +363,7 @@
 		];
 		rr:objectMap [
 			a rr:ObjectMap;
-			rr:template "ecfo_instance:applicablePeriod/{valid_from}/{valid_to}/end";
+			rr:template "https://w3id.org/ecfkg/i/UK/BEIS/2016/applicablePeriod/{valid_from}/{valid_to}/end";
 			rr:termType rr:IRI
 		];
 	].
