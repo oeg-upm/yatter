@@ -372,15 +372,13 @@ def add_inverse_pom(mapping_id, rdf_mapping, classes, prefixes):
             logger.error("ERROR: There is POM without predicate map defined")
             raise Exception("Review your mapping " + str(mapping_id))
 
-        prefix = list({i for i in prefixes if predicate.startswith(prefixes[i])})
-        if not predicate.startswith("http") and "{" not in predicate:
+        if not predicate.startswith("http"):
             predicate = '$(' + predicate + ')'
-        elif "{" in predicate and "}" in predicate:
+        elif predicate.startswith("http") and "{" not in predicate:
+            predicate = find_prefixes(predicate, prefixes)
+        else:
             predicate = predicate.replace('{', '$(').replace('}', ')')
-        elif prefix:
-            predicate = tm['predicateValue'].toPython().replace(prefixes[prefix[0]], prefix[0] + ":")
 
-        predicate = find_prefixes(predicate,prefixes)
 
         if tm['parentTriplesMap']:
             if tm['child']:
