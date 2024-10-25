@@ -1,5 +1,7 @@
 # YATTER
 
+<img title="logo" alt="YATTER" src="/logo/logo.png">
+
 ![GitHub](https://img.shields.io/github/license/oeg-upm/yatter?style=flat)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7024501.svg)](https://doi.org/10.5281/zenodo.7024501)
 [![PyPI](https://img.shields.io/pypi/v/yatter?style=flat)](https://pypi.org/project/yatter)
