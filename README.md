@@ -1,6 +1,6 @@
 # YATTER
 <p align="center">
-  <img title="logo" alt="YATTER" src="/logo/logo.png"  width="500" height="500"/>
+  <img title="logo" alt="YATTER" src="/logo/logo.png"  width="300" height="300"/>
 </p>
 
 
