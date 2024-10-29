@@ -10,9 +10,9 @@ prefixes:
   kg4di: "https://w3id.org/kg4di/"
 
 mappings:
-  df_map:
+  dict_map:
     sources:
-      - [$(output_dataframe)~Pandas-DataFrame]
-    s: http://instagram.com/data/user{Id}
+      - [$(output_dict)~Python-Dictionary, "$.users[*]"]
+    s: http://instagram.com/data/user$(id)
     po:
        - [a, insta:User]

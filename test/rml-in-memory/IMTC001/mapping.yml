@@ -14,10 +14,10 @@ mappings:
     sources:
       access: $(output_dataframe)
       referenceFormulation: DataFrame
-			structureDefiner: Pandas
-			softwareSpecification: 
-				programmingLanguage: Python3.9
-				softwareRequirements: “pandas>=1.1.0”
-    s: http://instagram.com/data/user{Id}
+      structureDefiner: Pandas
+      softwareSpecification:
+        programmingLanguage: Python3.9
+        softwareRequirements: pandas>=1.1.0
+    s: http://instagram.com/data/user$(Id)
     po:
        - [a, insta:User]

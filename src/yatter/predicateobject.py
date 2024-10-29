@@ -288,7 +288,7 @@ def ref_mapping(data, mapping, om, yarrrml_key, ref_type_property, mapping_forma
         else:
             if mapping_format == STAR_URI:
                 object = STAR_OBJECT
-            source_list = add_source(data, mapping_join, list_initial_sources)
+            source_list, external_refs = add_source(data, mapping_join, list_initial_sources)
 
         number_joins_rml = len(subject_list) * len(source_list)
         for i in range(number_joins_rml):

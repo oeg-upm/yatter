@@ -10,11 +10,14 @@ prefixes:
   kg4di: "https://w3id.org/kg4di/"
 
 mappings:
-  df_map:
+  dict_map:
     sources:
-      access: $(output_dataframe)
-      referenceFormulation: DataFrame
-			structureDefiner: Pandas
-    s: http://instagram.com/data/user{Id}
+      access: $(output_dict)
+      referenceFormulation: Dictionary
+      structureDefiner: Python
+      iterator: $.users[*]
+      softwareSpecification:
+        programmingLanguage: Python3.9
+    s: http://instagram.com/data/user$(id)
     po:
        - [a, insta:User]
