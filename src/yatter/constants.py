@@ -21,7 +21,7 @@ FORMATS_URI = 'http://www.w3.org/ns/formats/'
 VOID_URI = 'http://rdfs.org/ns/void#'
 FNML_URI = 'http://semweb.mmlab.be/ns/fnml#'
 GREL_URI = 'http://users.ugent.be/~bjdmeest/function/grel.ttl#'
-SD_URI = 'https://w3id.org/okn/o/sd/'
+SD_URI = 'https://w3id.org/okn/o/sd#'
 
 RML_PREFIX = '@prefix'
 RML_BASE = '@base'
