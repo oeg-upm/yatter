@@ -19,15 +19,10 @@ mappings:
         iterator: $.users[*]
         softwareSpecification: 
           programmingLanguage: Python3.9
-      - access: $(variable2)
-        referenceFormulation: Dictionary
-        structureDefiner: Python
-        iterator: $.followers[*]
-        softwareSpecification: 
-          programmingLanguage: Python3.9
-    s: http://instagram.com/data/user{Id}
+      - [followersperson.json~jsonpath, "$.followers[*]"]
+    s: http://instagram.com/data/user$(id)
     po:
        - [a, insta:User]
        - [insta:username, $(Username)]
        - [insta:name, "$(Name) $(Surname)"]
-       - [insta:follows, http://instagram.com/data/user${Follows}~iri]
+       - [insta:follows, http://instagram.com/data/user$(Follows)~iri]

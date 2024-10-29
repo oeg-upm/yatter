@@ -17,13 +17,14 @@ def translate(yarrrml_data, mapping_format=RML_URI):
     rml_mapping.extend(generate_database_connections(yarrrml_data, list_initial_sources))
     rml_mapping.extend(add_logical_targets(yarrrml_data))
     rml_mapping.extend(add_functions(yarrrml_data))
+    external_refs = []
     try:
         mappings, mapping_format = get_non_asserted_mappings(yarrrml_data, mapping_format)
         for mapping in yarrrml_data.get(YARRRML_MAPPINGS):
             if mapping_format == R2RML_URI:
                 source_list = add_table(yarrrml_data, mapping, list_initial_sources)
             else:
-                source_list = add_source(yarrrml_data, mapping, list_initial_sources)
+                source_list, external_refs = add_source(yarrrml_data, mapping, list_initial_sources)
             subject_list = add_subject(yarrrml_data, mapping, mapping_format)
             pred = add_predicate_object_maps(yarrrml_data, mapping, mapping_format)
             it = 0
@@ -37,6 +38,9 @@ def translate(yarrrml_data, mapping_format=RML_URI):
                     rml_mapping[len(rml_mapping) - 1] = rml_mapping[len(rml_mapping) - 1][:-2]
                     rml_mapping.append(".\n\n\n")
                     it = it + 1
+            external_refs = list(dict.fromkeys(external_refs))
+            for ref in external_refs:
+                rml_mapping.append(ref)
 
         logger.info("RML content is created!")
         rml_mapping_string = "".join(rml_mapping)

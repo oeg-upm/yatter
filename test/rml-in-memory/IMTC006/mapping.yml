@@ -14,15 +14,20 @@ mappings:
   df_map:
     sources:
       - access: $(variable1)
-        referenceFormulation: Dictionary
-        structureDefiner: Python
-        iterator: $.users[*]
+        referenceFormulation: DataFrame
+        structureDefiner: Pandas
         softwareSpecification: 
           programmingLanguage: Python3.9
-      - source: [followersperson.json~jsonpath, "$.followers[*]"]
-    s: http://instagram.com/data/user{Id}
+          softwareRequirements: pandas>=1.1.0
+      - access: $(variable2)
+        referenceFormulation: DataFrame
+        structureDefiner: Pandas
+        softwareSpecification: 
+          programmingLanguage: Python3.9
+          softwareRequirements: pandas>=1.1.0
+    s: http://instagram.com/data/user$(id)
     po:
        - [a, insta:User]
        - [insta:username, $(Username)]
        - [insta:name, "$(Name) $(Surname)"]
-       - [insta:follows, http://instagram.com/data/user${Follows}~iri]
+       - [insta:followersNumber, $(Followers)]
