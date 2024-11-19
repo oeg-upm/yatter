@@ -30,7 +30,7 @@ def generate_rml_termmap(rml_property, rml_class, text, indentation, mapping_for
             if text_prefix_split[0] in prefixes:
                 text = prefixes[text_prefix_split[0]] + text_prefix_split[1]
     elif term_map == RML_REFERENCE or term_map == R2RML_COLUMN:
-        text = text.replace("$(", "").replace(")", "")
+        text = generate_rml_template(text).replace("{","").replace("}","")
         text = text.replace('"', r'\"')
     elif term_map == R2RML_CONSTANT and text == "a":
         text = RDF_TYPE
