@@ -4,16 +4,14 @@ import argparse
 from rdflib import Graph
 from . import translate, inverse_translation, merge_mappings
 from .constants import *
-import pyjelly.integrations.rdflib
 from pyjelly.integrations.rdflib.serialize import SerializerOptions, StreamParameters
 
 
 
 def write_results(args, mapping):
     if type(mapping) is str:
-        if args.output_mapping_path.endswith('jelly'):
-            # Mapping string is parsed as a graph in a 'turtle' format
-            # before being serialized as a '.jelly' file (with namespace declarations).
+        if args.output_mapping_path.endswith('.jelly'):
+            # Jelly file saved by parsing to graph and serialization.
             g = Graph()
             g.parse(data=mapping)
             options = SerializerOptions(params=StreamParameters(namespace_declarations=True))
@@ -41,7 +39,7 @@ def parse_inputs(args):
                 '.rml') or args.input_mapping_path.endswith('.r2rml'):
             input_data = Graph()
             input_data.parse(args.input_mapping_path, format='turtle')
-        elif args.input_mapping_path.endswith('.jelly'):    # '.jelly' format is supported
+        elif args.input_mapping_path.endswith('.jelly'):
             input_data = Graph()
             input_data.parse(args.input_mapping_path, format='jelly')
         else:
