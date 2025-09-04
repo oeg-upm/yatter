@@ -4,13 +4,22 @@ import argparse
 from rdflib import Graph
 from . import translate, inverse_translation, merge_mappings
 from .constants import *
+from pyjelly.integrations.rdflib.serialize import SerializerOptions, StreamParameters
+
 
 
 def write_results(args, mapping):
     if type(mapping) is str:
-        output_file = open(args.output_mapping_path, "w")
-        output_file.write(mapping)
-        output_file.close()
+        if args.output_mapping_path.endswith('.jelly'):
+            # Jelly file saved by parsing to graph and serialization.
+            g = Graph()
+            g.parse(data=mapping)
+            options = SerializerOptions(params=StreamParameters(namespace_declarations=True))
+            g.serialize(args.output_mapping_path, format='jelly', options=options)
+        else:
+            output_file = open(args.output_mapping_path, "w")
+            output_file.write(mapping)
+            output_file.close()
     elif type(mapping) is dict:
         with open(args.output_mapping_path, "wb") as f:
             yaml = YAML()
@@ -29,10 +38,13 @@ def parse_inputs(args):
         elif args.input_mapping_path.endswith('.ttl') or args.input_mapping_path.endswith(
                 '.rml') or args.input_mapping_path.endswith('.r2rml'):
             input_data = Graph()
-            input_data.parse(args.input_mapping_path, format="turtle")
+            input_data.parse(args.input_mapping_path, format='turtle')
+        elif args.input_mapping_path.endswith('.jelly'):
+            input_data = Graph()
+            input_data.parse(args.input_mapping_path, format='jelly')
         else:
             sys.tracebacklimit = 0
-            logger.error("Input mapping does not have a valid extension (.yml, .yaml, .ttl, .rml, or .r2rml)")
+            logger.error("Input mapping does not have a valid extension (.yml, .yaml, .ttl, .rml, .r2rml or .jelly)")
             raise Exception("Change your mapping extension to a valid one")
 
         if args.format is not None and args.format == "R2RML":
