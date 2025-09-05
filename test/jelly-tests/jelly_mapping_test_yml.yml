@@ -1,0 +1,43 @@
+prefixes:
+  ex: http://www.example.com/
+  e: http://myontology.com/
+  dbo: http://dbpedia.org/ontology/
+  grel: http://users.ugent.be/~bjdmeest/function/grel.ttl#
+
+mappings:
+  people:
+    sources:
+      - ['yatter_test/people.csv~csv']
+    s: ex:$(id)
+    graphs: ex:Characters
+    po:
+      - [a, schema:Person]
+      - [schema:givenName, $(firstname)]
+      - [schema:familyName, $(lastname)]
+      - p: e:debutEpisode
+        o:
+         value: $(debut episode)
+         datatype: xsd:integer
+        graphs: ex:Episodes
+      - p: dbo:hairColor
+        o:
+          function: grel:toUpperCase
+          parameters:
+            - [grel:valueParameter, $(hair color)]
+          language: en
+      - p: e:appearsIn
+        o:
+          mapping: episode
+          condition:
+            function: equal
+            parameters:
+              - [str1, $(debut episode), s]
+              - [str2, $(number), o]
+        g: ex:Episodes
+  episode:
+    sources:
+      - ['yatter_test/episodes.csv~csv']
+    s: ex:episode_$(number)
+    po:
+      - [a, schema:Episode]
+      - [schema:title, $(title)]
