@@ -38,7 +38,7 @@ def add_internal_logical_target(mapping_id, mapping_data, internal_targets, exte
                                 add_internal_logical_target(mapping_id, v, internal_targets, external_targets, local_target_id)
                     elif type(value) is dict:
                         add_internal_logical_target(mapping_id, value, internal_targets, external_targets, local_target_id)
-        elif YARRRML_TARGETS in mapping_data[key]:
+        elif type(mapping_data[key]) is dict and YARRRML_TARGETS in mapping_data[key]:
             target_value = mapping_data[key][YARRRML_TARGETS]
             logical_target_id = "logical_target_" + mapping_id + "_" + str(local_target_id)
             internal_targets.extend(generate_logical_target(target_value, logical_target_id))

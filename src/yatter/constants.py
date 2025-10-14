@@ -237,5 +237,7 @@ YARRRML_DATABASES_DRIVER = {
     'sqlserver': 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
 }
 
+basic_types = [int, float]
+
 logger = logging.getLogger(__name__)
 coloredlogs.install(level='DEBUG', fmt='%(asctime)s,%(msecs)03d | %(levelname)s: %(message)s', logger=logger)

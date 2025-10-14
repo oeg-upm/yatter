@@ -3,6 +3,8 @@ from .constants import *
 
 ## return the type of TermMap based on the input text
 def get_termmap_type(text, mapping_format):
+    if type(text) in basic_types:
+        text = str(text)
     if "$(" in text and ")" in text:
         if text[0] == "$" and text[len(text) - 1] == ")" and text.count("$(") == 1:
             if mapping_format == R2RML_URI:
@@ -107,6 +109,8 @@ def generate_rml_termmap(rml_property, rml_class, text, indentation, mapping_for
     template = indentation[0:-1] + rml_property + " [\n" + indentation + "a " + rml_class + ";\n" + indentation
     if isinstance(text, dict) and 'value' in text:
         text = text.get('value', '')
+    if type(text) in basic_types:
+        text = str(text)
     term_map, text = generate_rml_termmap_text(text, mapping_format)
 
     if term_map == STAR_QUOTED:
