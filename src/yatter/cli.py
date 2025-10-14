@@ -81,6 +81,10 @@ def main():
         mapping_content = merge_mappings(mapping_data)
     else:
         mapping_content = translate(mapping_data, mapping_format)
-    write_results(args, mapping_content)
+    if mapping_content is None:
+        return 1
+    else:
+        write_results(args, mapping_content)
+        return 0
 
 
