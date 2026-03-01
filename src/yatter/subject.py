@@ -58,7 +58,9 @@ def add_subject(data, mapping, mapping_format):
                                       0:-3] + "\t" + R2RML_TERMTYPE + " " + R2RML_BLANK_NODE + "\n\t];\n"
 
         rml_subjects.append(subject_termmap)
-
+    if not rml_subjects:
+        rml_subjects.append(generate_rml_termmap(R2RML_SUBJECT, R2RML_SUBJECT_CLASS, R2RML_BLANK_NODE, "\t\t",
+                                                   mapping_format).replace(R2RML_CONSTANT, R2RML_TERMTYPE))
     if YARRRML_GRAPHS in data.get(YARRRML_MAPPINGS).get(mapping):
         graphs = data.get(YARRRML_MAPPINGS).get(mapping).get(YARRRML_GRAPHS)
     else:

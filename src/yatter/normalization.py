@@ -555,7 +555,6 @@ def normalize(data, external_sources, external_targets):
 
     if data.get(YARRRML_MAPPINGS):
         for mapping in data.get(YARRRML_MAPPINGS):
-
             mapping_data = data.get(YARRRML_MAPPINGS).get(mapping)
             if YARRRML_PREDICATEOBJECT in mapping_data:
                 for predicate_object_map in mapping_data.get(YARRRML_PREDICATEOBJECT):
@@ -572,6 +571,8 @@ def normalize(data, external_sources, external_targets):
                         logger.error(
                             "There isn't a valid predicate key (predicate, predicates, p) correctly specify in PON " + predicate_object_map)
                         raise Exception("Add or change the key of the predicate in the indicated POM")
+            if YARRRML_SUBJECTS not in mapping_data:
+                mapping_data[YARRRML_SUBJECTS] = list()
 
     switch_mappings(data, external_sources, external_targets)
     return data
