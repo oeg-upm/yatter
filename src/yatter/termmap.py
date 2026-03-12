@@ -1,4 +1,5 @@
 from .constants import *
+import re
 
 
 ## return the type of TermMap based on the input text
@@ -132,13 +133,41 @@ def generate_rml_termmap(rml_property, rml_class, text, indentation, mapping_for
     return template
 
 
-def generate_rml_template(yarrrml_template):
-    references = 0
-    for i in range(len(yarrrml_template)):
-        if yarrrml_template[i]=="$" and yarrrml_template[i+1]=="(":
-            references = references + 1
-    yarrrml_template = yarrrml_template.replace("$(", "{")
-    yarrrml_template = "}".join(yarrrml_template.rsplit(")", references))
-    return yarrrml_template
+def generate_rml_template(yarrrml_template: str) -> str:
+    result = []
+    i = 0
+    n = len(yarrrml_template)
+
+    while i < n:
+        if i + 1 < n and yarrrml_template[i] == "$" and yarrrml_template[i + 1] == "(":
+            i += 2
+            depth = 1
+            content = []
+            while i < n and depth > 0:
+                char = yarrrml_template[i]
+
+                if char == "(":
+                    depth += 1
+                    content.append(char)
+                elif char == ")":
+                    depth -= 1
+                    if depth > 0:
+                        content.append(char)
+                else:
+                    content.append(char)
+
+                i += 1
+            if depth == 0:
+                result.append("{")
+                result.append("".join(content))
+                result.append("}")
+            else:
+                result.append("$(")
+                result.append("".join(content))
+        else:
+            result.append(yarrrml_template[i])
+            i += 1
+
+    return "".join(result)
 
 
