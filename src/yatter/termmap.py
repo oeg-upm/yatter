@@ -1,5 +1,4 @@
 from .constants import *
-import re
 
 
 ## return the type of TermMap based on the input text
