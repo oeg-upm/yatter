@@ -6,7 +6,7 @@
 
 ![GitHub](https://img.shields.io/github/license/citiususc/yatter?style=flat)
 [![Test](https://github.com/citiususc/yatter/actions/workflows/testgha.yml/badge.svg)](https://github.com/citiususc/yatter/actions/workflows/testgha.yml)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7024501.svg)](https://doi.org/10.5281/zenodo.7024501)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7024500.svg)](https://doi.org/10.5281/zenodo.7024500)
 [![PyPI](https://img.shields.io/pypi/v/yatter?style=flat)](https://pypi.org/project/yatter)
 ![GitHub Release Date](https://img.shields.io/github/release-date/citiususc/yatter)
 [![codecov](https://codecov.io/gh/citiususc/yatter/branch/main/graph/badge.svg?token=QUWCG214SG)](https://codecov.io/gh/citiususc/yatter)
